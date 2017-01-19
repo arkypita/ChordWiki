@@ -53,6 +53,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\PendingChangesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PendingChangesForm.Designer.cs">
+      <DependentUpon>PendingChangesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -301,6 +307,9 @@
     <None Include="UserControls\DockingManager\Resources\DockPane_OptionOverflow.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PendingChangesForm.resx">
+      <DependentUpon>PendingChangesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -315,7 +324,6 @@
     <EmbeddedResource Include="UserControls\DockingManager\Strings.resx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forms\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
