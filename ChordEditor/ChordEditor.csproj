@@ -36,6 +36,18 @@
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ObjectListView">
+      <HintPath>external\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn">
+      <HintPath>external\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI">
+      <HintPath>external\SharpSvn.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="SparkleLibrary">
+      <HintPath>external\SparkleLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -53,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Core.cs" />
     <Compile Include="Core\Document.cs" />
     <Compile Include="Core\DocumentList.cs" />
     <Compile Include="Core\OpenedDocument.cs" />
