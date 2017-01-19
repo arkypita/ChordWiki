@@ -15,9 +15,7 @@ namespace ChordEditor.Core
 	/// </summary>
 	public static class Core
 	{
-		public static OpenedDocumentList OpenedDocument;
-		public static Document SelectedDocument;
-		
+	
 		
 		static Core()
 		{

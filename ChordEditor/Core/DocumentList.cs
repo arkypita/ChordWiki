@@ -5,7 +5,16 @@ using System.Text;
 
 namespace ChordEditor.Core
 {
-	public class DocumentList : List<Document>
+	public class DocumentList 
 	{
+		private List<Document> mList = new List<Document>();
+		
+		public Document CreateNew()
+		{
+			Document d = new Document();
+			mList.Add(d);
+			return d;
+		}
+		
 	}
 }

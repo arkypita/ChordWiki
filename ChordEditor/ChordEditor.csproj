@@ -68,8 +68,6 @@
     <Compile Include="Core\Core.cs" />
     <Compile Include="Core\Document.cs" />
     <Compile Include="Core\DocumentList.cs" />
-    <Compile Include="Core\OpenedDocument.cs" />
-    <Compile Include="Core\OpenedDocumentList.cs" />
     <Compile Include="Forms\DocumentBaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
