@@ -28,6 +28,20 @@ namespace ChordEditor
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
+
+			Forms.PendingChangesForm f = new Forms.PendingChangesForm();
+			f.Show(DP);
+
+			Forms.DocumentPropertyForm p = new Forms.DocumentPropertyForm();
+			p.Show(DP);
+
+			Forms.DocumentBaseForm d = new Forms.DocumentBaseForm();
+			d.Show(DP);
+		}
+
+		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Close();
 		}
 	}
 }

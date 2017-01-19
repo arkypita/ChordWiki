@@ -1,6 +1,6 @@
 ﻿namespace ChordEditor.Forms
 {
-	partial class PendingChangesForm
+	partial class DocumentPropertyForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -30,17 +30,18 @@
 		{
 			this.SuspendLayout();
 			// 
-			// PendingChangesForm
+			// DocumentPropertyForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(829, 294);
-			this.DockAreas = ((ChordEditor.UserControls.DockingManager.DockAreas)((ChordEditor.UserControls.DockingManager.DockAreas.Float | ChordEditor.UserControls.DockingManager.DockAreas.DockBottom)));
+			this.ClientSize = new System.Drawing.Size(284, 261);
+			this.DockAreas = ((ChordEditor.UserControls.DockingManager.DockAreas)(((ChordEditor.UserControls.DockingManager.DockAreas.Float | ChordEditor.UserControls.DockingManager.DockAreas.DockLeft) 
+            | ChordEditor.UserControls.DockingManager.DockAreas.DockRight)));
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Name = "PendingChangesForm";
-			this.TabText = "Pending Changes";
-			this.Text = "Pending Changes";
-			this.ToolTipText = "Pending Changes";
+			this.Name = "DocumentPropertyForm";
+			this.TabText = "Property";
+			this.Text = "Property";
+			this.ToolTipText = "Property";
 			this.ResumeLayout(false);
 
 		}
