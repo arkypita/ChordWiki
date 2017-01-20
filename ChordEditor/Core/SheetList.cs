@@ -20,7 +20,16 @@ namespace ChordEditor.Core
 			if (OpenSheet != null)
 				OpenSheet(sheet);
 		}
-		
-		
-	}
+
+
+
+        internal void Open(string filename)
+        {
+            Sheet sheet = new Sheet(filename);
+            mList.Add(sheet);
+
+            if (OpenSheet != null)
+                OpenSheet(sheet);
+        }
+    }
 }

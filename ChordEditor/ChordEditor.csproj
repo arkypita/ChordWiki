@@ -69,9 +69,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Core.cs" />
+    <Compile Include="Core\Program.cs" />
     <Compile Include="Core\Sheet.cs" />
+    <Compile Include="Core\SheetContent.cs" />
+    <Compile Include="Core\SheetDB.cs" />
+    <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
+    <Compile Include="Forms\SheetDatabase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SheetDatabase.Designer.cs">
+      <DependentUpon>SheetDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SheetForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -240,6 +249,9 @@
     <None Include="UserControls\DockingManager\Resources\DockPane_OptionOverflow.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\SheetDatabase.resx">
+      <DependentUpon>SheetDatabase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SheetForm.resx">
       <DependentUpon>SheetForm.cs</DependentUpon>
     </EmbeddedResource>

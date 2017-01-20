@@ -17,10 +17,14 @@ namespace ChordEditor.Core
 	{
 
 		public static SheetList OpenedSheet;
+        public static SheetDB SheetDB;
 
 		static Program()
 		{
 			OpenedSheet = new SheetList();
+            SheetDB = new SheetDB();
+
+            SheetDB.LoadCurrentFolder();
 		}
 
 		internal static void DocumentCreate()
@@ -30,37 +34,19 @@ namespace ChordEditor.Core
 
 		internal static void DocumentOpen()
 		{
-
-		}
-
-		internal static void DocumentSave()
-		{
-			
-		}
-
-		internal static void DocumentPrint()
-		{
-			
-		}
-
-		internal static void DocumentClose()
-		{
-			
-		}
-
-		internal static void DocumentSaveAs()
-		{
-			
-		}
-
-		internal static void DocumentPrintPreview()
-		{
-			
+            using (Forms.SheetDatabase f = new Forms.SheetDatabase())
+                f.ShowDialog();
 		}
 
 		internal static void DatabaseSyncronize()
 		{
 			
 		}
+
+        public static string UserLongName
+        { get { return "Diego Settimi"; } }
+
+        public static string CurrentFolder
+        { get { return ".\\SheetDB\\Local\\"; } }
 	}
 }

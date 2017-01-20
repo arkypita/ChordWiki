@@ -38,5 +38,32 @@ namespace ChordEditor.Forms
 		{
 			return null;
 		}
-	}
+
+        internal void Save()
+        {
+            if (mSheet.HasChanges)
+                mSheet.Save();
+        }
+
+        internal void Print()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SaveAs()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void PrintPreview()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SheetForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (mSheet.HasChanges && true)
+                Save();
+        }
+    }
 }

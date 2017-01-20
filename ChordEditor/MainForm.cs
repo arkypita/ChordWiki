@@ -19,9 +19,9 @@ namespace ChordEditor
 	/// </summary>
 	public partial class MainForm : Form
 	{
-		Forms.PendingChangesForm FormPendingChanges = new Forms.PendingChangesForm();
-		Forms.SheetPropertyForm FormDocumentProperty = new Forms.SheetPropertyForm();
-
+		Forms.PendingChangesForm PendingChanges = new Forms.PendingChangesForm();
+        Forms.SheetPropertyForm SheetProperty = new Forms.SheetPropertyForm();
+        
 
 		public MainForm()
 		{
@@ -36,15 +36,17 @@ namespace ChordEditor
 			using (Forms.SpashScreen ss = new Forms.SpashScreen())
 				ss.ShowDialog();
 
+			PendingChanges.Show(DP);
+			SheetProperty.Show(DP);
+          
 
-
-			FormPendingChanges.Show(DP);
-			FormDocumentProperty.Show(DP);
-
-		
-			Program.OpenedSheet.OpenSheet += OnOpenSheet; 
-			
+            Program.OpenedSheet.OpenSheet += OpenedSheet_OpenSheet;
 		}
+
+        void OpenedSheet_OpenSheet(Sheet sheet)
+        {
+            Forms.SheetForm.CreateAndShow(sheet, DP);
+        }
 
 
 		#region Button and Menu Handler
@@ -66,27 +68,27 @@ namespace ChordEditor
 
 		private void DocumentSave(object sender, EventArgs e)
 		{
-			Program.DocumentSave();
+            ActiveSheet.Save();
 		}
 
 		private void DocumentPrint(object sender, EventArgs e)
 		{
-			Program.DocumentPrint();
+            ActiveSheet.Print();
 		}
 
 		private void DocumentClose(object sender, EventArgs e)
 		{
-			Program.DocumentClose();
+            ActiveSheet.Close();
 		}
 
 		private void DocumentSaveAs(object sender, EventArgs e)
 		{
-			Program.DocumentSaveAs();
+            ActiveSheet.SaveAs();
 		}
 
 		private void DocumentPrintPreview(object sender, EventArgs e)
 		{
-			Program.DocumentPrintPreview();
+            ActiveSheet.PrintPreview();
 		}
 
 		private void DatabaseSyncronize(object sender, EventArgs e)
@@ -126,15 +128,17 @@ namespace ChordEditor
 
 		#endregion
 
-		void OnOpenSheet(Sheet sheet)
-		{
-			Forms.SheetForm.CreateAndShow(sheet, DP);
-		}
-		
-		void OnActiveDocumentChanged(object sender, EventArgs e)
-		{
-			
-		}
-		
+        private void DP_ActiveDocumentChanged(object sender, EventArgs e)
+        {
+            BtnPrintSheet.Enabled = MnPrintSheet.Enabled = ActiveSheet != null;
+            BtnSaveSheet.Enabled = MnSaveSheet.Enabled = ActiveSheet != null;
+            MnCloseSheet.Enabled = ActiveSheet != null;
+            MnPrintSheetPreview.Enabled = ActiveSheet != null;
+            MnSaveAllSheet.Enabled = ActiveSheet != null;
+        }
+
+        Forms.SheetForm ActiveSheet
+        { get { return DP.ActiveDocument as Forms.SheetForm; } }
+
 	}
 }
