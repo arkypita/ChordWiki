@@ -13,13 +13,54 @@ namespace ChordEditor.Core
 	/// <summary>
 	/// Description of Core.
 	/// </summary>
-	public static class Core
+	public static class Program
 	{
-	
-		
-		static Core()
+
+		public static OpenedDocumentList OpenedDocument;
+
+		static Program()
 		{
 			
+		}
+
+		internal static void DocumentCreate()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DocumentOpen()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DocumentSave()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DocumentPrint()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DocumentClose()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DocumentSaveAs()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DocumentPrintPreview()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void DatabaseSyncronize()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

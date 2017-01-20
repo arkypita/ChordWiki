@@ -14,7 +14,7 @@ namespace ChordEditor
 	/// <summary>
 	/// Class with program entry point.
 	/// </summary>
-	internal sealed class Program
+	internal sealed class Loader
 	{
 		/// <summary>
 		/// Program entry point.
@@ -26,6 +26,6 @@ namespace ChordEditor
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainForm());
 		}
-		
+
 	}
 }

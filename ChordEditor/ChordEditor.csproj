@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ChordEditor</RootNamespace>
     <AssemblyName>ChordEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <ApplicationIcon>ChordWiki.ico</ApplicationIcon>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -32,6 +33,12 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -44,9 +51,6 @@
     </Reference>
     <Reference Include="SharpSvn.UI">
       <HintPath>external\SharpSvn.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="SparkleLibrary">
-      <HintPath>external\SparkleLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -66,8 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Core.cs" />
-    <Compile Include="Core\Document.cs" />
-    <Compile Include="Core\DocumentList.cs" />
+    <Compile Include="Core\OpenedDocument.cs" />
+    <Compile Include="Core\OpenedDocumentList.cs" />
     <Compile Include="Forms\DocumentBaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,12 +96,18 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Loader.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SpashScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SpashScreen.Designer.cs">
+      <DependentUpon>SpashScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DockingManager\Docking\AutoHideStripBase.cs">
       <SubType>Component</SubType>
@@ -203,7 +213,6 @@
     <Compile Include="UserControls\DockingManager\Docking\Win32\NativeMethods.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />
     <None Include="UserControls\DockingManager\license.txt" />
     <None Include="UserControls\DockingManager\Resources\DockIndicator_PaneDiamond.bmp" />
@@ -239,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PendingChangesForm.resx">
       <DependentUpon>PendingChangesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SpashScreen.resx">
+      <DependentUpon>SpashScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

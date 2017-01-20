@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ChordEditor.Core
 {
-	public class Document
+	public class OpenedDocument
 	{
 	}
 }
