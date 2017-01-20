@@ -20,7 +20,7 @@ namespace ChordEditor
 	public partial class MainForm : Form
 	{
 		Forms.PendingChangesForm FormPendingChanges = new Forms.PendingChangesForm();
-		Forms.DocumentPropertyForm FormDocumentProperty = new Forms.DocumentPropertyForm();
+		Forms.SheetPropertyForm FormDocumentProperty = new Forms.SheetPropertyForm();
 
 
 		public MainForm()
@@ -41,8 +41,9 @@ namespace ChordEditor
 			FormPendingChanges.Show(DP);
 			FormDocumentProperty.Show(DP);
 
-			Forms.DocumentBaseForm d = new Forms.DocumentBaseForm();
-			d.Show(DP);
+		
+			Program.OpenedSheet.OpenSheet += OnOpenSheet; 
+			
 		}
 
 
@@ -125,5 +126,15 @@ namespace ChordEditor
 
 		#endregion
 
+		void OnOpenSheet(Sheet sheet)
+		{
+			Forms.SheetForm.CreateAndShow(sheet, DP);
+		}
+		
+		void OnActiveDocumentChanged(object sender, EventArgs e)
+		{
+			
+		}
+		
 	}
 }

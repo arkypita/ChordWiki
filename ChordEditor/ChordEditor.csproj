@@ -70,19 +70,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Core.cs" />
-    <Compile Include="Core\OpenedDocument.cs" />
-    <Compile Include="Core\OpenedDocumentList.cs" />
-    <Compile Include="Forms\DocumentBaseForm.cs">
+    <Compile Include="Core\Sheet.cs" />
+    <Compile Include="Core\SheetList.cs" />
+    <Compile Include="Forms\SheetForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DocumentBaseForm.Designer.cs">
-      <DependentUpon>DocumentBaseForm.cs</DependentUpon>
+    <Compile Include="Forms\SheetForm.Designer.cs">
+      <DependentUpon>SheetForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DocumentPropertyForm.cs">
+    <Compile Include="Forms\SheetPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DocumentPropertyForm.Designer.cs">
-      <DependentUpon>DocumentPropertyForm.cs</DependentUpon>
+    <Compile Include="Forms\SheetPropertyForm.Designer.cs">
+      <DependentUpon>SheetPropertyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PendingChangesForm.cs">
       <SubType>Form</SubType>
@@ -240,11 +240,11 @@
     <None Include="UserControls\DockingManager\Resources\DockPane_OptionOverflow.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\DocumentBaseForm.resx">
-      <DependentUpon>DocumentBaseForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SheetForm.resx">
+      <DependentUpon>SheetForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DocumentPropertyForm.resx">
-      <DependentUpon>DocumentPropertyForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SheetPropertyForm.resx">
+      <DependentUpon>SheetPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PendingChangesForm.resx">
       <DependentUpon>PendingChangesForm.cs</DependentUpon>

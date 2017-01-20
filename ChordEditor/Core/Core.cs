@@ -16,51 +16,51 @@ namespace ChordEditor.Core
 	public static class Program
 	{
 
-		public static OpenedDocumentList OpenedDocument;
+		public static SheetList OpenedSheet;
 
 		static Program()
 		{
-			
+			OpenedSheet = new SheetList();
 		}
 
 		internal static void DocumentCreate()
 		{
-			throw new NotImplementedException();
+			OpenedSheet.CreateNew();
 		}
 
 		internal static void DocumentOpen()
 		{
-			throw new NotImplementedException();
+
 		}
 
 		internal static void DocumentSave()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		internal static void DocumentPrint()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		internal static void DocumentClose()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		internal static void DocumentSaveAs()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		internal static void DocumentPrintPreview()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		internal static void DatabaseSyncronize()
 		{
-			throw new NotImplementedException();
+			
 		}
 	}
 }

@@ -9,11 +9,13 @@ using System.Windows.Forms;
 
 namespace ChordEditor.Forms
 {
-	public partial class DocumentBaseForm : ChordEditor.UserControls.DockingManager.DockContent
+	public partial class SheetPropertyForm : ChordEditor.UserControls.DockingManager.DockContent
 	{
-		public DocumentBaseForm()
+		public SheetPropertyForm()
 		{
 			InitializeComponent();
 		}
+		
+		
 	}
 }
