@@ -68,5 +68,8 @@ namespace ChordEditor.Forms
             if (mSheet.HasChanges && true)
                 Save(true);
         }
+
+        public Core.Sheet Sheet
+        { get { return mSheet; } }
     }
 }
