@@ -32,12 +32,6 @@ namespace ChordEditor.Core
 			OpenedSheet.CreateNew();
 		}
 
-		internal static void DocumentOpen()
-		{
-            using (Forms.SheetDatabase f = new Forms.SheetDatabase())
-                f.ShowDialog();
-		}
-
 		internal static void DatabaseSyncronize()
 		{
 			

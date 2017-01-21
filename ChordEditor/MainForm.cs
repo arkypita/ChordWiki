@@ -21,6 +21,7 @@ namespace ChordEditor
 	{
 		Forms.PendingChangesForm PendingChanges = new Forms.PendingChangesForm();
         Forms.SheetPropertyForm SheetProperty = new Forms.SheetPropertyForm();
+        Forms.SheetDatabase SheetDataBase = new Forms.SheetDatabase();
         
 
 		public MainForm()
@@ -38,9 +39,10 @@ namespace ChordEditor
 
 			PendingChanges.Show(DP);
 			SheetProperty.Show(DP);
-          
+            DocumentOpen(null, null);
 
             Program.OpenedSheet.OpenSheet += OpenedSheet_OpenSheet;
+
 		}
 
         void OpenedSheet_OpenSheet(Sheet sheet)
@@ -63,7 +65,8 @@ namespace ChordEditor
 
 		private void DocumentOpen(object sender, EventArgs e)
 		{
-			Program.DocumentOpen();
+            SheetDataBase.Show(DP);
+            SheetDataBase.Visible = true;
 		}
 
 		private void DocumentSave(object sender, EventArgs e)

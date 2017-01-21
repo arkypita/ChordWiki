@@ -40,6 +40,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnOpen = new System.Windows.Forms.Button();
+            this.BtnNew = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.LV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -131,10 +132,12 @@
             // 
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.BtnOpen, 1, 0);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.BtnOpen, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnNew, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 434);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -154,16 +157,29 @@
             this.BtnOpen.UseVisualStyleBackColor = true;
             this.BtnOpen.Click += new System.EventHandler(this.BtnOpen_Click);
             // 
+            // BtnNew
+            // 
+            this.BtnNew.Location = new System.Drawing.Point(590, 3);
+            this.BtnNew.Name = "BtnNew";
+            this.BtnNew.Size = new System.Drawing.Size(89, 37);
+            this.BtnNew.TabIndex = 1;
+            this.BtnNew.Text = "New";
+            this.BtnNew.UseVisualStyleBackColor = true;
+            this.BtnNew.Click += new System.EventHandler(this.BtnNew_Click);
+            // 
             // SheetDatabase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(783, 480);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.DockAreas = ChordEditor.UserControls.DockingManager.DockAreas.Document;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.HideOnClose = true;
             this.Name = "SheetDatabase";
+            this.TabText = "Sheet Database";
             this.Text = "Sheet Database";
+            this.ToolTipText = "Sheet Database";
             this.Load += new System.EventHandler(this.SheetDatabase_Load);
             ((System.ComponentModel.ISupportInitialize)(this.LV)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -185,5 +201,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button BtnOpen;
+        private System.Windows.Forms.Button BtnNew;
     }
 }

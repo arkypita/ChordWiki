@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace ChordEditor.Forms
 {
-    public partial class SheetDatabase : System.Windows.Forms.Form
+    public partial class SheetDatabase : UserControls.DockingManager.DockContent
     {
         public SheetDatabase()
         {
@@ -39,7 +39,6 @@ namespace ChordEditor.Forms
             Hide();
             foreach (Core.SheetHeader sh in LV.SelectedObjects)
                 Core.Program.OpenedSheet.Open(sh.FileName);
-            Close();
         }
 
         private void LV_ItemActivate(object sender, EventArgs e)
@@ -48,7 +47,11 @@ namespace ChordEditor.Forms
             Core.SheetHeader sh = LV.SelectedObject as Core.SheetHeader;
             if (sh != null)
                 Core.Program.OpenedSheet.Open(sh.FileName);
-            Close();
+        }
+
+        private void BtnNew_Click(object sender, EventArgs e)
+        {
+            Core.Program.DocumentCreate();
         }
 
     }
