@@ -41,6 +41,7 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.BtnOpen = new System.Windows.Forms.Button();
             this.BtnNew = new System.Windows.Forms.Button();
+            this.BtnDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.LV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -132,12 +133,14 @@
             // 
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.BtnOpen, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.BtnNew, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnDelete, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnOpen, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.BtnNew, 2, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 434);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -166,6 +169,17 @@
             this.BtnNew.Text = "New";
             this.BtnNew.UseVisualStyleBackColor = true;
             this.BtnNew.Click += new System.EventHandler(this.BtnNew_Click);
+            // 
+            // BtnDelete
+            // 
+            this.BtnDelete.Enabled = false;
+            this.BtnDelete.Location = new System.Drawing.Point(3, 3);
+            this.BtnDelete.Name = "BtnDelete";
+            this.BtnDelete.Size = new System.Drawing.Size(89, 37);
+            this.BtnDelete.TabIndex = 2;
+            this.BtnDelete.Text = "Delete";
+            this.BtnDelete.UseVisualStyleBackColor = true;
+            this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // SheetDatabase
             // 
@@ -202,5 +216,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button BtnOpen;
         private System.Windows.Forms.Button BtnNew;
+        private System.Windows.Forms.Button BtnDelete;
     }
 }

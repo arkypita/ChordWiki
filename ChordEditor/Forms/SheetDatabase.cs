@@ -21,17 +21,34 @@ namespace ChordEditor.Forms
                 Core.SheetHeader sh = (Core.SheetHeader)rowObject;
                 return "verified";
             };
+
+            LV.AboutToCreateGroups += (s, args) =>
+            {
+                foreach (var group in args.Groups)
+                {
+                    if (group.Header == "{null}" && args.Parameters.GroupByColumn == ChRevisor)
+                        group.Header = "Not reviewed";
+                }
+            };
+
+            Core.Program.SheetDB.ListChanged += SheetDB_ListChanged;
+        }
+
+        void SheetDB_ListChanged()
+        {
+            LV.BuildList();
+            LV_SelectionChanged(null, null);
         }
 
         private void SheetDatabase_Load(object sender, EventArgs e)
         {
             LV.SetObjects(Core.Program.SheetDB);
-            LV.BuildGroups(ChCategory, SortOrder.Descending);
         }
 
         private void LV_SelectionChanged(object sender, EventArgs e)
         {
             BtnOpen.Enabled = LV.SelectedObjects.Count > 0;
+            BtnDelete.Enabled = LV.SelectedObjects.Count > 0;
         }
 
         private void BtnOpen_Click(object sender, EventArgs e)
@@ -54,5 +71,14 @@ namespace ChordEditor.Forms
             Core.Program.DocumentCreate();
         }
 
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            foreach (Core.SheetHeader sh in LV.SelectedObjects)
+            {
+                if (System.IO.File.Exists(sh.FilePath))
+                    System.IO.File.Delete(sh.FilePath);
+            }
+            Core.Program.SheetDB.ReloadDataBase();
+        }
     }
 }

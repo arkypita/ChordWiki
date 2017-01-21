@@ -24,7 +24,7 @@ namespace ChordEditor.Core
 			OpenedSheet = new SheetList();
             SheetDB = new SheetDB();
 
-            SheetDB.LoadCurrentFolder();
+            SheetDB.ReloadDataBase();
 		}
 
 		internal static void DocumentCreate()

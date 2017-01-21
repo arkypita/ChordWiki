@@ -39,10 +39,13 @@ namespace ChordEditor.Forms
 			return null;
 		}
 
-        internal void Save()
+        internal void Save(bool reloadDB)
         {
             if (mSheet.HasChanges)
+            {
                 mSheet.Save();
+                if (reloadDB) Core.Program.SheetDB.ReloadDataBase();
+            }
         }
 
         internal void Print()
@@ -63,7 +66,7 @@ namespace ChordEditor.Forms
         private void SheetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (mSheet.HasChanges && true)
-                Save();
+                Save(true);
         }
     }
 }

@@ -18,9 +18,10 @@ namespace ChordEditor.Core
 
         public Sheet(string filename)
         {
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(Program.CurrentFolder + filename))
+            mHeader = new SheetHeader(filename);
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(mHeader.FilePath))
             {
-                mHeader = new SheetHeader(filename, sr);
+                mHeader.LoadFromStream(sr);
                 mContent = new SheetContent(sr);
             }
         }
@@ -32,7 +33,7 @@ namespace ChordEditor.Core
 
 
             System.IO.Directory.CreateDirectory(Program.CurrentFolder); //ensure path
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(Program.CurrentFolder + mHeader.FileName))
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mHeader.FilePath))
             {
                 //write header
                 mHeader.Write(sw);
@@ -45,6 +46,8 @@ namespace ChordEditor.Core
 
                 sw.Close();
             }
+
+            mHeader.UpdateFileInfo();
         }
 
         public bool HasChanges

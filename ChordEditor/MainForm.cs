@@ -71,7 +71,7 @@ namespace ChordEditor
 
 		private void DocumentSave(object sender, EventArgs e)
 		{
-            ActiveSheet.Save();
+            ActiveSheet.Save(true);
 		}
 
 		private void DocumentPrint(object sender, EventArgs e)

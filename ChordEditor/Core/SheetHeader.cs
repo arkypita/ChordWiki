@@ -6,33 +6,43 @@ using System.Threading.Tasks;
 
 namespace ChordEditor.Core
 {
-
+    [Serializable()]
     public class SheetHeader
     {
         private string mFileName;
+        private DateTime mFileDate;
+        private long mFileSize;
+
         private Dictionary<string, string> mMetaData;
 
-        public SheetHeader()
+        public SheetHeader() : this(Guid.NewGuid().ToString() + ".cpw")
         {
-            mFileName = Guid.NewGuid().ToString() + ".cpw";
-            mMetaData = new Dictionary<string, string>();
             SheetAuthor = Program.UserLongName;
             Title = "La canzone del sole";
             Artist = "Lucio Battisti";
             SheetCategory = "Cantautori";
         }
 
-        public SheetHeader(string filename, System.IO.StreamReader sr)
+        public SheetHeader(string filename)
         {
-            mFileName = System.IO.Path.GetFileName(filename);
             mMetaData = new Dictionary<string, string>();
+            mFileName = System.IO.Path.GetFileName(filename).ToLower();
+            UpdateFileInfo();
+        }
 
+        public string FilePath
+        { get { return Program.CurrentFolder + FileName; } }
+
+
+        internal void LoadFromStream(System.IO.StreamReader sr)
+        {
+            mMetaData.Clear();
             string line = null;
             while (!sr.EndOfStream && (line = sr.ReadLine()) != "") //stringa vuota separa header dai dati
             {
                 int index;
                 if (line.StartsWith("{") && line.EndsWith("}") && (index = line.IndexOf(':')) >= 0)
-                    SetMeta(line.Substring(1, index-1), line.Substring(index+1, line.Length - index -2));
+                    SetMeta(line.Substring(1, index - 1), line.Substring(index + 1, line.Length - index - 2));
             }
         }
 
@@ -77,7 +87,7 @@ namespace ChordEditor.Core
 
         public string SheetRevisor
         {
-            get { return GetMeta("sheetrevisor"); }
+            get {return GetMeta("sheetrevisor"); }
             set { SetMeta("sheetrevisor", value); }
         }
 
@@ -168,5 +178,66 @@ namespace ChordEditor.Core
 
         public bool HasChanges
         { get { return true; } }
+
+        private bool HasFileChanges()
+        {
+            if (GetFileDate() != mFileDate)
+                return true;
+            else if (GetFileSize() != mFileSize)
+                return true;
+            else
+                return false;
+        }
+
+        private long GetFileSize()
+        {
+            if (System.IO.File.Exists(FilePath))
+            {
+                System.IO.FileInfo fi = new System.IO.FileInfo(FilePath);
+                return fi.Length;
+            }
+            
+            return 0;
+        }
+
+        private DateTime GetFileDate()
+        {
+            if (System.IO.File.Exists(FilePath))
+                return System.IO.File.GetLastWriteTimeUtc(FilePath);
+            else
+                return DateTime.UtcNow;
+        }
+
+        public void UpdateFileInfo()
+        {
+            mFileDate = GetFileDate();
+            mFileSize = GetFileSize();
+        }
+
+
+
+        public void ReloadChangedHeader()
+        {
+            if (HasFileChanges())
+                ReloadHeader();
+        }
+
+        public void ReloadHeader()
+        {
+            using (System.IO.StreamReader sr = new System.IO.StreamReader(FilePath))
+                LoadFromStream(sr);
+            UpdateFileInfo();
+        }
+
+        public override bool Equals(object obj)
+        {
+            SheetHeader other = obj as SheetHeader;
+            return other != null && other.FilePath == FilePath;
+        }
+
+        public override int GetHashCode()
+        {
+            return FilePath.GetHashCode();
+        }
     }
 }

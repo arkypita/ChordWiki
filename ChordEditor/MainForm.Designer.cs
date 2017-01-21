@@ -407,7 +407,7 @@ namespace ChordEditor
             this.BtnOpenSheet.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnOpenSheet.Name = "BtnOpenSheet";
             this.BtnOpenSheet.Size = new System.Drawing.Size(36, 36);
-            this.BtnOpenSheet.Text = "&Open";
+            this.BtnOpenSheet.Text = "&Open From Database";
             this.BtnOpenSheet.Click += new System.EventHandler(this.DocumentOpen);
             // 
             // BtnSaveSheet
