@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ChordEditor.Core
 {
-	public class SheetList 
+	public class SheetList : IEnumerable<Sheet>
 	{
 		public delegate void SheetDelegate(Sheet sheet);
 		public event SheetDelegate OpenSheet;
@@ -23,13 +23,23 @@ namespace ChordEditor.Core
 
 
 
-        internal void Open(string filename)
+        internal void Open(SheetHeader sh)
         {
-            Sheet sheet = new Sheet(filename);
+            Sheet sheet = new Sheet(sh.FileName);
             mList.Add(sheet);
 
             if (OpenSheet != null)
                 OpenSheet(sheet);
+        }
+
+        IEnumerator<Sheet> IEnumerable<Sheet>.GetEnumerator()
+        {
+            return mList.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return mList.GetEnumerator();
         }
     }
 }

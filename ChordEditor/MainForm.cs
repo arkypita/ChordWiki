@@ -40,16 +40,7 @@ namespace ChordEditor
 			PendingChanges.Show(DP);
 			SheetProperty.Show(DP);
             DocumentOpen(null, null);
-
-            Program.OpenedSheet.OpenSheet += OpenedSheet_OpenSheet;
-
 		}
-
-        void OpenedSheet_OpenSheet(Sheet sheet)
-        {
-            Forms.SheetForm.CreateAndShow(sheet, DP);
-        }
-
 
 		#region Button and Menu Handler
 

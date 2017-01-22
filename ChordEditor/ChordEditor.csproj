@@ -40,6 +40,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastColoredTextBox">
+      <HintPath>external\FastColoredTextBox.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -71,10 +74,10 @@
   <ItemGroup>
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\Sheet.cs" />
-    <Compile Include="Core\SheetContent.cs" />
     <Compile Include="Core\SheetDB.cs" />
     <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
+    <Compile Include="Forms\InputBox.cs" />
     <Compile Include="Forms\SheetDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +223,12 @@
     </Compile>
     <Compile Include="UserControls\DockingManager\Docking\Win32\Enums.cs" />
     <Compile Include="UserControls\DockingManager\Docking\Win32\NativeMethods.cs" />
+    <Compile Include="UserControls\OnNullTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\OnNullTextBox.Designer.cs">
+      <DependentUpon>OnNullTextBox.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />

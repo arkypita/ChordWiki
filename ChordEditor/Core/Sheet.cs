@@ -7,13 +7,19 @@ namespace ChordEditor.Core
 {
 	public class Sheet
 	{
-        public SheetHeader mHeader;
-        public SheetContent mContent;
+        public delegate void SheetDelegate(Sheet s);
+        public static event SheetDelegate SheetChange;
+
+        private SheetHeader mHeader;
+        private string mContent;
+        private string mOContent;
 
         public Sheet()
         {
             mHeader = new SheetHeader();
-            mContent = new SheetContent();
+            mHeader.Progress = SheetHeader.SheetProgress.Incomplete;
+
+            SheetHeader.HeaderChanged += SheetHeader_HeaderChanged;
         }
 
         public Sheet(string filename)
@@ -22,15 +28,42 @@ namespace ChordEditor.Core
             using (System.IO.StreamReader sr = new System.IO.StreamReader(mHeader.FilePath))
             {
                 mHeader.LoadFromStream(sr);
-                mContent = new SheetContent(sr);
+                mContent = sr.ReadToEnd();
             }
+            
+            BackupStatus();
+
+            SheetHeader.HeaderChanged += SheetHeader_HeaderChanged;
+        }
+
+        public SheetHeader Header
+        { get { return mHeader; } }
+
+        public string Content
+        {
+            get { return mContent; } 
+            set 
+            {
+                if (mContent != value)
+                {
+                    mContent = value;
+
+                    if (SheetChange != null)
+                        SheetChange(this);
+                }
+            } 
+        }
+
+        void SheetHeader_HeaderChanged(SheetHeader sh)
+        {
+            if (SheetChange != null && object.Equals(sh, mHeader))
+                SheetChange(this);
         }
 
         public void Save()
         {
-            if (!HasChanges)
+            if (!HasMemoryChanges)
                 return;
-
 
             System.IO.Directory.CreateDirectory(Program.CurrentFolder); //ensure path
             using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mHeader.FilePath))
@@ -42,16 +75,27 @@ namespace ChordEditor.Core
                 sw.WriteLine("");
 
                 //write content
-                mContent.Write(sw);
+                if (mContent != null)
+                    sw.Write(mContent);
 
                 sw.Close();
             }
 
             mHeader.UpdateFileInfo();
+            BackupStatus();
+
+            if (SheetChange != null)
+                SheetChange(this);
         }
 
-        public bool HasChanges
-        { get { return mHeader.HasChanges || true; } }
+        void BackupStatus()
+        {
+            //salvo la mia memoria x confronto changes
+            mOContent = mContent;
+            mHeader.BackupStatus();
+        }
 
-	}
+        public bool HasMemoryChanges
+        { get { return mHeader.MemoryHasChanges || mContent != mOContent; } }
+    }
 }

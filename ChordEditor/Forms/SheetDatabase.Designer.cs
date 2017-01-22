@@ -39,9 +39,9 @@
             this.IL = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.BtnDelete = new System.Windows.Forms.Button();
             this.BtnOpen = new System.Windows.Forms.Button();
             this.BtnNew = new System.Windows.Forms.Button();
-            this.BtnDelete = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.LV)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -82,29 +82,32 @@
             this.ChTitle.AspectName = "Title";
             this.ChTitle.Text = "Title";
             this.ChTitle.UseInitialLetterForGroup = true;
-            this.ChTitle.Width = 160;
+            this.ChTitle.Width = 200;
             // 
             // ChArtist
             // 
             this.ChArtist.AspectName = "Artist";
             this.ChArtist.Text = "Artist";
             this.ChArtist.UseInitialLetterForGroup = true;
-            this.ChArtist.Width = 100;
+            this.ChArtist.Width = 160;
             // 
             // ChCategory
             // 
             this.ChCategory.AspectName = "SheetCategory";
             this.ChCategory.Text = "Category";
+            this.ChCategory.Width = 100;
             // 
             // ChAuthor
             // 
             this.ChAuthor.AspectName = "SheetAuthor";
             this.ChAuthor.Text = "Author";
+            this.ChAuthor.Width = 160;
             // 
             // ChRevisor
             // 
             this.ChRevisor.AspectName = "SheetRevisor";
             this.ChRevisor.Text = "Revisor";
+            this.ChRevisor.Width = 160;
             // 
             // IL
             // 
@@ -113,6 +116,7 @@
             this.IL.Images.SetKeyName(0, "incomplete");
             this.IL.Images.SetKeyName(1, "suspended");
             this.IL.Images.SetKeyName(2, "verified");
+            this.IL.Images.SetKeyName(3, "locked");
             // 
             // tableLayoutPanel1
             // 
@@ -149,6 +153,17 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(777, 43);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
+            // BtnDelete
+            // 
+            this.BtnDelete.Enabled = false;
+            this.BtnDelete.Location = new System.Drawing.Point(3, 3);
+            this.BtnDelete.Name = "BtnDelete";
+            this.BtnDelete.Size = new System.Drawing.Size(89, 37);
+            this.BtnDelete.TabIndex = 2;
+            this.BtnDelete.Text = "Delete";
+            this.BtnDelete.UseVisualStyleBackColor = true;
+            this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
+            // 
             // BtnOpen
             // 
             this.BtnOpen.Enabled = false;
@@ -169,17 +184,6 @@
             this.BtnNew.Text = "New";
             this.BtnNew.UseVisualStyleBackColor = true;
             this.BtnNew.Click += new System.EventHandler(this.BtnNew_Click);
-            // 
-            // BtnDelete
-            // 
-            this.BtnDelete.Enabled = false;
-            this.BtnDelete.Location = new System.Drawing.Point(3, 3);
-            this.BtnDelete.Name = "BtnDelete";
-            this.BtnDelete.Size = new System.Drawing.Size(89, 37);
-            this.BtnDelete.TabIndex = 2;
-            this.BtnDelete.Text = "Delete";
-            this.BtnDelete.UseVisualStyleBackColor = true;
-            this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
             // SheetDatabase
             // 

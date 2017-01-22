@@ -15,21 +15,17 @@ namespace ChordEditor.Core
 	/// </summary>
 	public static class Program
 	{
-
-		public static SheetList OpenedSheet;
         public static SheetDB SheetDB;
 
 		static Program()
 		{
-			OpenedSheet = new SheetList();
             SheetDB = new SheetDB();
-
             SheetDB.ReloadDataBase();
 		}
 
 		internal static void DocumentCreate()
 		{
-			OpenedSheet.CreateNew();
+            SheetDB.ReloadDataBase();
 		}
 
 		internal static void DatabaseSyncronize()

@@ -9,18 +9,22 @@ namespace ChordEditor.Core
     [Serializable()]
     public class SheetHeader
     {
+        public enum SheetProgress
+        { Incomplete, Complete, Reviewed, Locked }
+
+        public delegate void SheetHeaderDelegate(SheetHeader sh);
+        public static event SheetHeaderDelegate HeaderChanged;
+
         private string mFileName;
         private DateTime mFileDate;
         private long mFileSize;
-
         private Dictionary<string, string> mMetaData;
+        
+        [NonSerialized()] private Dictionary<string, string> mOMetaData;
 
         public SheetHeader() : this(Guid.NewGuid().ToString() + ".cpw")
         {
             SheetAuthor = Program.UserLongName;
-            Title = "La canzone del sole";
-            Artist = "Lucio Battisti";
-            SheetCategory = "Cantautori";
         }
 
         public SheetHeader(string filename)
@@ -44,6 +48,13 @@ namespace ChordEditor.Core
                 if (line.StartsWith("{") && line.EndsWith("}") && (index = line.IndexOf(':')) >= 0)
                     SetMeta(line.Substring(1, index - 1), line.Substring(index + 1, line.Length - index - 2));
             }
+        }
+
+        internal void BackupStatus()
+        {
+            mOMetaData = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> kvp in mMetaData)
+                mOMetaData.Add(kvp.Key, kvp.Value);
         }
 
         public string FileName
@@ -91,10 +102,10 @@ namespace ChordEditor.Core
             set { SetMeta("sheetrevisor", value); }
         }
 
-        public bool Locked
+        public SheetProgress Progress
         {
-            get { return GetMeta("locked") == null ? false : bool.Parse(GetMeta("locked")); }
-            set { SetMeta("locked", value.ToString()); }
+            get { return GetMeta("sheetprogress") == null ? SheetProgress.Incomplete : (SheetProgress)Enum.Parse(typeof(SheetProgress), GetMeta("sheetprogress")); }
+            set { SetMeta("sheetprogress", value.ToString()); }
         }
 
         public List<string> Tags
@@ -153,6 +164,9 @@ namespace ChordEditor.Core
                     mMetaData[key] = value;
                 else
                     mMetaData.Add(key, value);
+
+                if (HeaderChanged != null)
+                    HeaderChanged(this);
             }
         }
 
@@ -166,7 +180,7 @@ namespace ChordEditor.Core
             WriteNoNull(sw, "sheetcategory");
             WriteNoNull(sw, "sheetauthor");
             WriteNoNull(sw, "sheetrevisor");
-            if (Locked) WriteNoNull(sw, "locked");
+            WriteNoNull(sw, "sheetprogress");
         }
 
         private void WriteNoNull(System.IO.StreamWriter sw, string key)
@@ -176,10 +190,22 @@ namespace ChordEditor.Core
                 sw.WriteLine("{{{0}:{1}}}", key, value);
         }
 
-        public bool HasChanges
-        { get { return true; } }
+        public bool MemoryHasChanges
+        {
+            get 
+            {
+                if (mMetaData.Count != mOMetaData.Count)
+                    return true;
 
-        private bool HasFileChanges()
+                foreach (KeyValuePair<string, string> kvp in mMetaData)
+                    if (!mOMetaData.ContainsKey(kvp.Key) || mOMetaData[kvp.Key] != kvp.Value)
+                        return true;
+
+                return false;
+            } 
+        }
+
+        private bool FileHasChanges()
         {
             if (GetFileDate() != mFileDate)
                 return true;
@@ -218,7 +244,7 @@ namespace ChordEditor.Core
 
         public void ReloadChangedHeader()
         {
-            if (HasFileChanges())
+            if (FileHasChanges())
                 ReloadHeader();
         }
 

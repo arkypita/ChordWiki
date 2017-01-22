@@ -12,10 +12,12 @@ namespace ChordEditor.Core
         public event ListChangedDelegate ListChanged;
 
         List<SheetHeader> mList = new List<SheetHeader>();
+        List<string> mCategories = new List<string>();
+        List<string> mTags = new List<string>();
 
         public SheetDB()
         {
-            
+              
         }
 
         public void ReloadDataBase()
@@ -42,6 +44,17 @@ namespace ChordEditor.Core
                             mList.Add(sh);
                         }
                     }
+                }
+
+                foreach (SheetHeader sh in mList)
+                {
+                    string cat = sh.SheetCategory;
+                    if (cat != null && !mCategories.Contains(cat))
+                        mCategories.Add(cat);
+
+                    foreach(string tag in sh.Tags)
+                        if (!mTags.Contains(tag))
+                            mTags.Add(tag);
                 }
 
                 SaveIndex();
@@ -83,6 +96,12 @@ namespace ChordEditor.Core
                 fs.Close();
             }
         }
+
+        public List<string> Categories
+        { get { return mCategories; } }
+
+        public List<string> Tags
+        { get { return mTags; } }
 
         IEnumerator<SheetHeader> IEnumerable<SheetHeader>.GetEnumerator()
         {
