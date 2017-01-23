@@ -17,6 +17,8 @@ namespace ChordEditor.Forms
 		
 		TextStyle mChordStyle = new TextStyle(Brushes.Navy, null, FontStyle.Regular);
 		TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
+		TextStyle mKeywordStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
+		
 
         private SheetForm()
         {
@@ -177,11 +179,12 @@ namespace ChordEditor.Forms
 		private void TB_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
 		{
            //clear previous highlighting
-			e.ChangedRange.ClearStyle(mChordStyle);
-			e.ChangedRange.ClearStyle(mMetaStyle);
+			e.ChangedRange.ClearStyle();
             //highlight tags
-			e.ChangedRange.SetStyle(mChordStyle, "\\[[^\\]]+\\]");
-			e.ChangedRange.SetStyle(mMetaStyle, "{[^}]+}");
+			e.ChangedRange.SetStyle(mChordStyle, @"\[[^\]]+\]");
+			e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
+
+			e.ChangedRange.SetStyle(mKeywordStyle, @"\b(comment|comment_italic|comment_box|start_of_chorus|end_of_chorus)\s+(?<range>[\w_]+?)\b");
 		}
 
 
