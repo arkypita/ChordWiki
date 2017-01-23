@@ -69,7 +69,7 @@
 			this.TB.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
 			this.TB.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("TB.ServiceColors")));
 			this.TB.ShowLineNumbers = false;
-			this.TB.Size = new System.Drawing.Size(666, 464);
+			this.TB.Size = new System.Drawing.Size(666, 470);
 			this.TB.TabIndex = 0;
 			this.TB.Zoom = 100;
 			this.TB.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChangedDelayed);
@@ -86,11 +86,12 @@
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.CbZoom, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 473);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 476);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(666, 27);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(672, 27);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// label1
@@ -122,6 +123,7 @@
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
