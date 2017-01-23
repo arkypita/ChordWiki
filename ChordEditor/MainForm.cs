@@ -51,7 +51,7 @@ namespace ChordEditor
 
 		private void DocumentCreate(object sender, EventArgs e)
 		{
-			Program.DocumentCreate();
+			Forms.SheetForm.CreateAndShow(new Core.Sheet(), DP);
 		}
 
 		private void DocumentOpen(object sender, EventArgs e)
@@ -92,32 +92,38 @@ namespace ChordEditor
 
 		private void SelectionCut(object sender, EventArgs e)
 		{
-
+			if (ActiveEditor != null)
+				ActiveEditor.Cut();
 		}
 
 		private void SelectionCopy(object sender, EventArgs e)
 		{
-
+			if (ActiveEditor != null)
+				ActiveEditor.Copy();
 		}
 
 		private void SelectionPaste(object sender, EventArgs e)
 		{
-
+			if (ActiveEditor != null)
+				ActiveEditor.Paste();
 		}
 
 		private void ActionUndo(object sender, EventArgs e)
 		{
-
+			if (ActiveEditor != null && ActiveEditor.UndoEnabled)
+				ActiveEditor.Undo();
 		}
 
 		private void ActionRedo(object sender, EventArgs e)
 		{
-
+			if (ActiveEditor != null && ActiveEditor.RedoEnabled)
+				ActiveEditor.Redo();
 		}
 
 		private void ActionSelectAll(object sender, EventArgs e)
 		{
-
+			if (ActiveEditor != null)
+				ActiveEditor.SelectAll();
 		}
 
 		#endregion
@@ -129,10 +135,42 @@ namespace ChordEditor
             MnCloseSheet.Enabled = ActiveSheet != null;
             MnPrintSheetPreview.Enabled = ActiveSheet != null;
             MnSaveAllSheet.Enabled = ActiveSheet != null;
+
+			if (ActiveEditor != null)
+			{
+				MnUndo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Undo);
+				MnRedo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Redo);
+				MnCut.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Cut);
+				MnCopy.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Copy);
+				MnPaste.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Paste);
+				MnSelectAll.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.SelectAll);
+			}
         }
+
+		private Keys GetShortCut(FastColoredTextBoxNS.FCTBAction action)
+		{
+			foreach (KeyValuePair<Keys, FastColoredTextBoxNS.FCTBAction> kvp in ActiveEditor.HotkeysMapping)
+				if (action == kvp.Value)
+					return kvp.Key;
+			return Keys.None;
+		}
 
         Forms.SheetForm ActiveSheet
         { get { return DP.ActiveDocument as Forms.SheetForm; } }
+
+		FastColoredTextBoxNS.FastColoredTextBox ActiveEditor
+		{get{return ActiveSheet != null ? ActiveSheet.Editor : null;}}
+
+		private void ET_Tick(object sender, EventArgs e)
+		{
+
+
+			MnCut.Enabled = BtnCut.Enabled = ActiveEditor != null && !ActiveEditor.Selection.IsEmpty;
+			MnCopy.Enabled = BtnCopy.Enabled = ActiveEditor != null && !ActiveEditor.Selection.IsEmpty;
+			MnPaste.Enabled = BtnPaste.Enabled = ActiveEditor != null;
+			MnUndo.Enabled = ActiveEditor != null && ActiveEditor.UndoEnabled;
+			MnRedo.Enabled = ActiveEditor != null && ActiveEditor.RedoEnabled;
+		}
 
 	}
 }

@@ -106,7 +106,7 @@ namespace ChordEditor.Forms
                     if (cat != null && cat.Trim().Length > 0)
                     {
                         if (!CbCategory.Items.Contains(cat))
-                            CbCategory.Items.Insert(CbCategory.Items.Count - 2, cat);
+                            CbCategory.Items.Insert(CbCategory.Items.Count - 1, cat);
                         ActiveSheet.Header.SheetCategory = cat;
                     }
                 }
@@ -118,6 +118,13 @@ namespace ChordEditor.Forms
                 ActiveSheet.Header.SheetCategory = (string)CbCategory.SelectedItem;
             }
         }
+
+		private void ValidateTextBox(object sender, CancelEventArgs e)
+		{
+			TextBox tb = sender as TextBox;
+			if (tb.Text.Length > 0 && tb.Text.Trim().Length == 0)
+				tb.Text = "";
+		}
 		
 	}
 }

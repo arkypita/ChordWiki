@@ -23,11 +23,6 @@ namespace ChordEditor.Core
             SheetDB.ReloadDataBase();
 		}
 
-		internal static void DocumentCreate()
-		{
-            SheetDB.ReloadDataBase();
-		}
-
 		internal static void DatabaseSyncronize()
 		{
 			

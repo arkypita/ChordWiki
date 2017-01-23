@@ -40,9 +40,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastColoredTextBox">
-      <HintPath>external\FastColoredTextBox.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -263,6 +260,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SheetForm.resx">
       <DependentUpon>SheetForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SheetPropertyForm.resx">
       <DependentUpon>SheetPropertyForm.cs</DependentUpon>
@@ -283,6 +281,11 @@
     <EmbeddedResource Include="UserControls\DockingManager\Resources.resx" />
     <EmbeddedResource Include="UserControls\DockingManager\Strings.resx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FastColoredTextBox\FastColoredTextBox.csproj">
+      <Project>{6dd14a85-ccfc-4774-bd26-0f5772512319}</Project>
+      <Name>FastColoredTextBox</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

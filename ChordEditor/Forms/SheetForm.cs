@@ -23,6 +23,19 @@ namespace ChordEditor.Forms
             InitializeComponent();
             mSheet = sheet;
             TB.Text = sheet.Content;
+			TB.ClearUndo();
+			TB_ZoomChanged(null, null);
+
+			CbZoom.Items.Add(String.Format("{0} %", 50));
+			CbZoom.Items.Add(String.Format("{0} %", 70));
+			CbZoom.Items.Add(String.Format("{0} %", 90));
+			CbZoom.Items.Add(String.Format("{0} %", 100));
+			CbZoom.Items.Add(String.Format("{0} %", 125));
+			CbZoom.Items.Add(String.Format("{0} %", 150));
+			CbZoom.Items.Add(String.Format("{0} %", 175));
+			CbZoom.Items.Add(String.Format("{0} %", 200));
+			CbZoom.Items.Add(String.Format("{0} %", 300));
+
             Core.Sheet.SheetChange += Sheet_SheetChange;
         }
 
@@ -106,7 +119,7 @@ namespace ChordEditor.Forms
 
         private void SheetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (mSheet.HasMemoryChanges && true)
+            if (mSheet.HasMemoryChanges)
             {
                 DialogResult rv = System.Windows.Forms.MessageBox.Show("This file contains changes.\r\nSave changes?", "Close confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
@@ -121,10 +134,40 @@ namespace ChordEditor.Forms
         public Core.Sheet Sheet
         { get { return mSheet; } }
 
+		public FastColoredTextBoxNS.FastColoredTextBox Editor
+		{ get { return TB; } }
+
         private void TB_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             mSheet.Content = TB.Text;
         }
+
+		private void CbZoom_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				TB.Zoom = int.Parse(((string)CbZoom.SelectedItem).Trim(" %".ToCharArray()));
+			}
+			catch { TB_ZoomChanged(null, null); }
+		}
+
+		private void TB_ZoomChanged(object sender, EventArgs e)
+		{
+			int newval = Math.Min(Math.Max(TB.Zoom, 50), 300);
+			if (TB.Zoom != newval)
+				TB.Zoom = newval;
+
+			CbZoom.Text = String.Format("{0} %", TB.Zoom);
+		}
+
+		private void CbZoom_Validating(object sender, CancelEventArgs e)
+		{
+			try
+			{
+				TB.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
+			}
+			catch { TB_ZoomChanged(null, null); }
+		}
 
 
     }

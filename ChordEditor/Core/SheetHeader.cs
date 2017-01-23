@@ -24,12 +24,13 @@ namespace ChordEditor.Core
 
         public SheetHeader() : this(Guid.NewGuid().ToString() + ".cpw")
         {
-            SheetAuthor = Program.UserLongName;
+			SheetAuthor = Program.UserLongName;
         }
 
         public SheetHeader(string filename)
         {
             mMetaData = new Dictionary<string, string>();
+			mOMetaData = new Dictionary<string, string>();
             mFileName = System.IO.Path.GetFileName(filename).ToLower();
             UpdateFileInfo();
         }
@@ -153,9 +154,11 @@ namespace ChordEditor.Core
 
             key = key.Trim().ToLower();
 
-            if ((value == null || value.Trim().Length == 0) && mMetaData.ContainsKey(key))
+            if ((value == null || value.Trim().Length == 0))
             {
-                mMetaData.Remove(key);
+				if (mMetaData.ContainsKey(key)) 
+					mMetaData.Remove(key);
+				//else do not add it
             }
             else
             {
@@ -164,10 +167,10 @@ namespace ChordEditor.Core
                     mMetaData[key] = value;
                 else
                     mMetaData.Add(key, value);
-
-                if (HeaderChanged != null)
-                    HeaderChanged(this);
             }
+
+			if (HeaderChanged != null)
+				HeaderChanged(this);
         }
 
         internal void Write(System.IO.StreamWriter sw)

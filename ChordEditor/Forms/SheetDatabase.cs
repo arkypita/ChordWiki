@@ -103,7 +103,7 @@ namespace ChordEditor.Forms
 
         private void BtnNew_Click(object sender, EventArgs e)
         {
-            Core.Program.DocumentCreate();
+			Forms.SheetForm.CreateAndShow(new Core.Sheet(), DockPanel);
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)
