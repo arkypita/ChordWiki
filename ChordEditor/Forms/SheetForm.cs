@@ -6,12 +6,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FastColoredTextBoxNS;
+
 
 namespace ChordEditor.Forms
 {
     public partial class SheetForm : ChordEditor.UserControls.DockingManager.DockContent
     {
         private Core.Sheet mSheet;
+		
+		TextStyle mChordStyle = new TextStyle(Brushes.Navy, null, FontStyle.Regular);
+		TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
         private SheetForm()
         {
@@ -167,6 +172,16 @@ namespace ChordEditor.Forms
 				TB.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
 			}
 			catch { TB_ZoomChanged(null, null); }
+		}
+
+		private void TB_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+		{
+           //clear previous highlighting
+			e.ChangedRange.ClearStyle(mChordStyle);
+			e.ChangedRange.ClearStyle(mMetaStyle);
+            //highlight tags
+			e.ChangedRange.SetStyle(mChordStyle, "\\[[^\\]]+\\]");
+			e.ChangedRange.SetStyle(mMetaStyle, "{[^}]+}");
 		}
 
 

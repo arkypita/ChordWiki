@@ -59,7 +59,6 @@
 			this.TB.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.TB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.TB.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.TB.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.TB.Hotkeys = resources.GetString("TB.Hotkeys");
 			this.TB.IsReplaceMode = false;
 			this.TB.Location = new System.Drawing.Point(3, 3);
@@ -72,6 +71,7 @@
 			this.TB.Size = new System.Drawing.Size(666, 470);
 			this.TB.TabIndex = 0;
 			this.TB.Zoom = 100;
+			this.TB.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChanged);
 			this.TB.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChangedDelayed);
 			this.TB.ZoomChanged += new System.EventHandler(this.TB_ZoomChanged);
 			// 
