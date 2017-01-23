@@ -15,10 +15,8 @@ namespace ChordEditor.Forms
     {
         private Core.Sheet mSheet;
 		
-		TextStyle mChordStyle = new TextStyle(Brushes.Navy, null, FontStyle.Regular);
+		TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
 		TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
-		TextStyle mKeywordStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
-		
 
         private SheetForm()
         {
@@ -111,17 +109,17 @@ namespace ChordEditor.Forms
 
         internal void Print()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         internal void SaveAs()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         internal void PrintPreview()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void SheetForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -182,9 +180,7 @@ namespace ChordEditor.Forms
 			e.ChangedRange.ClearStyle();
             //highlight tags
 			e.ChangedRange.SetStyle(mChordStyle, @"\[[^\]]+\]");
-			e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
-
-			e.ChangedRange.SetStyle(mKeywordStyle, @"\b(comment|comment_italic|comment_box|start_of_chorus|end_of_chorus)\s+(?<range>[\w_]+?)\b");
+            e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
 		}
 
 

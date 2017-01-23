@@ -90,7 +90,7 @@ namespace ChordEditor.Forms
             }
 
             if (sf != null)
-                sf.Focus();
+                sf.Show();
             else
                 Forms.SheetForm.CreateAndShow(new Core.Sheet(sh.FileName), DockPanel);
         }

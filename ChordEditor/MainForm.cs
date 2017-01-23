@@ -170,6 +170,7 @@ namespace ChordEditor
 			MnPaste.Enabled = BtnPaste.Enabled = ActiveEditor != null;
 			MnUndo.Enabled = ActiveEditor != null && ActiveEditor.UndoEnabled;
 			MnRedo.Enabled = ActiveEditor != null && ActiveEditor.RedoEnabled;
+            MnSelectAll.Enabled = ActiveEditor != null;
 		}
 
 	}
