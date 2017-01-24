@@ -13,7 +13,11 @@ namespace ChordEditor.Forms
 {
     public partial class SheetForm : ChordEditor.UserControls.DockingManager.DockContent
     {
+        public delegate void SheetFormDelegate(SheetForm sf);
+        public static event SheetFormDelegate DelayedTextChanged;
+
         private Core.Sheet mSheet;
+        private Core.ChordNotation mSheetNotation;
 		
 		TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
 		TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
@@ -145,6 +149,10 @@ namespace ChordEditor.Forms
         private void TB_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             mSheet.Content = TB.Text;
+            Analyze();
+
+            if (DelayedTextChanged != null)
+                DelayedTextChanged(this);
         }
 
 		private void CbZoom_SelectedIndexChanged(object sender, EventArgs e)
@@ -179,10 +187,73 @@ namespace ChordEditor.Forms
            //clear previous highlighting
 			e.ChangedRange.ClearStyle();
             //highlight tags
-			e.ChangedRange.SetStyle(mChordStyle, @"\[[^\]]+\]");
+            e.ChangedRange.SetStyle(mChordStyle, @"\[(.*?)\]");
             e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
 		}
 
+        private void Analyze()
+        {
+            int italian = 0;
+            int american = 0;
+            int unknown = 0;
 
+            IEnumerable<FastColoredTextBoxNS.Range> chords = TB.GetRanges(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (FastColoredTextBoxNS.Range chord in chords)
+            {
+                Core.ChordNotation n = Core.Traspose.WhatNotation(chord.Text);
+                if (n == Core.ChordNotation.Italian)
+                    italian++;
+                else if (n == Core.ChordNotation.American)
+                    american++;
+                else if (n == Core.ChordNotation.Unknown)
+                    unknown++;
+            }
+
+            if (italian + american + unknown == 0)
+                mSheetNotation = Core.ChordNotation.Unknown;
+            else if (italian > 0 && american + unknown == 0)
+                mSheetNotation = Core.ChordNotation.Italian;
+            else if (american > 0 && italian + unknown == 0)
+                mSheetNotation = Core.ChordNotation.American;
+            else
+                mSheetNotation = Core.ChordNotation.Unknown;
+        }
+
+
+        public Core.ChordNotation SheetNotation
+        {get { return mSheetNotation; }}
+
+
+
+        internal void ChangeNotation()
+        {
+            Core.ChordNotation targetNotation = Core.ChordNotation.Unknown;
+            if (SheetNotation == Core.ChordNotation.Italian)
+                targetNotation = Core.ChordNotation.American;
+            else if (SheetNotation == Core.ChordNotation.American)
+                targetNotation = Core.ChordNotation.Italian;
+
+            if (targetNotation != Core.ChordNotation.Unknown)
+            {
+                System.Text.StringBuilder text = new StringBuilder(TB.Text);
+                int offset = 0;
+
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+                foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
+                {
+                    string oldChord = m.Captures[0].Value;
+                    string newChord = Core.Traspose.ChangeNotation(oldChord, targetNotation);
+
+                    int position = m.Index + offset;
+                    text.Remove(position, oldChord.Length);
+                    text.Insert(position, newChord);
+
+                    offset += newChord.Length - oldChord.Length;
+                }
+                TB.Text = text.ToString();
+            }
+
+
+        }
     }
 }

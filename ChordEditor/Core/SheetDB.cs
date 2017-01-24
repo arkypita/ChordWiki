@@ -63,18 +63,22 @@ namespace ChordEditor.Core
 				{
 					using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
 					{
-						SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
-						statusArgs.Depth = SharpSvn.SvnDepth.Files;
-						statusArgs.RetrieveAllEntries = true;
-						System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
-						cln.GetStatus(Program.CurrentFolder, statusArgs, out statuses);
-						foreach (SharpSvn.SvnStatusEventArgs status in statuses)
-						{
-							foreach (SheetHeader sh in mList)
+                        try
+                        {
+                            SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
+                            statusArgs.Depth = SharpSvn.SvnDepth.Files;
+                            statusArgs.RetrieveAllEntries = true;
+                            System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
+                            cln.GetStatus(Program.CurrentFolder, statusArgs, out statuses);
+                            foreach (SharpSvn.SvnStatusEventArgs status in statuses)
+                            {
+                                foreach (SheetHeader sh in mList)
 
-								if (System.IO.Path.GetFileName(status.Path) == System.IO.Path.GetFileName(sh.FilePath))
-									sh.Status = status.LocalContentStatus;
-						}
+                                    if (System.IO.Path.GetFileName(status.Path) == System.IO.Path.GetFileName(sh.FilePath))
+                                        sh.Status = status.LocalContentStatus;
+                            }
+                        }
+                        catch (Exception ex){ }
 					}
 				}
 

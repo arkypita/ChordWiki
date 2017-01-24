@@ -19,8 +19,9 @@ namespace ChordEditor.Core
 
         static Program()
         {
+            //Settings.Default.Reset(); //reset config
 			Settings.Default.Upgrade();
-			//Settings.Default.Reset(); //reset config
+			
 
 			System.IO.Directory.CreateDirectory(CurrentFolder); //ensure path
 

@@ -22,6 +22,25 @@ namespace ChordEditor.Forms
         {
             RefreshCategoryList();
             DockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
+            SheetForm.DelayedTextChanged += SheetForm_DelayedTextChanged;
+        }
+
+        void SheetForm_DelayedTextChanged(SheetForm sf)
+        {
+            if (object.Equals(sf.Sheet, ActiveSheet))
+                RefreshFileInfo();
+        }
+
+        private void RefreshFileInfo()
+        {
+            SheetForm sf = ActiveSheetForm;
+
+            if (sf != null)
+                PbNotation.Image = NF.Images[sf.SheetNotation.ToString()];
+            else
+                PbNotation.Image = NF.Images[Core.ChordNotation.Unknown.ToString()];
+
+            PbNotation.Enabled = (sf != null && (sf.SheetNotation == Core.ChordNotation.American || sf.SheetNotation == Core.ChordNotation.Italian));
         }
 
         void RefreshCategoryList()
@@ -71,6 +90,8 @@ namespace ChordEditor.Forms
                 TlpMain.Enabled = false;
             }
 
+            RefreshFileInfo();
+
         }
 
         String OnNull(string val, string replacement)
@@ -81,14 +102,11 @@ namespace ChordEditor.Forms
                 return val;
         }
 
+        SheetForm ActiveSheetForm
+        {get{return DockPanel.ActiveDocument as Forms.SheetForm;} }
+
         Core.Sheet ActiveSheet
-        {
-            get
-            {
-                Forms.SheetForm sf = DockPanel.ActiveDocument as Forms.SheetForm; 
-                return sf != null ? sf.Sheet : null;
-            } 
-        }
+        {get{return ActiveSheetForm != null ? ActiveSheetForm.Sheet : null;} }
 
         private void TbTitle_TextChanged(object sender, EventArgs e)
         {if (ActiveSheet != null) ActiveSheet.Header.Title = TbTitle.Text;}
@@ -122,6 +140,12 @@ namespace ChordEditor.Forms
 			if (tb.Text.Length > 0 && tb.Text.Trim().Length == 0)
 				tb.Text = "";
 		}
+
+        private void PbNotation_Click(object sender, EventArgs e)
+        {
+            if (ActiveSheetForm != null)
+                ActiveSheetForm.ChangeNotation();
+        }
 		
 	}
 }
