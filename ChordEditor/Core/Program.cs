@@ -81,19 +81,12 @@ namespace ChordEditor.Core
 
 
 					SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
-					statusArgs.Depth = SharpSvn.SvnDepth.Infinity;
+					statusArgs.Depth = SharpSvn.SvnDepth.Files;
 					statusArgs.RetrieveAllEntries = true;
 					System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
 					cln.GetStatus(CurrentFolder, statusArgs, out statuses);
 					foreach (SharpSvn.SvnStatusEventArgs status in statuses)
-					{
 						Console.WriteLine(String.Format("{0}: {1}", status.LocalContentStatus, status.Path));
-						
-						if (status.LocalContentStatus == SharpSvn.SvnStatus.Missing)
-							cln.Delete(status.Path);
-						else if (status.LocalContentStatus == SharpSvn.SvnStatus.NotVersioned && System.IO.Path.GetExtension(status.Path).ToLower() == ".cpw")
-							cln.Add(status.Path);
-					}
 
 
 					SharpSvn.SvnCommitArgs args = new SharpSvn.SvnCommitArgs();
@@ -109,6 +102,7 @@ namespace ChordEditor.Core
 					catch (Exception ex)
 					{
 					}
+
 					cln.Update(CurrentFolder);
 				}
             }
@@ -128,7 +122,7 @@ namespace ChordEditor.Core
 		private static bool LocalRepo
 		{ get { return Settings.Default.LocalRepo; } }
 
-		private static bool LocalOrInvalid
+		public static bool LocalOrInvalid
 		{ get { return LocalRepo || CurrentRepoUri == null; } }
 
 		private static Uri CurrentRepoUri

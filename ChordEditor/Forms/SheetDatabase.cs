@@ -108,11 +108,20 @@ namespace ChordEditor.Forms
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
+			
+
             foreach (Core.SheetHeader sh in LV.SelectedObjects)
             {
-                if (System.IO.File.Exists(sh.FilePath))
-                    System.IO.File.Delete(sh.FilePath);
+				if (System.IO.File.Exists(sh.FilePath))
+				{
+					if (Core.Program.LocalOrInvalid)
+						System.IO.File.Delete(sh.FilePath); //delete file from filesystem
+					else
+						using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+							cln.Delete(sh.FilePath); //mark for svn deletion
+				}
             }
+
             Core.Program.SheetDB.ReloadDataBase();
         }
     }

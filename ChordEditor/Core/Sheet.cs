@@ -65,6 +65,8 @@ namespace ChordEditor.Core
             if (!HasMemoryChanges)
                 return;
 
+			bool createNew = !System.IO.File.Exists(mHeader.FilePath);
+
             System.IO.Directory.CreateDirectory(Program.CurrentFolder); //ensure path
             using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mHeader.FilePath))
             {
@@ -83,6 +85,10 @@ namespace ChordEditor.Core
 
             mHeader.UpdateFileInfo();
             BackupStatus();
+
+			if (createNew && !Program.LocalOrInvalid)
+				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+					cln.Add(mHeader.FilePath); //mark for svn add
 
             if (SheetChange != null)
                 SheetChange(this);
