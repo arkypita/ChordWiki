@@ -41,10 +41,10 @@
 			this.PbSheetProgress = new System.Windows.Forms.PictureBox();
 			this.GbSongInfo = new System.Windows.Forms.GroupBox();
 			this.TlpHeader = new System.Windows.Forms.TableLayoutPanel();
-			this.TbTitle = new ChordEditor.UserControls.OnNullTextBox();
-			this.TbArtist = new ChordEditor.UserControls.OnNullTextBox();
+			this.TbTitle = new ChordEditor.UserControls.NullTextBox();
+			this.TbArtist = new ChordEditor.UserControls.NullTextBox();
 			this.CbCategory = new System.Windows.Forms.ComboBox();
-			this.TbTags = new ChordEditor.UserControls.OnNullTextBox();
+			this.TbTags = new ChordEditor.UserControls.NullTextBox();
 			this.PbSongTitle = new System.Windows.Forms.PictureBox();
 			this.PbArtist = new System.Windows.Forms.PictureBox();
 			this.PbCategory = new System.Windows.Forms.PictureBox();
@@ -348,10 +348,10 @@
 
         private System.Windows.Forms.TableLayoutPanel TlpMain;
         private System.Windows.Forms.TableLayoutPanel TlpHeader;
-        private UserControls.OnNullTextBox TbTitle;
-        private ChordEditor.UserControls.OnNullTextBox TbArtist;
+        private UserControls.NullTextBox TbTitle;
+        private ChordEditor.UserControls.NullTextBox TbArtist;
         private System.Windows.Forms.ComboBox CbCategory;
-        private ChordEditor.UserControls.OnNullTextBox TbTags;
+        private ChordEditor.UserControls.NullTextBox TbTags;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TextBox TbSheetAuthor;
         private System.Windows.Forms.TextBox TbSheetRevisor;

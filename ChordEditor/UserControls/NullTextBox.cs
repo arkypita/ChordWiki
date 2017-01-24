@@ -11,14 +11,14 @@ using System.Runtime.InteropServices;
 
 namespace ChordEditor.UserControls
 {
-    public partial class OnNullTextBox : TextBox
+    public partial class NullTextBox : TextBox
     {
         // Within your class or scoped in a more appropriate location:
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [MarshalAs(UnmanagedType.LPWStr)] string lParam);
 
 
-        public OnNullTextBox()
+        public NullTextBox()
         {
             InitializeComponent();
         }

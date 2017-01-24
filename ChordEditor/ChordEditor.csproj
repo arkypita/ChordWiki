@@ -99,6 +99,12 @@
     <Compile Include="Forms\PendingChangesForm.Designer.cs">
       <DependentUpon>PendingChangesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SyncronizeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SyncronizeForm.Designer.cs">
+      <DependentUpon>SyncronizeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,11 @@
     </Compile>
     <Compile Include="Forms\SpashScreen.Designer.cs">
       <DependentUpon>SpashScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DockingManager\Docking\AutoHideStripBase.cs">
       <SubType>Component</SubType>
@@ -220,14 +231,21 @@
     </Compile>
     <Compile Include="UserControls\DockingManager\Docking\Win32\Enums.cs" />
     <Compile Include="UserControls\DockingManager\Docking\Win32\NativeMethods.cs" />
-    <Compile Include="UserControls\OnNullTextBox.cs">
+    <Compile Include="UserControls\NullTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserControls\OnNullTextBox.Designer.cs">
-      <DependentUpon>OnNullTextBox.cs</DependentUpon>
+    <Compile Include="UserControls\NullTextBox.Designer.cs">
+      <DependentUpon>NullTextBox.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />
     <None Include="UserControls\DockingManager\license.txt" />
     <None Include="UserControls\DockingManager\Resources\DockIndicator_PaneDiamond.bmp" />
@@ -270,6 +288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpashScreen.resx">
       <DependentUpon>SpashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SyncronizeForm.resx">
+      <DependentUpon>SyncronizeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

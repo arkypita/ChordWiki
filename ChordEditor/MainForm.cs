@@ -87,7 +87,7 @@ namespace ChordEditor
 
 		private void DatabaseSyncronize(object sender, EventArgs e)
 		{
-			Program.DatabaseSyncronize();
+			Program.DatabaseSyncronize(this);
 		}
 
 		private void SelectionCut(object sender, EventArgs e)

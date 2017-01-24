@@ -1,6 +1,6 @@
 ﻿namespace ChordEditor.UserControls
 {
-    partial class OnNullTextBox
+    partial class NullTextBox
     {
         /// <summary> 
         /// Variabile di progettazione necessaria.
