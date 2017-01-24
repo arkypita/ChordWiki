@@ -90,6 +90,17 @@ namespace ChordEditor
 			Program.DatabaseSyncronize(this);
 		}
 
+		private void DatabaseDownload(object sender, EventArgs e)
+		{
+			Program.DatabaseDownload(this);
+		}
+
+		private void DatabaseUpload(object sender, EventArgs e)
+		{
+			Program.DatabaseUpload(this);
+		}
+
+
 		private void SelectionCut(object sender, EventArgs e)
 		{
 			if (ActiveEditor != null)
@@ -172,6 +183,8 @@ namespace ChordEditor
 			MnRedo.Enabled = ActiveEditor != null && ActiveEditor.RedoEnabled;
             MnSelectAll.Enabled = ActiveEditor != null;
 		}
+
+
 
 	}
 }

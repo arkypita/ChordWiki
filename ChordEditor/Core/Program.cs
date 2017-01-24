@@ -19,6 +19,7 @@ namespace ChordEditor.Core
 
         static Program()
         {
+			Settings.Default.Upgrade();
 			//Settings.Default.Reset(); //reset config
 
 			System.IO.Directory.CreateDirectory(CurrentFolder); //ensure path
@@ -29,6 +30,59 @@ namespace ChordEditor.Core
 
         internal static void DatabaseSyncronize(System.Windows.Forms.Form form)
         {
+			CheckWorkingCopy(form);
+
+			if (!LocalOrInvalid)
+			{
+				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+				{
+					SharpSvn.UI.SvnUI.Bind(cln, form);
+
+					CheckOutRequired(cln);
+					LogCommit(cln);
+					Commit(cln);
+					Update(cln);
+				}
+            }
+
+            SheetDB.ReloadDataBase();
+        }
+
+		private static void LogCommit(SharpSvn.SvnClient cln)
+		{
+			//SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
+			//statusArgs.Depth = SharpSvn.SvnDepth.Files;
+			//statusArgs.RetrieveAllEntries = true;
+			//System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
+			//cln.GetStatus(CurrentFolder, statusArgs, out statuses);
+			//foreach (SharpSvn.SvnStatusEventArgs status in statuses)
+			//	Console.WriteLine(String.Format("{0}: {1}", status.LocalContentStatus, status.Path));
+		}
+
+		private static void CheckOutRequired(SharpSvn.SvnClient cln)
+		{
+			if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
+				cln.CheckOut(CurrentRepoUri, CurrentFolder); //esegui un primo checkout
+		}
+
+		private static void Update(SharpSvn.SvnClient cln)
+		{
+			try { cln.Update(CurrentFolder); }
+			catch { }
+		}
+
+		private static void Commit(SharpSvn.SvnClient cln)
+		{
+			try
+			{
+				SharpSvn.SvnCommitResult result;
+				cln.Commit(CurrentFolder, new SharpSvn.SvnCommitArgs() { LogMessage = GenerateLogMessage(), ThrowOnError = true }, out result);
+			}
+			catch (Exception ex) { }
+		}
+
+		private static void CheckWorkingCopy(System.Windows.Forms.Form form)
+		{
 			if (LocalOrInvalid)
 			{
 				string repo = Forms.InputBox.Show("Database URL", "Url?");
@@ -64,11 +118,15 @@ namespace ChordEditor.Core
 					}
 				}
 
-				Settings.Default.CurrentRepo = repo	;
+				Settings.Default.CurrentRepo = repo;
 				Settings.Default.LocalRepo = repo == null;
 				Settings.Default.Save();
-            }
+			}
+		}
 
+		internal static void DatabaseDownload(System.Windows.Forms.Form form)
+		{
+			CheckWorkingCopy(form);
 
 			if (!LocalOrInvalid)
 			{
@@ -76,39 +134,33 @@ namespace ChordEditor.Core
 				{
 					SharpSvn.UI.SvnUI.Bind(cln, form);
 
-					if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
-						cln.CheckOut(CurrentRepoUri, CurrentFolder); //esegui un primo checkout
-
-
-					SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
-					statusArgs.Depth = SharpSvn.SvnDepth.Files;
-					statusArgs.RetrieveAllEntries = true;
-					System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
-					cln.GetStatus(CurrentFolder, statusArgs, out statuses);
-					foreach (SharpSvn.SvnStatusEventArgs status in statuses)
-						Console.WriteLine(String.Format("{0}: {1}", status.LocalContentStatus, status.Path));
-
-
-					SharpSvn.SvnCommitArgs args = new SharpSvn.SvnCommitArgs();
-					args.LogMessage = GenerateLogMessage();
-					args.ThrowOnError = true;
-					args.ThrowOnCancel = true;
-
-					try
-					{
-						SharpSvn.SvnCommitResult result;
-						cln.Commit(CurrentFolder, args, out result);
-					}
-					catch (Exception ex)
-					{
-					}
-
-					cln.Update(CurrentFolder);
+					CheckOutRequired(cln);
+					Update(cln);
 				}
-            }
+			}
 
-            SheetDB.ReloadDataBase();
-        }
+			SheetDB.ReloadDataBase();
+		}
+
+		internal static void DatabaseUpload(System.Windows.Forms.Form form)
+		{
+			CheckWorkingCopy(form);
+
+			if (!LocalOrInvalid)
+			{
+				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+				{
+					SharpSvn.UI.SvnUI.Bind(cln, form);
+
+					CheckOutRequired(cln);
+					LogCommit(cln);
+					Commit(cln);
+				}
+			}
+
+			SheetDB.ReloadDataBase();
+		}
+
 
         private static string GenerateLogMessage()
         { return string.Format("Committed @ {0} by user {1}", DateTime.Now, UserLongName); }
@@ -151,5 +203,7 @@ namespace ChordEditor.Core
 			}
 		}
 
-    }
+
+
+	}
 }

@@ -21,6 +21,7 @@ namespace ChordEditor.Core
         private Dictionary<string, string> mMetaData;
         
         [NonSerialized()] private Dictionary<string, string> mOMetaData;
+		[NonSerialized()] private SharpSvn.SvnStatus mSvnStatus;
 
         public SheetHeader() : this(Guid.NewGuid().ToString() + ".cpw")
         {
@@ -268,5 +269,28 @@ namespace ChordEditor.Core
         {
             return FilePath.GetHashCode();
         }
+
+		public string StatusString
+		{
+			get
+			{
+				if (Status == SharpSvn.SvnStatus.Zero)
+					return "";
+				else if (Status == SharpSvn.SvnStatus.Added)
+					return "Added";
+				else if (Status == SharpSvn.SvnStatus.Modified)
+					return "Modified";
+				else if (Status == SharpSvn.SvnStatus.Normal)
+					return "Original";
+				else
+					return Status.ToString();
+			}
+		}
+
+		public SharpSvn.SvnStatus Status
+		{
+			get { return mSvnStatus; }
+			set { mSvnStatus = value; }
+		}
     }
 }

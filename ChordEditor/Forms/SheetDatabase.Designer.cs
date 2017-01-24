@@ -36,6 +36,7 @@
 			this.ChCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.ChAuthor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.ChRevisor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.ChStatus = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.IL = new System.Windows.Forms.ImageList(this.components);
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -54,13 +55,15 @@
 			this.LV.AllColumns.Add(this.ChCategory);
 			this.LV.AllColumns.Add(this.ChAuthor);
 			this.LV.AllColumns.Add(this.ChRevisor);
+			this.LV.AllColumns.Add(this.ChStatus);
 			this.LV.CellEditUseWholeCell = false;
 			this.LV.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ChTitle,
             this.ChArtist,
             this.ChCategory,
             this.ChAuthor,
-            this.ChRevisor});
+            this.ChRevisor,
+            this.ChStatus});
 			this.LV.Cursor = System.Windows.Forms.Cursors.Default;
 			this.LV.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.LV.EmptyListMsg = "";
@@ -108,6 +111,11 @@
 			this.ChRevisor.AspectName = "SheetRevisor";
 			this.ChRevisor.Text = "Revisor";
 			this.ChRevisor.Width = 160;
+			// 
+			// ChStatus
+			// 
+			this.ChStatus.AspectName = "StatusString";
+			this.ChStatus.Text = "Status";
 			// 
 			// IL
 			// 
@@ -223,5 +231,6 @@
         private System.Windows.Forms.Button BtnOpen;
         private System.Windows.Forms.Button BtnNew;
         private System.Windows.Forms.Button BtnDelete;
+		private BrightIdeasSoftware.OLVColumn ChStatus;
     }
 }

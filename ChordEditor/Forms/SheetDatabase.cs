@@ -118,7 +118,7 @@ namespace ChordEditor.Forms
 						System.IO.File.Delete(sh.FilePath); //delete file from filesystem
 					else
 						using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-							cln.Delete(sh.FilePath); //mark for svn deletion
+							cln.Delete(sh.FilePath, new SharpSvn.SvnDeleteArgs() { Force = true }); //mark for svn deletion
 				}
             }
 
