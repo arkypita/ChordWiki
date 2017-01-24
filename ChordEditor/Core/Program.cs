@@ -26,7 +26,7 @@ namespace ChordEditor.Core
             }
             else
             {
-                SetCurrentFolder(@".\Local\SheetDB");
+                SetCurrentFolder(@"./localhost/database/");
             }
 
             SheetDB = new SheetDB();
@@ -41,6 +41,11 @@ namespace ChordEditor.Core
                 string repo = null;
                 if (Forms.InputBox.Show(ref repo) == System.Windows.Forms.DialogResult.OK)
                 {
+                    repo = repo.Trim();
+
+                    if (repo.Length == 0)
+                        return;
+
                     Settings.Default.CurrentRepo = repo;
                     Settings.Default.Save();
 
