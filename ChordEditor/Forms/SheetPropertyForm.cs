@@ -100,15 +100,12 @@ namespace ChordEditor.Forms
         {
             if ((string)CbCategory.SelectedItem == NEW_CAT)
             {
-                string cat = null;
-                if (InputBox.Show(ref cat) == System.Windows.Forms.DialogResult.OK)
+                string cat = InputBox.Show("New category", "Category?");
+                if (cat != null)
                 {
-                    if (cat != null && cat.Trim().Length > 0)
-                    {
-                        if (!CbCategory.Items.Contains(cat))
-                            CbCategory.Items.Insert(CbCategory.Items.Count - 1, cat);
-                        ActiveSheet.Header.SheetCategory = cat;
-                    }
+                    if (!CbCategory.Items.Contains(cat))
+                        CbCategory.Items.Insert(CbCategory.Items.Count - 1, cat);
+                    ActiveSheet.Header.SheetCategory = cat;
                 }
 
                 CbCategory.SelectedItem = ActiveSheet.Header.SheetCategory;

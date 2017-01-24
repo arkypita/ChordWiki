@@ -19,15 +19,9 @@ namespace ChordEditor.Core
 
         static Program()
         {
-            if (Settings.Default.CurrentRepo.Trim().Length > 0)
-            {
-                Uri uri = new Uri(Settings.Default.CurrentRepo);
-                SetCurrentFolder(String.Format("./{0}{1}/", uri.Host, uri.AbsolutePath));
-            }
-            else
-            {
-                SetCurrentFolder(@"./localhost/database/");
-            }
+			//Settings.Default.Reset(); //reset config
+
+			System.IO.Directory.CreateDirectory(CurrentFolder); //ensure path
 
             SheetDB = new SheetDB();
             SheetDB.ReloadDataBase();
@@ -35,57 +29,80 @@ namespace ChordEditor.Core
 
         internal static void DatabaseSyncronize(System.Windows.Forms.Form form)
         {
+			if (LocalOrInvalid)
+			{
+				string repo = Forms.InputBox.Show("Database URL", "Url?");
+				if (repo != null) //verify repo
+				{
+					using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+					{
+						SharpSvn.UI.SvnUI.Bind(cln, form);
 
-            if (Settings.Default.CurrentRepo.Trim().Length == 0)
-            {
-                string repo = null;
-                if (Forms.InputBox.Show(ref repo) == System.Windows.Forms.DialogResult.OK)
-                {
-                    repo = repo.Trim();
+						SharpSvn.SvnInfoEventArgs info;
 
-                    if (repo.Length == 0)
-                        return;
+						SharpSvn.SvnInfoArgs args = new SharpSvn.SvnInfoArgs();
+						args.ThrowOnError = true;
+						args.ThrowOnCancel = true;
 
-                    Settings.Default.CurrentRepo = repo;
-                    Settings.Default.Save();
+						try
+						{
+							Uri totest = new Uri(repo);
 
-                    Uri tmp = new Uri(Settings.Default.CurrentRepo);
-                    SetCurrentFolder(String.Format("./{0}{1}/", tmp.Host, tmp.AbsolutePath));
-                }
+							if (totest.IsFile)
+								throw new InvalidOperationException("Repository url needs to be an internet resource.");
+
+							cln.GetInfo(SharpSvn.SvnTarget.FromUri(totest), out info);
+							if (info.NodeKind != SharpSvn.SvnNodeKind.Directory)
+								throw new InvalidOperationException("Url does not point to a valid repository folder.");
+						}
+						catch (Exception ex) //not a valid url
+						{
+							System.Windows.Forms.MessageBox.Show(ex.Message, "Invalid repository!", System.Windows.Forms.MessageBoxButtons.OK,
+																	System.Windows.Forms.MessageBoxIcon.Error);
+							repo = null;
+						}
+					}
+				}
+
+				Settings.Default.CurrentRepo = repo	;
+				Settings.Default.LocalRepo = repo == null;
+				Settings.Default.Save();
             }
 
 
-            Uri uri = new Uri(Settings.Default.CurrentRepo);
-            using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-            {
-                SharpSvn.UI.SvnUI.Bind(cln, form);
+			if (!LocalOrInvalid)
+			{
+				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+				{
+					SharpSvn.UI.SvnUI.Bind(cln, form);
 
-                if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
-                    cln.CheckOut(uri, CurrentFolder); //esegui un primo checkout
+					if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
+						cln.CheckOut(CurrentRepoUri, CurrentFolder); //esegui un primo checkout
 
-                foreach (string filename in System.IO.Directory.GetFiles(CurrentFolder))
-                {
-                    if (System.IO.Path.GetExtension(filename).ToLower() == ".cpw")
-                    {
-                        if (cln.GetUriFromWorkingCopy(filename) == null)
-                            cln.Add(filename);
-                    }
-                }
+					foreach (string filename in System.IO.Directory.GetFiles(CurrentFolder))
+					{
+						if (System.IO.Path.GetExtension(filename).ToLower() == ".cpw")
+						{
+							if (cln.GetUriFromWorkingCopy(filename) == null)
+								cln.Add(filename);
+						}
+					}
 
-                SharpSvn.SvnCommitArgs args = new SharpSvn.SvnCommitArgs();
-                args.LogMessage = GenerateLogMessage();
-                args.ThrowOnError = true;
-                args.ThrowOnCancel = true;
+					SharpSvn.SvnCommitArgs args = new SharpSvn.SvnCommitArgs();
+					args.LogMessage = GenerateLogMessage();
+					args.ThrowOnError = true;
+					args.ThrowOnCancel = true;
 
-                try
-                {
-                    SharpSvn.SvnCommitResult result;
-                    cln.Commit(CurrentFolder, args, out result);
-                }
-                catch (Exception ex)
-                {
-                }
-                cln.Update(CurrentFolder);
+					try
+					{
+						SharpSvn.SvnCommitResult result;
+						cln.Commit(CurrentFolder, args, out result);
+					}
+					catch (Exception ex)
+					{
+					}
+					cln.Update(CurrentFolder);
+				}
             }
 
             SheetDB.ReloadDataBase();
@@ -97,17 +114,40 @@ namespace ChordEditor.Core
         public static string UserLongName
         { get { return "Diego Settimi"; } }
 
-        private static string mCurrentFolder;
-        public static string CurrentFolder
-        { get { return mCurrentFolder; } }
 
-        private static void SetCurrentFolder(string value)
-        {
-            if (value != mCurrentFolder)
-            {
-                mCurrentFolder = value;
-                System.IO.Directory.CreateDirectory(mCurrentFolder); //ensure path
-            }
-        }
+
+
+		private static bool LocalRepo
+		{ get { return Settings.Default.LocalRepo; } }
+
+		private static bool LocalOrInvalid
+		{ get { return LocalRepo || CurrentRepoUri == null; } }
+
+		private static Uri CurrentRepoUri
+		{
+			get
+			{
+				if (LocalRepo)
+					return null;
+
+				if (Settings.Default.CurrentRepo == null || Settings.Default.CurrentRepo.Trim().Length == 0)
+					return null;
+
+				try { return new Uri(Settings.Default.CurrentRepo); }
+				catch { return null; }
+			}
+		}
+
+		public static string CurrentFolder
+		{
+			get
+			{
+				if (LocalOrInvalid)
+					return @"./localhost/database/";
+				else
+					return String.Format("./{0}{1}/", CurrentRepoUri.Host, CurrentRepoUri.AbsolutePath);
+			}
+		}
+
     }
 }

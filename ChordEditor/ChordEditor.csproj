@@ -74,7 +74,12 @@
     <Compile Include="Core\SheetDB.cs" />
     <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
-    <Compile Include="Forms\InputBox.cs" />
+    <Compile Include="Forms\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InputBox.Designer.cs">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SheetDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,12 +103,6 @@
     </Compile>
     <Compile Include="Forms\PendingChangesForm.Designer.cs">
       <DependentUpon>PendingChangesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SyncronizeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SyncronizeForm.Designer.cs">
-      <DependentUpon>SyncronizeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -273,6 +272,9 @@
     <None Include="UserControls\DockingManager\Resources\DockPane_OptionOverflow.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SheetDatabase.resx">
       <DependentUpon>SheetDatabase.cs</DependentUpon>
     </EmbeddedResource>
@@ -288,9 +290,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpashScreen.resx">
       <DependentUpon>SpashScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SyncronizeForm.resx">
-      <DependentUpon>SyncronizeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

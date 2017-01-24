@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,48 +10,36 @@ using System.Windows.Forms;
 
 namespace ChordEditor.Forms
 {
-    public class InputBox
-    {
-        public static DialogResult Show(ref string input)
-        {
-            using (Form inputBox = new Form())
-            {
-                System.Drawing.Size size = new System.Drawing.Size(200, 70);
+	public partial class InputBox : Form
+	{
+		private InputBox()
+		{
+			InitializeComponent();
+		}
 
-                inputBox.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-                inputBox.ClientSize = size;
-                inputBox.Text = "Name";
+		private InputBox(string p1, string p2)
+		{
+			InitializeComponent();
 
-                System.Windows.Forms.TextBox textBox = new TextBox();
-                textBox.Size = new System.Drawing.Size(size.Width - 10, 23);
-                textBox.Location = new System.Drawing.Point(5, 5);
-                textBox.Text = input;
-                inputBox.Controls.Add(textBox);
+			Text = p1;
+			LblQuestion.Text = p2;
+			TbInput.Focus();
+		}
 
-                Button okButton = new Button();
-                okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-                okButton.Name = "okButton";
-                okButton.Size = new System.Drawing.Size(75, 23);
-                okButton.Text = "&OK";
-                okButton.Location = new System.Drawing.Point(size.Width - 80 - 80, 39);
-                inputBox.Controls.Add(okButton);
+		private void BtnOk_Click(object sender, EventArgs e)
+		{
+			DialogResult = System.Windows.Forms.DialogResult.OK;
+			Close();
+		}
 
-                Button cancelButton = new Button();
-                cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-                cancelButton.Name = "cancelButton";
-                cancelButton.Size = new System.Drawing.Size(75, 23);
-                cancelButton.Text = "&Cancel";
-                cancelButton.Location = new System.Drawing.Point(size.Width - 80, 39);
-                inputBox.Controls.Add(cancelButton);
-
-                inputBox.AcceptButton = okButton;
-                inputBox.CancelButton = cancelButton;
-
-                DialogResult result = inputBox.ShowDialog();
-                input = textBox.Text;
-                return result;
-            }
-        }
-
-    }
+		internal static string Show(string title, string question)
+		{
+			using (InputBox ib = new InputBox(title, question))
+			{
+				if (ib.ShowDialog() == DialogResult.OK)
+					return ib.TbInput.Text.Trim().Length > 0 ? ib.TbInput.Text.Trim() : null;
+			}
+			return null;
+		}
+	}
 }

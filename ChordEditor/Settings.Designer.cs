@@ -34,5 +34,17 @@ namespace ChordEditor {
                 this["CurrentRepo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LocalRepo {
+            get {
+                return ((bool)(this["LocalRepo"]));
+            }
+            set {
+                this["LocalRepo"] = value;
+            }
+        }
     }
 }
