@@ -62,10 +62,27 @@ namespace ChordEditor.Core
 
 		private static void Revert(SharpSvn.SvnClient cln)
 		{
-			try { cln.Revert(CurrentFolder, new SharpSvn.SvnRevertArgs { Depth = SharpSvn.SvnDepth.Infinity }); }
+			try {cln.Revert(CurrentFolder, new SharpSvn.SvnRevertArgs { Depth = SharpSvn.SvnDepth.Files }); }
 			catch { }
 		}
 
+		private static void DeleteUnversioned(SharpSvn.SvnClient cln)
+		{
+			try 
+			{
+				SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
+				statusArgs.Depth = SharpSvn.SvnDepth.Files;
+				statusArgs.RetrieveAllEntries = true;
+				System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
+				cln.GetStatus(Program.CurrentFolder, statusArgs, out statuses);
+				foreach (SharpSvn.SvnStatusEventArgs status in statuses)
+				{
+					if (System.IO.Path.GetExtension(status.Path).ToLower() == ".cpw" && status.LocalContentStatus == SharpSvn.SvnStatus.NotVersioned)
+						System.IO.File.Delete(status.Path);
+				}
+			}
+			catch { }
+		}
 
 		private static void CheckOutRequired(SharpSvn.SvnClient cln)
 		{
@@ -179,6 +196,7 @@ namespace ChordEditor.Core
 				{
 					SharpSvn.UI.SvnUI.Bind(cln, form);
 					Revert(cln);
+					DeleteUnversioned(cln);
 				}
 			}
 

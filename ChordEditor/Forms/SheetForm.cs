@@ -280,7 +280,7 @@ namespace ChordEditor.Forms
 
 		private void FSW_Deleted(object sender, System.IO.FileSystemEventArgs e)
 		{
-
+			VT.Enabled = true;
 		}
 
 		private void FSW_Changed(object sender, System.IO.FileSystemEventArgs e) //quando viene semplicemente sovrascritto
@@ -291,6 +291,14 @@ namespace ChordEditor.Forms
 		private void FSW_Created(object sender, System.IO.FileSystemEventArgs e) //quando viene cancellato e ricreato
 		{
 			ReloadFile();
+		}
+
+		private void VT_Tick(object sender, EventArgs e)
+		{
+			VT.Enabled = false;
+
+			if (!System.IO.File.Exists(Sheet.Header.FilePath)) //se è stato eliminato per davvero -> chiudi
+				ForceCloseWhenDelete();
 		}
     }
 }
