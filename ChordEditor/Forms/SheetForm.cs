@@ -193,37 +193,37 @@ namespace ChordEditor.Forms
 
         private void Analyze()
         {
-            int italian = 0;
-            int american = 0;
-            int unknown = 0;
 
-            IEnumerable<FastColoredTextBoxNS.Range> chords = TB.GetRanges(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (FastColoredTextBoxNS.Range chord in chords)
-            {
-                Core.ChordNotation n = Core.Traspose.WhatNotation(chord.Text);
-                if (n == Core.ChordNotation.Italian)
-                    italian++;
-                else if (n == Core.ChordNotation.American)
-                    american++;
-                else if (n == Core.ChordNotation.Unknown)
-                    unknown++;
+			int Unknown = 0;
+			int Italian = 0;
+			int American = 0;
+
+			//get matches with different notations
+			System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+			foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
+			{
+				string chord = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
+				Core.ChordNotation cn = Core.Traspose.WhatNotation(chord);
+
+				if (cn == Core.ChordNotation.Italian)
+					Italian++;
+				else if (cn == Core.ChordNotation.American)
+					American++;
+				else
+					Unknown++;
             }
 
-            if (italian + american + unknown == 0)
-                mSheetNotation = Core.ChordNotation.Unknown;
-            else if (italian > 0 && american + unknown == 0)
-                mSheetNotation = Core.ChordNotation.Italian;
-            else if (american > 0 && italian + unknown == 0)
-                mSheetNotation = Core.ChordNotation.American;
-            else
-                mSheetNotation = Core.ChordNotation.Unknown;
+			if (Italian > 0 && Italian >= American && Italian >= Unknown)
+				mSheetNotation = Core.ChordNotation.Italian;
+			else if (American > 0 && American >= Italian && American >= Unknown)
+				mSheetNotation = Core.ChordNotation.American;
+			else
+				mSheetNotation = Core.ChordNotation.Unknown;
         }
 
 
         public Core.ChordNotation SheetNotation
         {get { return mSheetNotation; }}
-
-
 
         internal void ChangeNotation()
         {
@@ -241,10 +241,12 @@ namespace ChordEditor.Forms
                 System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
                 foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
                 {
-                    string oldChord = m.Captures[0].Value;
+					System.Text.RegularExpressions.Group g = m.Groups[1];
+
+                    string oldChord = g.Value;
                     string newChord = Core.Traspose.ChangeNotation(oldChord, targetNotation);
 
-                    int position = m.Index + offset;
+                    int position = g.Index + offset;
                     text.Remove(position, oldChord.Length);
                     text.Insert(position, newChord);
 
