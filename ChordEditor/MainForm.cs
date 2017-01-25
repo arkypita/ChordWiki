@@ -87,22 +87,30 @@ namespace ChordEditor
 
 		private void DatabaseSyncronize(object sender, EventArgs e)
 		{
+			Cursor = Cursors.WaitCursor;
 			Program.DatabaseSyncronize(this);
+			Cursor = Cursors.Default;
 		}
 
 		private void DatabaseDownload(object sender, EventArgs e)
 		{
+			Cursor = Cursors.WaitCursor;
 			Program.DatabaseDownload(this);
+			Cursor = Cursors.Default;
 		}
 
 		private void DatabaseUpload(object sender, EventArgs e)
 		{
+			Cursor = Cursors.WaitCursor;
 			Program.DatabaseUpload(this);
+			Cursor = Cursors.Default;
 		}
 
 		private void DatabaseRevert(object sender, EventArgs e)
 		{
+			Cursor = Cursors.WaitCursor;
 			Program.DatabaseRevert(this);
+			Cursor = Cursors.Default;
 		}
 
 		private void SelectionCut(object sender, EventArgs e)

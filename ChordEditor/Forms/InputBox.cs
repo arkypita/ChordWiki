@@ -23,7 +23,6 @@ namespace ChordEditor.Forms
 
 			Text = p1;
 			LblQuestion.Text = p2;
-			TbInput.Focus();
 		}
 
 		private void BtnOk_Click(object sender, EventArgs e)
@@ -40,6 +39,11 @@ namespace ChordEditor.Forms
 					return ib.TbInput.Text.Trim().Length > 0 ? ib.TbInput.Text.Trim() : null;
 			}
 			return null;
+		}
+
+		private void InputBox_Load(object sender, EventArgs e)
+		{
+			ActiveControl = TbInput;
 		}
 	}
 }
