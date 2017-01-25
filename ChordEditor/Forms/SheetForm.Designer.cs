@@ -35,9 +35,11 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.CbZoom = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.FSW = new System.IO.FileSystemWatcher();
 			((System.ComponentModel.ISupportInitialize)(this.TB)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.FSW)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// TB
@@ -131,6 +133,14 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(672, 503);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
+			// FSW
+			// 
+			this.FSW.EnableRaisingEvents = true;
+			this.FSW.SynchronizingObject = this;
+			this.FSW.Changed += new System.IO.FileSystemEventHandler(this.FSW_Changed);
+			this.FSW.Created += new System.IO.FileSystemEventHandler(this.FSW_Created);
+			this.FSW.Deleted += new System.IO.FileSystemEventHandler(this.FSW_Deleted);
+			// 
 			// SheetForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,6 +161,7 @@
 			this.tableLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.FSW)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -162,5 +173,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.ComboBox CbZoom;
+		private System.IO.FileSystemWatcher FSW;
 	}
 }

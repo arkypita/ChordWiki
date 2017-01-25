@@ -100,6 +100,10 @@ namespace ChordEditor
 			Program.DatabaseUpload(this);
 		}
 
+		private void DatabaseRevert(object sender, EventArgs e)
+		{
+			Program.DatabaseRevert(this);
+		}
 
 		private void SelectionCut(object sender, EventArgs e)
 		{
@@ -183,6 +187,8 @@ namespace ChordEditor
 			MnRedo.Enabled = ActiveEditor != null && ActiveEditor.RedoEnabled;
             MnSelectAll.Enabled = ActiveEditor != null;
 		}
+
+
 
 
 

@@ -108,7 +108,14 @@ namespace ChordEditor.Forms
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
-			
+			List<SheetForm> toClose = new List<SheetForm>();
+			foreach (Core.SheetHeader sh in LV.SelectedObjects) //tutti gli sheet che voglio eliminare
+				foreach (UserControls.DockingManager.DockContent dc in DockPanel.Documents) //tutti i documenti aperti
+					if (dc is SheetForm && object.Equals(((SheetForm)dc).Sheet.Header, sh))
+						toClose.Add(dc as SheetForm);
+
+			foreach (SheetForm sf in toClose)
+				sf.ForceCloseWhenDelete();
 
             foreach (Core.SheetHeader sh in LV.SelectedObjects)
             {

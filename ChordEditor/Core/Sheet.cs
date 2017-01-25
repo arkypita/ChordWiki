@@ -25,14 +25,7 @@ namespace ChordEditor.Core
         public Sheet(string filename)
         {
             mHeader = new SheetHeader(filename);
-            using (System.IO.StreamReader sr = new System.IO.StreamReader(mHeader.FilePath))
-            {
-                mHeader.LoadFromStream(sr);
-                mContent = sr.ReadToEnd();
-            }
-            
-            BackupStatus();
-
+			ReloadFile();
             SheetHeader.HeaderChanged += SheetHeader_HeaderChanged;
         }
 
@@ -68,22 +61,22 @@ namespace ChordEditor.Core
 			bool createNew = !System.IO.File.Exists(mHeader.FilePath);
 
             System.IO.Directory.CreateDirectory(Program.CurrentFolder); //ensure path
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mHeader.FilePath))
-            {
-                //write header
-                mHeader.Write(sw);
+			using (System.IO.StreamWriter sw =  new System.IO.StreamWriter(mHeader.FilePath))
+			{
+				//write header
+				mHeader.Write(sw);
 
-                //write separator
-                sw.WriteLine("");
+				//write separator
+				sw.WriteLine("");
 
-                //write content
-                if (mContent != null)
-                    sw.Write(mContent);
+				//write content
+				if (mContent != null)
+					sw.Write(mContent);
 
-                sw.Close();
-            }
+				sw.Close();
+			}
 
-            mHeader.UpdateFileInfo();
+			mHeader.UpdateFileInfo();
             BackupStatus();
 
 			if (createNew && !Program.LocalOrInvalid)
@@ -103,5 +96,16 @@ namespace ChordEditor.Core
 
         public bool HasMemoryChanges
         { get { return mHeader.MemoryHasChanges || mContent != mOContent; } }
-    }
+
+		internal void ReloadFile()
+		{
+			using (System.IO.StreamReader sr = new System.IO.StreamReader(mHeader.FilePath))
+			{
+				mHeader.LoadFromStream(sr);
+				mContent = sr.ReadToEnd();
+			}
+
+			BackupStatus();
+		}
+	}
 }

@@ -18,7 +18,8 @@ namespace ChordEditor.Forms
 
         private Core.Sheet mSheet;
         private Core.ChordNotation mSheetNotation;
-		
+		private bool mForceClose = false;
+
 		TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
 		TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
@@ -31,6 +32,10 @@ namespace ChordEditor.Forms
         {
             InitializeComponent();
             mSheet = sheet;
+
+			FSW.Path = System.IO.Path.GetDirectoryName(sheet.Header.FilePath);
+			FSW.Filter = System.IO.Path.GetFileName(sheet.Header.FilePath);
+
             TB.Text = sheet.Content;
 			TB.ClearUndo();
 			TB_ZoomChanged(null, null);
@@ -47,6 +52,14 @@ namespace ChordEditor.Forms
 
             Core.Sheet.SheetChange += Sheet_SheetChange;
         }
+
+		private void ReloadFile()
+		{
+			Sheet.ReloadFile();
+			TB.Text = Sheet.Content;
+			TB.ClearUndo();
+		}
+
 
         private void SheetForm_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -128,7 +141,7 @@ namespace ChordEditor.Forms
 
         private void SheetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (mSheet.HasMemoryChanges)
+            if (mSheet.HasMemoryChanges && !mForceClose)
             {
                 DialogResult rv = System.Windows.Forms.MessageBox.Show("This file contains changes.\r\nSave changes?", "Close confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
@@ -257,5 +270,27 @@ namespace ChordEditor.Forms
 
 
         }
+
+		public bool ForceCloseWhenDelete()
+		{
+			mForceClose = true;
+			Close();
+			return true;
+		}
+
+		private void FSW_Deleted(object sender, System.IO.FileSystemEventArgs e)
+		{
+
+		}
+
+		private void FSW_Changed(object sender, System.IO.FileSystemEventArgs e) //quando viene semplicemente sovrascritto
+		{
+			ReloadFile();
+		}
+
+		private void FSW_Created(object sender, System.IO.FileSystemEventArgs e) //quando viene cancellato e ricreato
+		{
+			ReloadFile();
+		}
     }
 }

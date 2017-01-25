@@ -60,6 +60,13 @@ namespace ChordEditor.Core
 			//	Console.WriteLine(String.Format("{0}: {1}", status.LocalContentStatus, status.Path));
 		}
 
+		private static void Revert(SharpSvn.SvnClient cln)
+		{
+			try { cln.Revert(CurrentFolder, new SharpSvn.SvnRevertArgs { Depth = SharpSvn.SvnDepth.Infinity }); }
+			catch { }
+		}
+
+
 		private static void CheckOutRequired(SharpSvn.SvnClient cln)
 		{
 			if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
@@ -156,6 +163,22 @@ namespace ChordEditor.Core
 					CheckOutRequired(cln);
 					LogCommit(cln);
 					Commit(cln);
+				}
+			}
+
+			SheetDB.ReloadDataBase();
+		}
+
+		internal static void DatabaseRevert(System.Windows.Forms.Form form)
+		{
+			CheckWorkingCopy(form);
+
+			if (!LocalOrInvalid)
+			{
+				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+				{
+					SharpSvn.UI.SvnUI.Bind(cln, form);
+					Revert(cln);
 				}
 			}
 

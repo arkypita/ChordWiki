@@ -9,19 +9,21 @@ namespace ChordEditor.Core
     public enum ChordNotation
 	{ Unknown, Italian, American }
 
-	public class Chord
-	{
-		public Chord(string note, string variant, ChordNotation notation)
-		{
-			mNotation = notation;
-			mNote = note;
-			mVariant = variant;
-		}
+	//public class Chord
+	//{
+	//	public Chord(int index, string note, string variant, ChordNotation notation)
+	//	{
+	//		mIndex = index;
+	//		mNotation = notation;
+	//		mNote = note;
+	//		mVariant = variant;
+	//	}
 
-		private ChordNotation mNotation;
- 		private string mNote;
-		private string mVariant;
-	}
+	//	private int mIndex;
+	//	private ChordNotation mNotation;
+	//	private string mNote;
+	//	private string mVariant;
+	//}
 
     public class NotationInfo
     {
@@ -43,14 +45,11 @@ namespace ChordEditor.Core
         public string Description
         { get { return mDescription; } }
 
-		//public string Ord2Chord(int index)
-		//{ return mNotes[index]; }
+		public bool MatchNotation(string text)
+		{ return mUpperNotes.Any(n => text.ToUpper().StartsWith(n)); }
 
-		//public int Chord2Ord(string chord)
-		//{ return mUpperNotes.IndexOf(chord.ToUpper()); }
-
-		public bool MatchAnyChordNote(string chord)
-		{return mUpperNotes.Any(n => chord.ToUpper().StartsWith(n));}
+		public int NoteIndex(string text)
+		{ return mUpperNotes.FindIndex(n => text.ToUpper().StartsWith(n)); }
 
 		internal string NormalizeChord(string text)
 		{
@@ -59,8 +58,16 @@ namespace ChordEditor.Core
 				if (matchtext.StartsWith(un))
 					return mNotes[mUpperNotes.IndexOf(un)] + text.Substring(un.Length); //if match
 
+			//todo: normalize variation (maj, min, 7...)
+
 			return text; //if no match
 		}
+
+		internal string GetNote(int index)
+		{ return mNotes[index]; }
+
+		internal string GetVariation(string text)
+		{return text.Substring(mUpperNotes[NoteIndex(text)].Length);}
 
 	}
 
@@ -78,7 +85,7 @@ namespace ChordEditor.Core
         public static ChordNotation WhatNotation(string chord)
         {
 			foreach (KeyValuePair<ChordNotation, NotationInfo> kvp in mNotations)
-				if (kvp.Value.MatchAnyChordNote(chord))
+				if (kvp.Value.MatchNotation(chord))
 					return kvp.Key;
 
 			return ChordNotation.Unknown;
@@ -93,7 +100,11 @@ namespace ChordEditor.Core
 			string rv = mNotations[srcN].NormalizeChord(text); //normalize source
 
 			if (dstN != srcN) //translate
-				;
+			{
+				int index = mNotations[srcN].NoteIndex(text);
+				rv = mNotations[srcN].GetVariation(text);
+				rv = mNotations[dstN].GetNote(index) + rv;
+			}
 
             return rv;
         }
