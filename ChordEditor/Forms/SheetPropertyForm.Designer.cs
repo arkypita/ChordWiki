@@ -32,13 +32,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SheetPropertyForm));
             this.TlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.PbTrasposeUp = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.PbTrasposeDown = new System.Windows.Forms.PictureBox();
             this.CbSemitoni = new System.Windows.Forms.ComboBox();
+            this.PbTrasposeDown = new System.Windows.Forms.PictureBox();
+            this.PbNormalized = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.PbNotation = new System.Windows.Forms.PictureBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.GbSheetInfo = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.TbProgress = new System.Windows.Forms.TextBox();
@@ -59,11 +63,14 @@
             this.PbTags = new System.Windows.Forms.PictureBox();
             this.TT = new System.Windows.Forms.ToolTip(this.components);
             this.NF = new System.Windows.Forms.ImageList(this.components);
+            this.SF = new System.Windows.Forms.ImageList(this.components);
             this.TlpMain.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PbTrasposeUp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PbTrasposeDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PbNormalized)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PbNotation)).BeginInit();
             this.GbSheetInfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -94,53 +101,73 @@
             this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TlpMain.Size = new System.Drawing.Size(258, 452);
+            this.TlpMain.Size = new System.Drawing.Size(268, 452);
             this.TlpMain.TabIndex = 0;
             // 
             // groupBox1
             // 
             this.groupBox1.AutoSize = true;
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox1.Controls.Add(this.tableLayoutPanel3);
             this.groupBox1.Controls.Add(this.tableLayoutPanel2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 133);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(252, 70);
+            this.groupBox1.Size = new System.Drawing.Size(262, 76);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tools";
             // 
-            // tableLayoutPanel2
+            // tableLayoutPanel3
             // 
-            this.tableLayoutPanel2.AutoSize = true;
-            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 5;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.PbTrasposeUp, 3, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.PbTrasposeDown, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.CbSemitoni, 2, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.PbNotation, 1, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(246, 51);
-            this.tableLayoutPanel2.TabIndex = 1;
+            this.tableLayoutPanel3.AutoSize = true;
+            this.tableLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel3.ColumnCount = 4;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.PbNormalized, 3, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.PbNotation, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label3, 2, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(256, 57);
+            this.tableLayoutPanel3.TabIndex = 2;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel4.AutoSize = true;
+            this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel4.ColumnCount = 3;
+            this.tableLayoutPanel3.SetColumnSpan(this.tableLayoutPanel4, 3);
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.Controls.Add(this.PbTrasposeUp, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.CbSemitoni, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.PbTrasposeDown, 0, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(60, 27);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(128, 27);
+            this.tableLayoutPanel4.TabIndex = 3;
             // 
             // PbTrasposeUp
             // 
             this.PbTrasposeUp.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PbTrasposeUp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PbTrasposeUp.Image = ((System.Drawing.Image)(resources.GetObject("PbTrasposeUp.Image")));
-            this.PbTrasposeUp.Location = new System.Drawing.Point(164, 27);
+            this.PbTrasposeUp.Location = new System.Drawing.Point(107, 3);
             this.PbTrasposeUp.Margin = new System.Windows.Forms.Padding(1);
             this.PbTrasposeUp.Name = "PbTrasposeUp";
             this.PbTrasposeUp.Size = new System.Drawing.Size(20, 20);
@@ -150,22 +177,24 @@
             this.TT.SetToolTip(this.PbTrasposeUp, "Change notation");
             this.PbTrasposeUp.Click += new System.EventHandler(this.PbTrasposeUp_Click);
             // 
-            // label2
+            // CbSemitoni
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 31);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 13);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Traspose";
+            this.CbSemitoni.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.CbSemitoni.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CbSemitoni.FormattingEnabled = true;
+            this.CbSemitoni.Location = new System.Drawing.Point(25, 3);
+            this.CbSemitoni.MinimumSize = new System.Drawing.Size(70, 0);
+            this.CbSemitoni.Name = "CbSemitoni";
+            this.CbSemitoni.Size = new System.Drawing.Size(78, 21);
+            this.CbSemitoni.TabIndex = 15;
+            this.CbSemitoni.SelectedIndexChanged += new System.EventHandler(this.CbSemitoni_SelectedIndexChanged);
             // 
             // PbTrasposeDown
             // 
             this.PbTrasposeDown.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.PbTrasposeDown.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PbTrasposeDown.Image = ((System.Drawing.Image)(resources.GetObject("PbTrasposeDown.Image")));
-            this.PbTrasposeDown.Location = new System.Drawing.Point(58, 27);
+            this.PbTrasposeDown.Location = new System.Drawing.Point(1, 3);
             this.PbTrasposeDown.Margin = new System.Windows.Forms.Padding(1);
             this.PbTrasposeDown.Name = "PbTrasposeDown";
             this.PbTrasposeDown.Size = new System.Drawing.Size(20, 20);
@@ -175,17 +204,20 @@
             this.TT.SetToolTip(this.PbTrasposeDown, "Change notation");
             this.PbTrasposeDown.Click += new System.EventHandler(this.PbTrasposeDown_Click);
             // 
-            // CbSemitoni
+            // PbNormalized
             // 
-            this.CbSemitoni.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.CbSemitoni.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.CbSemitoni.FormattingEnabled = true;
-            this.CbSemitoni.Location = new System.Drawing.Point(82, 27);
-            this.CbSemitoni.MinimumSize = new System.Drawing.Size(70, 0);
-            this.CbSemitoni.Name = "CbSemitoni";
-            this.CbSemitoni.Size = new System.Drawing.Size(78, 21);
-            this.CbSemitoni.TabIndex = 15;
-            this.CbSemitoni.SelectedIndexChanged += new System.EventHandler(this.CbSemitoni_SelectedIndexChanged);
+            this.PbNormalized.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.PbNormalized.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.PbNormalized.Image = ((System.Drawing.Image)(resources.GetObject("PbNormalized.Image")));
+            this.PbNormalized.Location = new System.Drawing.Point(157, 1);
+            this.PbNormalized.Margin = new System.Windows.Forms.Padding(1);
+            this.PbNormalized.Name = "PbNormalized";
+            this.PbNormalized.Size = new System.Drawing.Size(32, 22);
+            this.PbNormalized.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.PbNormalized.TabIndex = 19;
+            this.PbNormalized.TabStop = false;
+            this.TT.SetToolTip(this.PbNormalized, "Normalize");
+            this.PbNormalized.Click += new System.EventHandler(this.PbNormalized_Click);
             // 
             // label1
             // 
@@ -197,10 +229,19 @@
             this.label1.TabIndex = 17;
             this.label1.Text = "Notation";
             // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 34);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Traspose";
+            // 
             // PbNotation
             // 
             this.PbNotation.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel2.SetColumnSpan(this.PbNotation, 2);
             this.PbNotation.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PbNotation.Image = ((System.Drawing.Image)(resources.GetObject("PbNotation.Image")));
             this.PbNotation.Location = new System.Drawing.Point(58, 1);
@@ -213,15 +254,45 @@
             this.TT.SetToolTip(this.PbNotation, "Change notation");
             this.PbNotation.Click += new System.EventHandler(this.PbNotation_Click);
             // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(94, 5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Normalized";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(20, 0);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
             // GbSheetInfo
             // 
             this.GbSheetInfo.AutoSize = true;
             this.GbSheetInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.GbSheetInfo.Controls.Add(this.tableLayoutPanel1);
             this.GbSheetInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.GbSheetInfo.Location = new System.Drawing.Point(3, 209);
+            this.GbSheetInfo.Location = new System.Drawing.Point(3, 215);
             this.GbSheetInfo.Name = "GbSheetInfo";
-            this.GbSheetInfo.Size = new System.Drawing.Size(252, 109);
+            this.GbSheetInfo.Size = new System.Drawing.Size(262, 109);
             this.GbSheetInfo.TabIndex = 2;
             this.GbSheetInfo.TabStop = false;
             this.GbSheetInfo.Text = "Sheet Info";
@@ -248,7 +319,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(246, 90);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(256, 90);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // TbProgress
@@ -257,7 +328,7 @@
             this.TbProgress.Enabled = false;
             this.TbProgress.Location = new System.Drawing.Point(33, 65);
             this.TbProgress.Name = "TbProgress";
-            this.TbProgress.Size = new System.Drawing.Size(210, 20);
+            this.TbProgress.Size = new System.Drawing.Size(220, 20);
             this.TbProgress.TabIndex = 11;
             // 
             // TbSheetAuthor
@@ -266,7 +337,7 @@
             this.TbSheetAuthor.Enabled = false;
             this.TbSheetAuthor.Location = new System.Drawing.Point(33, 5);
             this.TbSheetAuthor.Name = "TbSheetAuthor";
-            this.TbSheetAuthor.Size = new System.Drawing.Size(210, 20);
+            this.TbSheetAuthor.Size = new System.Drawing.Size(220, 20);
             this.TbSheetAuthor.TabIndex = 5;
             // 
             // TbSheetRevisor
@@ -275,7 +346,7 @@
             this.TbSheetRevisor.Enabled = false;
             this.TbSheetRevisor.Location = new System.Drawing.Point(33, 35);
             this.TbSheetRevisor.Name = "TbSheetRevisor";
-            this.TbSheetRevisor.Size = new System.Drawing.Size(210, 20);
+            this.TbSheetRevisor.Size = new System.Drawing.Size(220, 20);
             this.TbSheetRevisor.TabIndex = 6;
             this.TbSheetRevisor.Visible = false;
             // 
@@ -318,7 +389,7 @@
             this.GbSongInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GbSongInfo.Location = new System.Drawing.Point(3, 3);
             this.GbSongInfo.Name = "GbSongInfo";
-            this.GbSongInfo.Size = new System.Drawing.Size(252, 124);
+            this.GbSongInfo.Size = new System.Drawing.Size(262, 124);
             this.GbSongInfo.TabIndex = 3;
             this.GbSongInfo.TabStop = false;
             this.GbSongInfo.Text = "Song Property";
@@ -346,7 +417,7 @@
             this.TlpHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TlpHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TlpHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.TlpHeader.Size = new System.Drawing.Size(246, 105);
+            this.TlpHeader.Size = new System.Drawing.Size(256, 105);
             this.TlpHeader.TabIndex = 0;
             // 
             // TbTitle
@@ -355,7 +426,7 @@
             this.TbTitle.Location = new System.Drawing.Point(29, 3);
             this.TbTitle.Name = "TbTitle";
             this.TbTitle.NullString = "<Song Title>";
-            this.TbTitle.Size = new System.Drawing.Size(214, 20);
+            this.TbTitle.Size = new System.Drawing.Size(224, 20);
             this.TbTitle.TabIndex = 0;
             this.TbTitle.TextChanged += new System.EventHandler(this.TbTitle_TextChanged);
             this.TbTitle.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
@@ -366,7 +437,7 @@
             this.TbArtist.Location = new System.Drawing.Point(29, 29);
             this.TbArtist.Name = "TbArtist";
             this.TbArtist.NullString = "<Artist>";
-            this.TbArtist.Size = new System.Drawing.Size(214, 20);
+            this.TbArtist.Size = new System.Drawing.Size(224, 20);
             this.TbArtist.TabIndex = 1;
             this.TbArtist.TextChanged += new System.EventHandler(this.TbArtist_TextChanged);
             this.TbArtist.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
@@ -378,7 +449,7 @@
             this.CbCategory.FormattingEnabled = true;
             this.CbCategory.Location = new System.Drawing.Point(29, 55);
             this.CbCategory.Name = "CbCategory";
-            this.CbCategory.Size = new System.Drawing.Size(214, 21);
+            this.CbCategory.Size = new System.Drawing.Size(224, 21);
             this.CbCategory.TabIndex = 2;
             this.CbCategory.SelectedIndexChanged += new System.EventHandler(this.CbCategory_SelectedIndexChanged);
             // 
@@ -388,7 +459,7 @@
             this.TbTags.Location = new System.Drawing.Point(29, 82);
             this.TbTags.Name = "TbTags";
             this.TbTags.NullString = "<Tags>";
-            this.TbTags.Size = new System.Drawing.Size(214, 20);
+            this.TbTags.Size = new System.Drawing.Size(224, 20);
             this.TbTags.TabIndex = 3;
             this.TbTags.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
             // 
@@ -448,11 +519,18 @@
             this.NF.Images.SetKeyName(1, "American");
             this.NF.Images.SetKeyName(2, "Unknown");
             // 
+            // SF
+            // 
+            this.SF.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("SF.ImageStream")));
+            this.SF.TransparentColor = System.Drawing.Color.Transparent;
+            this.SF.Images.SetKeyName(0, "ImgOK");
+            this.SF.Images.SetKeyName(1, "ImgKO");
+            // 
             // SheetPropertyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(258, 452);
+            this.ClientSize = new System.Drawing.Size(268, 452);
             this.Controls.Add(this.TlpMain);
             this.DockAreas = ((ChordEditor.UserControls.DockingManager.DockAreas)(((ChordEditor.UserControls.DockingManager.DockAreas.Float | ChordEditor.UserControls.DockingManager.DockAreas.DockLeft) 
             | ChordEditor.UserControls.DockingManager.DockAreas.DockRight)));
@@ -467,10 +545,13 @@
             this.TlpMain.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PbTrasposeUp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PbTrasposeDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PbNormalized)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PbNotation)).EndInit();
             this.GbSheetInfo.ResumeLayout(false);
             this.GbSheetInfo.PerformLayout();
@@ -522,5 +603,10 @@
         private System.Windows.Forms.PictureBox PbTrasposeUp;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox CbSemitoni;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.PictureBox PbNormalized;
+        private System.Windows.Forms.ImageList SF;
 	}
 }

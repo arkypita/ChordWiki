@@ -18,6 +18,7 @@ namespace ChordEditor.Forms
 
         private Core.Sheet mSheet;
         private Core.ChordNotation mSheetNotation;
+        private bool mNormalized;
 		private bool mForceClose = false;
 
 		TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
@@ -221,19 +222,25 @@ namespace ChordEditor.Forms
 			int American = 0;
 
 			//get matches with different notations
+            bool normal = true;
 			System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
 			foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
 			{
-				string chord = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
-				Core.ChordNotation cn = Core.Pagliaro.WhatNotation(chord);
+				string text = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
+				Core.Chord c = Core.Pagliaro.GetChord(text);
 
-				if (cn == Core.ChordNotation.Italian)
+				if (c.Notation == Core.ChordNotation.Italian)
 					Italian++;
-				else if (cn == Core.ChordNotation.American)
+				else if (c.Notation == Core.ChordNotation.American)
 					American++;
 				else
 					Unknown++;
+
+                if (text != c.Normalized)
+                    normal = false;
             }
+
+            mNormalized = normal;
 
 			if (Italian > 0 && Italian >= American && Italian >= Unknown)
 				mSheetNotation = Core.ChordNotation.Italian;
@@ -246,6 +253,9 @@ namespace ChordEditor.Forms
 
         public Core.ChordNotation SheetNotation
         {get { return mSheetNotation; }}
+
+        public bool IsNormalized
+        { get { return mNormalized; } }
 
         internal void ChangeNotation()
         {
@@ -332,6 +342,30 @@ namespace ChordEditor.Forms
                 offset += newChord.Length - oldChord.Length;
             }
             TB.Text = text.ToString();
+        }
+
+        internal void Normalize()
+        {
+            System.Text.StringBuilder text = new StringBuilder(TB.Text);
+            int offset = 0;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
+            {
+                System.Text.RegularExpressions.Group g = m.Groups[1];
+
+                string oldChord = g.Value;
+                string newChord = Core.Pagliaro.Normalize(oldChord);
+
+                int position = g.Index + offset;
+                text.Remove(position, oldChord.Length);
+                text.Insert(position, newChord);
+
+                offset += newChord.Length - oldChord.Length;
+            }
+            TB.Text = text.ToString();
+                
+
         }
     }
 }

@@ -118,7 +118,7 @@ namespace ChordEditor.Core
         private string mVariant = ""; //all the text next to note, in normalized format
         private string mBaseText;
 
-        public Chord(string text, bool normalize = true)
+        public Chord(string text)
         {
             if (text == null)
                 return;
@@ -140,8 +140,8 @@ namespace ChordEditor.Core
             {
                 mVariant = mBaseText.Substring(noteDictionary[mNotation][mNote].Length);
 
-                if (normalize)
-                {
+                //if (normalize)
+                //{
                     if (mVariant.StartsWith("+"))                     //rimuovi notazione di maggiore iniziale
                         mVariant = mVariant.Substring(1);
                     else if (mVariant.ToLower().StartsWith("maj"))    //rimuovi notazione di maggiore iniziale
@@ -156,7 +156,7 @@ namespace ChordEditor.Core
                     mVariant = mVariant.ToLower(); //può essere fatto solo a questo punto del codice, perché prima si rischia di confondere M con m
 
                     //mVariant = mVariant.Replace("sus", "ecc");  //normalizza eccedenti
-                }
+                //}
             }   
         }
 
@@ -172,6 +172,17 @@ namespace ChordEditor.Core
                 return mBaseText;
             else
                 return noteDictionary[notation][mNote] + mVariant;
+        }
+
+        public string Normalized
+        {
+            get
+            {
+                if (!IsValid)
+                    return mBaseText;
+                else
+                    return noteDictionary[mNotation][mNote] + mVariant;
+            }
         }
 
         internal string Traspose(int semitones)
@@ -237,13 +248,16 @@ namespace ChordEditor.Core
 
     public class Pagliaro
     {
-        public static ChordNotation WhatNotation(string text)
-        {return new Chord(text, false).Notation;}
+        public static Chord GetChord(string text)
+        {return new Chord(text);}
 
         public static string ChangeNotation(string text, ChordNotation notation)
-        {return new Chord(text, true).ToNotation(notation);}
+        {return new Chord(text).ToNotation(notation);}
 
         public static string Traspose(string text, int semitones)
-        { return new Chord(text, true).Traspose(semitones); }
+        { return new Chord(text).Traspose(semitones); }
+
+        internal static string Normalize(string text)
+        {return new Chord(text).Normalized;}
     }
 }

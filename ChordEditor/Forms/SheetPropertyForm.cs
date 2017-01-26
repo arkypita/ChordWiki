@@ -55,6 +55,12 @@ namespace ChordEditor.Forms
             else
                 PbNotation.Image = NF.Images[Core.ChordNotation.Unknown.ToString()];
 
+            if (sf != null)
+                PbNormalized.Image = SF.Images[sf.IsNormalized ? "ImgOK" : "ImgKO"];
+            else
+                PbNormalized.Image = SF.Images["ImgOK"];
+
+            PbNormalized.Enabled = (sf != null && !sf.IsNormalized);
             PbNotation.Enabled = (sf != null && (sf.SheetNotation == Core.ChordNotation.American || sf.SheetNotation == Core.ChordNotation.Italian));
         }
 
@@ -185,6 +191,12 @@ namespace ChordEditor.Forms
     
                 CbSemitoni.SelectedIndex = 11;
             }
+        }
+
+        private void PbNormalized_Click(object sender, EventArgs e)
+        {
+            if (ActiveSheetForm != null)
+                ActiveSheetForm.Normalize();
         }
 		
 	}
