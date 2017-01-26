@@ -24,6 +24,10 @@ namespace ChordEditor
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+
+			//Settings.Default.Reset(); //reset config
+			Settings.Default.Upgrade();
+
 			Application.Run(new MainForm());
 		}
 

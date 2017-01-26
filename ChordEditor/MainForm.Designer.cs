@@ -106,6 +106,8 @@ namespace ChordEditor
 			this.MMnUploadOnly = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.MMnRevert = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+			this.MMnCleanup = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.MnExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,6 +127,10 @@ namespace ChordEditor
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.MnDownloadOnly = new System.Windows.Forms.ToolStripMenuItem();
 			this.MnUploadOnly = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.MnRevert = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.MnCleanup = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.BtnOpenSheet = new System.Windows.Forms.ToolStripButton();
 			this.BtnNewSheet = new System.Windows.Forms.ToolStripButton();
@@ -136,8 +142,7 @@ namespace ChordEditor
 			this.BtnPaste = new System.Windows.Forms.ToolStripButton();
 			this.MTT = new System.Windows.Forms.ToolTip(this.components);
 			this.ET = new System.Windows.Forms.Timer(this.components);
-			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-			this.MnRevert = new System.Windows.Forms.ToolStripMenuItem();
+			this.VCAT = new System.Windows.Forms.Timer(this.components);
 			this.DP = new ChordEditor.UserControls.DockingManager.DockPanel();
 			this.MMS.SuspendLayout();
 			this.MTS.SuspendLayout();
@@ -277,12 +282,13 @@ namespace ChordEditor
             this.MMnDownloadOnly,
             this.MMnUploadOnly,
             this.toolStripMenuItem4,
-            this.MMnRevert});
+            this.MMnRevert,
+            this.toolStripMenuItem7,
+            this.MMnCleanup});
 			this.MnSyncronize.Image = ((System.Drawing.Image)(resources.GetObject("MnSyncronize.Image")));
 			this.MnSyncronize.Name = "MnSyncronize";
 			this.MnSyncronize.Size = new System.Drawing.Size(157, 22);
 			this.MnSyncronize.Text = "Syncroni&ze";
-			this.MnSyncronize.Click += new System.EventHandler(this.DatabaseSyncronize);
 			// 
 			// MMnFullSync
 			// 
@@ -325,6 +331,19 @@ namespace ChordEditor
 			this.MMnRevert.Size = new System.Drawing.Size(193, 22);
 			this.MMnRevert.Text = "Revert all changes";
 			this.MMnRevert.Click += new System.EventHandler(this.DatabaseRevert);
+			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(190, 6);
+			// 
+			// MMnCleanup
+			// 
+			this.MMnCleanup.Image = ((System.Drawing.Image)(resources.GetObject("MMnCleanup.Image")));
+			this.MMnCleanup.Name = "MMnCleanup";
+			this.MMnCleanup.Size = new System.Drawing.Size(193, 22);
+			this.MMnCleanup.Text = "Cleanup!";
+			this.MMnCleanup.Click += new System.EventHandler(this.DatabaseCleanup);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -466,7 +485,9 @@ namespace ChordEditor
             this.MnDownloadOnly,
             this.MnUploadOnly,
             this.toolStripMenuItem5,
-            this.MnRevert});
+            this.MnRevert,
+            this.toolStripMenuItem6,
+            this.MnCleanup});
 			this.BtnSyncronize.Image = ((System.Drawing.Image)(resources.GetObject("BtnSyncronize.Image")));
 			this.BtnSyncronize.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.BtnSyncronize.Name = "BtnSyncronize";
@@ -506,6 +527,34 @@ namespace ChordEditor
 			this.MnUploadOnly.Size = new System.Drawing.Size(193, 22);
 			this.MnUploadOnly.Text = "Commit local changes";
 			this.MnUploadOnly.Click += new System.EventHandler(this.DatabaseUpload);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(190, 6);
+			// 
+			// MnRevert
+			// 
+			this.MnRevert.Image = ((System.Drawing.Image)(resources.GetObject("MnRevert.Image")));
+			this.MnRevert.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.MnRevert.Name = "MnRevert";
+			this.MnRevert.Size = new System.Drawing.Size(193, 22);
+			this.MnRevert.Text = "Revert all changes";
+			this.MnRevert.Click += new System.EventHandler(this.DatabaseRevert);
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(190, 6);
+			// 
+			// MnCleanup
+			// 
+			this.MnCleanup.Image = ((System.Drawing.Image)(resources.GetObject("MnCleanup.Image")));
+			this.MnCleanup.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.MnCleanup.Name = "MnCleanup";
+			this.MnCleanup.Size = new System.Drawing.Size(193, 22);
+			this.MnCleanup.Text = "Cleanup!";
+			this.MnCleanup.Click += new System.EventHandler(this.DatabaseCleanup);
 			// 
 			// toolStripSeparator5
 			// 
@@ -598,19 +647,10 @@ namespace ChordEditor
 			this.ET.Interval = 400;
 			this.ET.Tick += new System.EventHandler(this.ET_Tick);
 			// 
-			// toolStripMenuItem5
+			// VCAT
 			// 
-			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(190, 6);
-			// 
-			// MnRevert
-			// 
-			this.MnRevert.Image = ((System.Drawing.Image)(resources.GetObject("MnRevert.Image")));
-			this.MnRevert.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.MnRevert.Name = "MnRevert";
-			this.MnRevert.Size = new System.Drawing.Size(193, 22);
-			this.MnRevert.Text = "Revert all changes";
-			this.MnRevert.Click += new System.EventHandler(this.DatabaseRevert);
+			this.VCAT.Interval = 1000;
+			this.VCAT.Tick += new System.EventHandler(this.VCAT_Tick);
 			// 
 			// DP
 			// 
@@ -684,6 +724,8 @@ namespace ChordEditor
 			this.Name = "MainForm";
 			this.Text = "BG3 ChordPro Editor";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.MMS.ResumeLayout(false);
 			this.MMS.PerformLayout();
 			this.MTS.ResumeLayout(false);
@@ -712,5 +754,10 @@ namespace ChordEditor
 		private System.Windows.Forms.ToolStripMenuItem MMnRevert;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 		private System.Windows.Forms.ToolStripMenuItem MnRevert;
+		private System.Windows.Forms.Timer VCAT;
+		private System.Windows.Forms.ToolStripMenuItem MnCleanup;
+		private System.Windows.Forms.ToolStripMenuItem MMnCleanup;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 	}
 }

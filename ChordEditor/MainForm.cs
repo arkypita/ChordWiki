@@ -19,10 +19,9 @@ namespace ChordEditor
 	/// </summary>
 	public partial class MainForm : Form
 	{
-		Forms.LogMessageForm PendingChanges = new Forms.LogMessageForm();
-        Forms.SheetPropertyForm SheetProperty = new Forms.SheetPropertyForm();
-        Forms.SheetDatabase SheetDataBase = new Forms.SheetDatabase();
-        
+		Forms.LogMessageForm LogMessages;
+		Forms.SheetPropertyForm SheetProperty;
+		Forms.SheetDatabase SheetDataBase;
 
 		public MainForm()
 		{
@@ -30,23 +29,75 @@ namespace ChordEditor
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//
 			using (Forms.SpashScreen ss = new Forms.SpashScreen())
 				ss.ShowDialog();
 
-			PendingChanges.Show(DP);
+			LogMessages = new Forms.LogMessageForm();
+			LogMessages.Show(DP);
+
+			VerifyTotalCleanup();
+
+			SheetProperty = new Forms.SheetPropertyForm();
 			SheetProperty.Show(DP);
-            DocumentOpen(null, null);
+
+			SheetDataBase = new Forms.SheetDatabase();
+			SheetDataBase.Show(DP);
 
             Program.SvnOperationBegin += Program_SvnOperationBegin;
             Program.SvnOperationEnd += Program_SvnOperationEnd;
+			Program.SvnOperationError += Program_SvnOperationError;
+
+			Program.SheetDB.ReloadDataBase();
 		}
 
- 
+		private int mErrorCount = 0;
+		void Program_SvnOperationError(Exception ex)
+		{
+			if (InvokeRequired)
+			{
+				Invoke(new Program.SvnOperationErrorDelegate(Program_SvnOperationError), ex);
+			}
+			else
+			{
+				completedWithoutError = false;
+				mErrorCount++;
+			}
+		}
 
+		void VerifyTotalCleanup()
+		{
+			if (TokenFile.TestAndDelete("cleanup.tok"))
+				Program.TotalCleanup(this);
+		}
+
+		void VerifyErrorCount()
+		{
+			if (mErrorCount > 20)
+			{
+				if (System.Windows.Forms.MessageBox.Show("It would seem that there are strong issues in your working copy.\r\nI can fix it with a \"Strong Cleanup\".\r\nPerform strong cleanup now?\r\n\r\nApplication restart is required.",
+					"Syncronization error", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes)
+				{
+					TokenFile.Set("cleanup.tok");
+					mForceClose = true;
+					Program.Restart();
+				}
+			}
+			else if (mErrorCount > 10)
+			{
+				if (System.Windows.Forms.MessageBox.Show("It would seem that there are some issues in your working copy.\r\nSometimes these problems can be solved with the \"Cleanup\" function.\r\nPerform cleanup now?",
+					"Syncronization error", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes)
+				{
+					mErrorCount = 0;
+					Program.DatabaseCleanup(this);
+				}
+			}
+		}
+
+
+		private bool completedWithoutError = true;
         void Program_SvnOperationBegin(string message)
         {
             if (InvokeRequired)
@@ -55,6 +106,7 @@ namespace ChordEditor
             }
             else
             {
+				completedWithoutError = true;
                 Cursor = Cursors.WaitCursor;
                 MnSyncronize.Enabled = BtnSyncronize.Enabled = false;
             }
@@ -70,6 +122,12 @@ namespace ChordEditor
             {
                 MnSyncronize.Enabled = BtnSyncronize.Enabled = true;
                 Cursor = Cursors.Default;
+
+				if (completedWithoutError)
+					mErrorCount = 0;
+
+				VerifyErrorCount();
+				VerifyClosingAct();
             }
         }
 
@@ -127,6 +185,12 @@ namespace ChordEditor
 
 		private void DatabaseRevert(object sender, EventArgs e)
 		{Program.DatabaseRevert(this);}
+
+		private void DatabaseCleanup(object sender, EventArgs e)
+		{
+			mErrorCount = 0;
+			Program.DatabaseCleanup(this);
+		}
 
 		private void SelectionCut(object sender, EventArgs e)
 		{
@@ -210,6 +274,54 @@ namespace ChordEditor
 			MnRedo.Enabled = ActiveEditor != null && ActiveEditor.RedoEnabled;
             MnSelectAll.Enabled = ActiveEditor != null;
 		}
+
+		private bool mForceClose = false;
+		private bool mClosePending = false;
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (!mForceClose && Program.DatabaseHasChanges())
+			{
+				DialogResult rv = System.Windows.Forms.MessageBox.Show("There are some changes not yet sent to the server.\r\nSubmit your changes?",
+																		"Uncommitted changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+				if (rv == System.Windows.Forms.DialogResult.Yes)
+				{
+					mClosePending = true;
+					Enabled = false;
+					Program.DatabaseUpload(this); //è asincrono
+					e.Cancel = true;
+				}
+				else if (rv == System.Windows.Forms.DialogResult.Cancel)
+				{
+					e.Cancel = true;
+				}
+			}
+		}
+
+		private void VerifyClosingAct() //chiamata dalla end operation
+		{
+			if (mClosePending)
+				VCAT.Start(); //aspetto un secondo x vedere i messaggi
+		}
+
+		private void VCAT_Tick(object sender, EventArgs e)
+		{
+			VCAT.Enabled = false;
+			if (mClosePending)
+			{
+				Enabled = true; //riabilito l'interfaccia, potrebbe essere necessaria nuova interazione sul close
+				mClosePending = false;
+				Close();
+			}
+		}
+
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			if (!Program.LocalOrInvalid)
+				Program.DatabaseDownload(this);
+		}
+
+
 
 
 

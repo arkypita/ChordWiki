@@ -22,9 +22,9 @@ namespace ChordEditor.Forms
             Core.Program.SvnOperationError += Program_SvnOperationError;
 		}
 
-        void Program_SvnOperationError(string message)
+        void Program_SvnOperationError(Exception ex)
         {
-            Log(message, errorStyle);
+            Log(ex.Message, errorStyle);
         }
 
         void Program_SvnOperationMessage(string message)
