@@ -88,15 +88,8 @@ namespace ChordEditor.Core
 
 		private static void Commit(SharpSvn.SvnClient cln)
 		{
-			try
-			{
-				SharpSvn.SvnCommitResult result;
-				cln.Commit(CurrentFolder, new SharpSvn.SvnCommitArgs() { LogMessage = GenerateLogMessage(), ThrowOnError = false, ThrowOnWarning = false }, out result);
-			}
-            catch (Exception ex)
-            {
-                OnSvnEx(ex);
-            }
+			try{cln.Commit(CurrentFolder, new SharpSvn.SvnCommitArgs() { LogMessage = GenerateLogMessage(), ThrowOnError = false, ThrowOnWarning = false });}
+            catch (Exception ex){OnSvnEx(ex);}
 		}
 
 		private static void CheckWorkingCopy(System.Windows.Forms.Form form)
@@ -169,13 +162,15 @@ namespace ChordEditor.Core
 					{
 						cln.Notify += cln_Notify;
 						cln.SvnError += cln_SvnError;
+						cln.Conflict += cln_Conflict;
 
 						CheckOutIfRequired(cln);
 						Commit(cln);
 						Update(cln);
 
-						cln.Notify += cln_Notify;
-						cln.SvnError += cln_SvnError;
+						cln.Notify -= cln_Notify;
+						cln.SvnError -= cln_SvnError;
+						cln.Conflict -= cln_Conflict;
 					}
 
 					SendOperationEnd();
@@ -185,6 +180,11 @@ namespace ChordEditor.Core
 			else
 				SendOperationSkip();
         }
+
+		static void cln_Conflict(object sender, SharpSvn.SvnConflictEventArgs e)
+		{
+			e.Choice = SharpSvn.SvnAccept.Mine; //assume mine is better, i don't want to lose my job!
+		}
 
 		private static void SendOperationEnd()
 		{
@@ -253,12 +253,14 @@ namespace ChordEditor.Core
                     {
                         cln.Notify += cln_Notify;
                         cln.SvnError += cln_SvnError;
+						cln.Conflict += cln_Conflict;
 
                         CheckOutIfRequired(cln);
                         Update(cln);
 
                         cln.Notify -= cln_Notify;
                         cln.SvnError -= cln_SvnError;
+						cln.Conflict -= cln_Conflict;
                     }
 
 
@@ -287,12 +289,14 @@ namespace ChordEditor.Core
                     {
                         cln.Notify += cln_Notify;
                         cln.SvnError += cln_SvnError;
+						cln.Conflict += cln_Conflict;
 
                         CheckOutIfRequired(cln);
                         Commit(cln);
 
                         cln.Notify -= cln_Notify;
                         cln.SvnError -= cln_SvnError;
+						cln.Conflict -= cln_Conflict;
                     }
 
 					SendOperationEnd();

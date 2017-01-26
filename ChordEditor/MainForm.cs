@@ -23,6 +23,10 @@ namespace ChordEditor
 		Forms.SheetPropertyForm SheetProperty;
 		Forms.SheetDatabase SheetDataBase;
 
+		private bool errorRecorded = false;
+		private bool completedWithoutError = true;
+		private int mErrorCount = 0;
+
 		public MainForm()
 		{
 			//
@@ -53,7 +57,6 @@ namespace ChordEditor
 			Program.SheetDB.ReloadDataBase();
 		}
 
-		private int mErrorCount = 0;
 		void Program_SvnOperationError(Exception ex)
 		{
 			if (InvokeRequired)
@@ -63,7 +66,12 @@ namespace ChordEditor
 			else
 			{
 				completedWithoutError = false;
-				mErrorCount++;
+
+				if (!errorRecorded)
+				{
+					mErrorCount++;
+					errorRecorded = true;
+				}
 			}
 		}
 
@@ -75,7 +83,7 @@ namespace ChordEditor
 
 		void VerifyErrorCount()
 		{
-			if (mErrorCount > 20)
+			if (mErrorCount > 10)
 			{
 				if (System.Windows.Forms.MessageBox.Show("It would seem that there are strong issues in your working copy.\r\nI can fix it with a \"Strong Cleanup\".\r\nPerform strong cleanup now?\r\n\r\nApplication restart is required.",
 					"Syncronization error", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes)
@@ -85,19 +93,16 @@ namespace ChordEditor
 					Program.Restart();
 				}
 			}
-			else if (mErrorCount > 10)
+			else if (mErrorCount > 5)
 			{
 				if (System.Windows.Forms.MessageBox.Show("It would seem that there are some issues in your working copy.\r\nSometimes these problems can be solved with the \"Cleanup\" function.\r\nPerform cleanup now?",
 					"Syncronization error", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes)
 				{
-					mErrorCount = 0;
-					Program.DatabaseCleanup(this);
+					DatabaseCleanup(null, null);
 				}
 			}
 		}
 
-
-		private bool completedWithoutError = true;
         void Program_SvnOperationBegin(string message)
         {
             if (InvokeRequired)
@@ -106,6 +111,7 @@ namespace ChordEditor
             }
             else
             {
+				errorRecorded = true;
 				completedWithoutError = true;
                 Cursor = Cursors.WaitCursor;
                 MnSyncronize.Enabled = BtnSyncronize.Enabled = false;

@@ -53,13 +53,22 @@ namespace ChordEditor.Forms
             Core.Sheet.SheetChange += Sheet_SheetChange;
         }
 
-		private void ReloadFile()
+		private void TryReloadRetry()
 		{
-			Sheet.ReloadFile();
-			TB.Text = Sheet.Content;
-			TB.ClearUndo();
+			try
+			{
+				Sheet.ReloadFile();
+				TB.Text = Sheet.Content;
+				TB.ClearUndo();
+			}
+			catch {RetryReload.Start();}
 		}
 
+		private void RetryReload_Tick(object sender, EventArgs e)
+		{
+			RetryReload.Stop();
+			TryReloadRetry();
+		}
 
         private void SheetForm_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -285,12 +294,12 @@ namespace ChordEditor.Forms
 
 		private void FSW_Changed(object sender, System.IO.FileSystemEventArgs e) //quando viene semplicemente sovrascritto
 		{
-			ReloadFile();
+			TryReloadRetry();
 		}
 
 		private void FSW_Created(object sender, System.IO.FileSystemEventArgs e) //quando viene cancellato e ricreato
 		{
-			ReloadFile();
+			TryReloadRetry();
 		}
 
 		private void VT_Tick(object sender, EventArgs e)
@@ -300,5 +309,7 @@ namespace ChordEditor.Forms
 			if (!System.IO.File.Exists(Sheet.Header.FilePath)) //se è stato eliminato per davvero -> chiudi
 				ForceCloseWhenDelete();
 		}
+
+
     }
 }

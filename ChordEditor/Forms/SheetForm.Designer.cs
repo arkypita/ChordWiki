@@ -37,6 +37,7 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.FSW = new System.IO.FileSystemWatcher();
 			this.VT = new System.Windows.Forms.Timer(this.components);
+			this.RetryReload = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.TB)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -62,7 +63,6 @@
 			this.TB.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.TB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.TB.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.TB.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.TB.Hotkeys = resources.GetString("TB.Hotkeys");
 			this.TB.IsReplaceMode = false;
 			this.TB.Location = new System.Drawing.Point(3, 3);
@@ -148,6 +148,11 @@
 			this.VT.Interval = 500;
 			this.VT.Tick += new System.EventHandler(this.VT_Tick);
 			// 
+			// RetryReload
+			// 
+			this.RetryReload.Interval = 500;
+			this.RetryReload.Tick += new System.EventHandler(this.RetryReload_Tick);
+			// 
 			// SheetForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,5 +187,6 @@
 		private System.Windows.Forms.ComboBox CbZoom;
 		private System.IO.FileSystemWatcher FSW;
 		private System.Windows.Forms.Timer VT;
+		private System.Windows.Forms.Timer RetryReload;
 	}
 }
