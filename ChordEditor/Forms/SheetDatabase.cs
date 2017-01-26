@@ -56,8 +56,15 @@ namespace ChordEditor.Forms
 
         void SheetDB_ListChanged()
         {
-            LV.BuildList();
-            LV_SelectionChanged(null, null);
+            if (InvokeRequired)
+            {
+                Invoke(new Core.SheetDB.ListChangedDelegate(SheetDB_ListChanged));
+            }
+            else
+            {
+                LV.BuildList();
+                LV_SelectionChanged(null, null);
+            }
         }
 
         private void SheetDatabase_Load(object sender, EventArgs e)
@@ -112,11 +119,17 @@ namespace ChordEditor.Forms
             {
 				if (System.IO.File.Exists(sh.FilePath))
 				{
-					if (Core.Program.LocalOrInvalid)
-						System.IO.File.Delete(sh.FilePath); //delete file from filesystem
-					else
-						using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-							cln.Delete(sh.FilePath, new SharpSvn.SvnDeleteArgs() { Force = true }); //mark for svn deletion
+                    if (Core.Program.LocalOrInvalid)
+                        System.IO.File.Delete(sh.FilePath); //delete file from filesystem
+                    else
+                    {
+                        try
+                        {
+                            using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+                                cln.Delete(sh.FilePath, new SharpSvn.SvnDeleteArgs() { Force = true }); //mark for svn deletion
+                        }
+                        catch (Exception ex) { }
+                    }
 				}
             }
 

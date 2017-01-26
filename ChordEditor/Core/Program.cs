@@ -15,6 +15,12 @@ namespace ChordEditor.Core
     /// </summary>
     public static class Program
     {
+        public delegate void SvnOperationDelegate(string message);
+        public static event SvnOperationDelegate SvnOperationBegin;
+        public static event SvnOperationDelegate SvnOperationEnd;
+        public static event SvnOperationDelegate SvnOperationMessage;
+        public static event SvnOperationDelegate SvnOperationError;
+
         public static SheetDB SheetDB;
 
         static Program()
@@ -29,41 +35,13 @@ namespace ChordEditor.Core
             SheetDB.ReloadDataBase();
         }
 
-        internal static void DatabaseSyncronize(System.Windows.Forms.Form form)
-        {
-			CheckWorkingCopy(form);
-
-			if (!LocalOrInvalid)
-			{
-				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-				{
-					SharpSvn.UI.SvnUI.Bind(cln, form);
-
-					CheckOutRequired(cln);
-					LogCommit(cln);
-					Commit(cln);
-					Update(cln);
-				}
-            }
-
-            SheetDB.ReloadDataBase();
-        }
-
-		private static void LogCommit(SharpSvn.SvnClient cln)
-		{
-			//SharpSvn.SvnStatusArgs statusArgs = new SharpSvn.SvnStatusArgs();
-			//statusArgs.Depth = SharpSvn.SvnDepth.Files;
-			//statusArgs.RetrieveAllEntries = true;
-			//System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
-			//cln.GetStatus(CurrentFolder, statusArgs, out statuses);
-			//foreach (SharpSvn.SvnStatusEventArgs status in statuses)
-			//	Console.WriteLine(String.Format("{0}: {1}", status.LocalContentStatus, status.Path));
-		}
-
 		private static void Revert(SharpSvn.SvnClient cln)
 		{
 			try {cln.Revert(CurrentFolder, new SharpSvn.SvnRevertArgs { Depth = SharpSvn.SvnDepth.Files }); }
-			catch { }
+            catch (Exception ex)
+            {
+                OnSvnEx(ex);
+            }
 		}
 
 		private static void DeleteUnversioned(SharpSvn.SvnClient cln)
@@ -81,20 +59,39 @@ namespace ChordEditor.Core
 						System.IO.File.Delete(status.Path);
 				}
 			}
-			catch { }
+            catch (Exception ex)
+            {
+                OnSvnEx(ex);
+            }
 		}
 
 		private static void CheckOutRequired(SharpSvn.SvnClient cln)
 		{
-			if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
-				cln.CheckOut(CurrentRepoUri, CurrentFolder); //esegui un primo checkout
+            try
+            {
+                if (cln.GetUriFromWorkingCopy(CurrentFolder) == null) //se non è un repository
+                    cln.CheckOut(CurrentRepoUri, CurrentFolder); //esegui un primo checkout
+            }
+            catch (Exception ex)
+            {
+                OnSvnEx(ex);
+            }
 		}
 
 		private static void Update(SharpSvn.SvnClient cln)
 		{
 			try { cln.Update(CurrentFolder); }
-			catch { }
+            catch (Exception ex)
+            {
+                OnSvnEx(ex);
+            }
 		}
+
+        private static void OnSvnEx(Exception ex)
+        {
+            if (SvnOperationError != null)
+                SvnOperationError(ex.ToString());
+        }
 
 		private static void Commit(SharpSvn.SvnClient cln)
 		{
@@ -103,7 +100,10 @@ namespace ChordEditor.Core
 				SharpSvn.SvnCommitResult result;
 				cln.Commit(CurrentFolder, new SharpSvn.SvnCommitArgs() { LogMessage = GenerateLogMessage(), ThrowOnError = true }, out result);
 			}
-			catch (Exception ex) { }
+            catch (Exception ex)
+            {
+                OnSvnEx(ex);
+            }
 		}
 
 		private static void CheckWorkingCopy(System.Windows.Forms.Form form)
@@ -118,7 +118,6 @@ namespace ChordEditor.Core
 						SharpSvn.UI.SvnUI.Bind(cln, form);
 
 						SharpSvn.SvnInfoEventArgs info;
-
 						SharpSvn.SvnInfoArgs args = new SharpSvn.SvnInfoArgs();
 						args.ThrowOnError = true;
 						args.ThrowOnCancel = true;
@@ -149,59 +148,156 @@ namespace ChordEditor.Core
 			}
 		}
 
+
+        internal static void DatabaseSyncronize(System.Windows.Forms.Form form)
+        {
+            if (SvnOperationBegin != null)
+                SvnOperationBegin("------ SYNCRONIZE ------");
+
+            CheckWorkingCopy(form);
+
+            if (!LocalOrInvalid)
+            {
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+                    {
+                        cln.Notify += cln_Notify;
+                        cln.SvnError += cln_SvnError;
+
+                        CheckOutRequired(cln);
+                        Commit(cln);
+                        Update(cln);
+
+                        cln.Notify += cln_Notify;
+                        cln.SvnError += cln_SvnError;
+                    }
+
+                    if (SvnOperationEnd != null)
+                        SvnOperationEnd("Complete!");
+
+                    SheetDB.ReloadDataBase();
+
+                });
+            }
+        }
+
+        static void cln_SvnError(object sender, SharpSvn.SvnErrorEventArgs e)
+        {
+            if (SvnOperationError != null)
+                SvnOperationError(e.Exception.Message);
+        }
+
+        static void cln_Notify(object sender, SharpSvn.SvnNotifyEventArgs e)
+        {
+            if (SvnOperationMessage != null)
+            {
+                string filename = e.FullPath != null ? System.IO.Path.GetFileName(e.FullPath) : "";
+                SheetHeader sh = SheetDB.GetByFileName(filename);
+
+                if (sh != null)
+                    SvnOperationMessage(String.Format("{0}\t{1}{2}{3}\t[{4}]", e.Action, sh.Artist, sh.Artist != null ? @"\" : "", sh.Title, filename));
+                else
+                    SvnOperationMessage(String.Format("{0}\t[{1}]", e.Action, filename));
+            }
+        }
+
 		internal static void DatabaseDownload(System.Windows.Forms.Form form)
 		{
+            if (SvnOperationBegin != null)
+                SvnOperationBegin("------ CHECKOUT ------");
+
 			CheckWorkingCopy(form);
 
 			if (!LocalOrInvalid)
 			{
-				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-				{
-					SharpSvn.UI.SvnUI.Bind(cln, form);
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+                    {
+                        cln.Notify += cln_Notify;
+                        cln.SvnError += cln_SvnError;
 
-					CheckOutRequired(cln);
-					Update(cln);
-				}
+                        CheckOutRequired(cln);
+                        Update(cln);
+
+                        cln.Notify -= cln_Notify;
+                        cln.SvnError -= cln_SvnError;
+                    }
+
+
+                    if (SvnOperationEnd != null)
+                        SvnOperationEnd("Complete!");
+
+                    SheetDB.ReloadDataBase();
+
+                });
 			}
-
-			SheetDB.ReloadDataBase();
 		}
 
 		internal static void DatabaseUpload(System.Windows.Forms.Form form)
 		{
+            if (SvnOperationBegin != null)
+                SvnOperationBegin("------ COMMIT ------");
+
 			CheckWorkingCopy(form);
 
 			if (!LocalOrInvalid)
 			{
-				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-				{
-					SharpSvn.UI.SvnUI.Bind(cln, form);
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+                    {
+                        cln.Notify += cln_Notify;
+                        cln.SvnError += cln_SvnError;
 
-					CheckOutRequired(cln);
-					LogCommit(cln);
-					Commit(cln);
-				}
+                        CheckOutRequired(cln);
+                        Commit(cln);
+
+                        cln.Notify -= cln_Notify;
+                        cln.SvnError -= cln_SvnError;
+                    }
+
+                    if (SvnOperationEnd != null)
+                        SvnOperationEnd("Complete!");
+
+                    SheetDB.ReloadDataBase();
+
+                });
 			}
-
-			SheetDB.ReloadDataBase();
 		}
 
 		internal static void DatabaseRevert(System.Windows.Forms.Form form)
 		{
+            if (SvnOperationBegin != null)
+                SvnOperationBegin("------ REVERT ------");
+
 			CheckWorkingCopy(form);
 
 			if (!LocalOrInvalid)
 			{
-				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-				{
-					SharpSvn.UI.SvnUI.Bind(cln, form);
-					Revert(cln);
-					DeleteUnversioned(cln);
-				}
-			}
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+                    {
+                        cln.Notify += cln_Notify;
+                        cln.SvnError += cln_SvnError;
 
-			SheetDB.ReloadDataBase();
-		}
+                        Revert(cln);
+                        DeleteUnversioned(cln);
+
+                        cln.Notify -= cln_Notify;
+                        cln.SvnError -= cln_SvnError;
+                    }
+
+                    if (SvnOperationEnd != null)
+                        SvnOperationEnd("Complete!");
+
+                    SheetDB.ReloadDataBase();
+
+                });
+			}
+ 		}
 
 
         private static string GenerateLogMessage()

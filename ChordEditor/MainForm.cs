@@ -19,7 +19,7 @@ namespace ChordEditor
 	/// </summary>
 	public partial class MainForm : Form
 	{
-		Forms.PendingChangesForm PendingChanges = new Forms.PendingChangesForm();
+		Forms.LogMessageForm PendingChanges = new Forms.LogMessageForm();
         Forms.SheetPropertyForm SheetProperty = new Forms.SheetPropertyForm();
         Forms.SheetDatabase SheetDataBase = new Forms.SheetDatabase();
         
@@ -40,7 +40,38 @@ namespace ChordEditor
 			PendingChanges.Show(DP);
 			SheetProperty.Show(DP);
             DocumentOpen(null, null);
+
+            Program.SvnOperationBegin += Program_SvnOperationBegin;
+            Program.SvnOperationEnd += Program_SvnOperationEnd;
 		}
+
+ 
+
+        void Program_SvnOperationBegin(string message)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Program.SvnOperationDelegate(Program_SvnOperationBegin), message);
+            }
+            else
+            {
+                Cursor = Cursors.WaitCursor;
+                MnSyncronize.Enabled = BtnSyncronize.Enabled = false;
+            }
+        }
+
+        void Program_SvnOperationEnd(string message)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Program.SvnOperationDelegate(Program_SvnOperationEnd), message);
+            }
+            else
+            {
+                MnSyncronize.Enabled = BtnSyncronize.Enabled = true;
+                Cursor = Cursors.Default;
+            }
+        }
 
 		#region Button and Menu Handler
 
@@ -86,32 +117,16 @@ namespace ChordEditor
 		}
 
 		private void DatabaseSyncronize(object sender, EventArgs e)
-		{
-			Cursor = Cursors.WaitCursor;
-			Program.DatabaseSyncronize(this);
-			Cursor = Cursors.Default;
-		}
+		{Program.DatabaseSyncronize(this);}
 
 		private void DatabaseDownload(object sender, EventArgs e)
-		{
-			Cursor = Cursors.WaitCursor;
-			Program.DatabaseDownload(this);
-			Cursor = Cursors.Default;
-		}
+		{Program.DatabaseDownload(this);}
 
 		private void DatabaseUpload(object sender, EventArgs e)
-		{
-			Cursor = Cursors.WaitCursor;
-			Program.DatabaseUpload(this);
-			Cursor = Cursors.Default;
-		}
+		{Program.DatabaseUpload(this);}
 
 		private void DatabaseRevert(object sender, EventArgs e)
-		{
-			Cursor = Cursors.WaitCursor;
-			Program.DatabaseRevert(this);
-			Cursor = Cursors.Default;
-		}
+		{Program.DatabaseRevert(this);}
 
 		private void SelectionCut(object sender, EventArgs e)
 		{

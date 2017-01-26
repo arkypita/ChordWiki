@@ -80,8 +80,14 @@ namespace ChordEditor.Core
             BackupStatus();
 
 			if (createNew && !Program.LocalOrInvalid)
-				using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-					cln.Add(mHeader.FilePath); //mark for svn add
+                using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+                {
+                    try
+                    {
+                        cln.Add(mHeader.FilePath); //mark for svn add
+                    }
+                    catch (Exception ex) { }
+                }
 
             if (SheetChange != null)
                 SheetChange(this);

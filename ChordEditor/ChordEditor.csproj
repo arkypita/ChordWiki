@@ -99,11 +99,11 @@
     <Compile Include="Forms\SheetPropertyForm.Designer.cs">
       <DependentUpon>SheetPropertyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PendingChangesForm.cs">
+    <Compile Include="Forms\LogMessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\PendingChangesForm.Designer.cs">
-      <DependentUpon>PendingChangesForm.cs</DependentUpon>
+    <Compile Include="Forms\LogMessageForm.Designer.cs">
+      <DependentUpon>LogMessageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -287,8 +287,8 @@
     <EmbeddedResource Include="Forms\SheetPropertyForm.resx">
       <DependentUpon>SheetPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PendingChangesForm.resx">
-      <DependentUpon>PendingChangesForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\LogMessageForm.resx">
+      <DependentUpon>LogMessageForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpashScreen.resx">
       <DependentUpon>SpashScreen.cs</DependentUpon>

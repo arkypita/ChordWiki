@@ -137,5 +137,17 @@ namespace ChordEditor.Core
         {
             return mList.GetEnumerator();
         }
+
+        internal SheetHeader GetByFileName(string p)
+        {
+            if (p != null && p.Length > 0)
+            {
+                foreach (SheetHeader sh in mList)
+                    if (sh.FileName.ToLower() == p.ToLower())
+                        return sh;
+            }
+
+            return null;
+        }
     }
 }
