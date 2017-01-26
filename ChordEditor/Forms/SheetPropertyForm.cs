@@ -13,9 +13,24 @@ namespace ChordEditor.Forms
 	{
         private const string NEW_CAT = "--- new category ---";
 
+        class TrasposeCbItem
+        {
+            public int howMany;
+
+            public override string ToString()
+            {return howMany.ToString("+#;-#;0");}
+        }
+
 		public SheetPropertyForm()
 		{
 			InitializeComponent();
+
+            CbSemitoni.BeginUpdate();
+            for (int i = 11; i > -12; i--)
+                CbSemitoni.Items.Add(new TrasposeCbItem() { howMany = i });
+            CbSemitoni.SelectedIndex = 11;
+            CbSemitoni.EndUpdate();
+
 		}
 
         private void SheetPropertyForm_Load(object sender, EventArgs e)
@@ -60,6 +75,8 @@ namespace ChordEditor.Forms
 
         void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
+            CbSemitoni.SelectedIndex = 11;
+
             if (ActiveSheet != null)
             {
                 TbTitle.Text = ActiveSheet.Header.Title;
@@ -145,6 +162,29 @@ namespace ChordEditor.Forms
         {
             if (ActiveSheetForm != null)
                 ActiveSheetForm.ChangeNotation();
+        }
+
+        private void PbTrasposeDown_Click(object sender, EventArgs e)
+        {
+            if (ActiveSheetForm != null)
+                ActiveSheetForm.Traspose(-1);
+        }
+
+        private void PbTrasposeUp_Click(object sender, EventArgs e)
+        {
+            if (ActiveSheetForm != null)
+                ActiveSheetForm.Traspose(+1);
+        }
+
+        private void CbSemitoni_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CbSemitoni.SelectedIndex != 11)
+            {
+                if (ActiveSheetForm != null)
+                    ActiveSheetForm.Traspose(((TrasposeCbItem)CbSemitoni.SelectedItem).howMany);
+    
+                CbSemitoni.SelectedIndex = 11;
+            }
         }
 		
 	}

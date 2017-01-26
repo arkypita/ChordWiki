@@ -75,7 +75,7 @@
     <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
     <Compile Include="Core\TokenFile.cs" />
-    <Compile Include="Core\Traspose.cs" />
+    <Compile Include="Core\Pagliaro.cs" />
     <Compile Include="Forms\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>

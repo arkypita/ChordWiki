@@ -225,7 +225,7 @@ namespace ChordEditor.Forms
 			foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
 			{
 				string chord = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
-				Core.ChordNotation cn = Core.Traspose.WhatNotation(chord);
+				Core.ChordNotation cn = Core.Pagliaro.WhatNotation(chord);
 
 				if (cn == Core.ChordNotation.Italian)
 					Italian++;
@@ -266,7 +266,7 @@ namespace ChordEditor.Forms
 					System.Text.RegularExpressions.Group g = m.Groups[1];
 
                     string oldChord = g.Value;
-                    string newChord = Core.Traspose.ChangeNotation(oldChord, targetNotation);
+                    string newChord = Core.Pagliaro.ChangeNotation(oldChord, targetNotation);
 
                     int position = g.Index + offset;
                     text.Remove(position, oldChord.Length);
@@ -311,5 +311,27 @@ namespace ChordEditor.Forms
 		}
 
 
+
+        internal void Traspose(int semitones)
+        {
+            System.Text.StringBuilder text = new StringBuilder(TB.Text);
+            int offset = 0;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
+            {
+                System.Text.RegularExpressions.Group g = m.Groups[1];
+
+                string oldChord = g.Value;
+                string newChord = Core.Pagliaro.Traspose(oldChord, semitones);
+
+                int position = g.Index + offset;
+                text.Remove(position, oldChord.Length);
+                text.Insert(position, newChord);
+
+                offset += newChord.Length - oldChord.Length;
+            }
+            TB.Text = text.ToString();
+        }
     }
 }
