@@ -48,11 +48,11 @@ namespace ChordEditor.Core
             new chordMatch(ChordNotation.Italian, "SOL#", 8),
             new chordMatch(ChordNotation.Italian, "LA#", 10),
 
-            new chordMatch(ChordNotation.Italian, "REb", 1),
-            new chordMatch(ChordNotation.Italian, "MIb", 3),
-            new chordMatch(ChordNotation.Italian, "SOLb", 6),
-            new chordMatch(ChordNotation.Italian, "LAb", 8),
-            new chordMatch(ChordNotation.Italian, "SIb", 10),
+            new chordMatch(ChordNotation.Italian, "REB", 1),
+            new chordMatch(ChordNotation.Italian, "MIB", 3),
+            new chordMatch(ChordNotation.Italian, "SOLB", 6),
+            new chordMatch(ChordNotation.Italian, "LAB", 8),
+            new chordMatch(ChordNotation.Italian, "SIB", 10),
 
             new chordMatch(ChordNotation.Italian, "DO♯", 1),
             new chordMatch(ChordNotation.Italian, "RE♯", 3),
@@ -82,11 +82,11 @@ namespace ChordEditor.Core
             new chordMatch(ChordNotation.American, "G#", 8),
             new chordMatch(ChordNotation.American, "A#", 10),
 
-            new chordMatch(ChordNotation.American, "Db", 1),
-            new chordMatch(ChordNotation.American, "Eb", 3),
-            new chordMatch(ChordNotation.American, "Gb", 6),
-            new chordMatch(ChordNotation.American, "Ab", 8),
-            new chordMatch(ChordNotation.American, "Bb", 10),
+            new chordMatch(ChordNotation.American, "DB", 1),
+            new chordMatch(ChordNotation.American, "EB", 3),
+            new chordMatch(ChordNotation.American, "GB", 6),
+            new chordMatch(ChordNotation.American, "AB", 8),
+            new chordMatch(ChordNotation.American, "BB", 10),
 
             new chordMatch(ChordNotation.American, "C♯", 1),
             new chordMatch(ChordNotation.American, "D♯", 3),
@@ -118,7 +118,7 @@ namespace ChordEditor.Core
         private string mVariant = ""; //all the text next to note, in normalized format
         private string mBaseText;
 
-        public Chord(string text, bool notationonly = false)
+        public Chord(string text, bool normalize = true)
         {
             if (text == null)
                 return;
@@ -139,7 +139,25 @@ namespace ChordEditor.Core
             if (IsValid)
             {
                 mVariant = mBaseText.Substring(noteDictionary[mNotation][mNote].Length);
-            }
+
+                if (normalize)
+                {
+                    if (mVariant.StartsWith("+"))                     //rimuovi notazione di maggiore iniziale
+                        mVariant = mVariant.Substring(1);
+                    else if (mVariant.ToLower().StartsWith("maj"))    //rimuovi notazione di maggiore iniziale
+                        mVariant = mVariant.Substring(3);
+                    else if (mVariant.StartsWith("M"))                //rimuovi notazione di maggiore iniziale
+                        mVariant = mVariant.Substring(1);
+                    else if (mVariant.ToLower().StartsWith("min"))                      //notazione di minore standardizzata
+                    { mVariant = mVariant.Substring(3); mVariant = "-" + mVariant; }
+                    else if (mVariant.StartsWith("m"))                                  //notazione di minore standardizzata
+                    { mVariant = mVariant.Substring(1); mVariant = "-" + mVariant; }
+
+                    mVariant = mVariant.ToLower(); //può essere fatto solo a questo punto del codice, perché prima si rischia di confondere M con m
+
+                    //mVariant = mVariant.Replace("sus", "ecc");  //normalizza eccedenti
+                }
+            }   
         }
 
         public bool IsValid
@@ -220,12 +238,12 @@ namespace ChordEditor.Core
     public class Pagliaro
     {
         public static ChordNotation WhatNotation(string text)
-        {return new Chord(text, true).Notation;}
+        {return new Chord(text, false).Notation;}
 
         public static string ChangeNotation(string text, ChordNotation notation)
-        {return new Chord(text, false).ToNotation(notation);}
+        {return new Chord(text, true).ToNotation(notation);}
 
         public static string Traspose(string text, int semitones)
-        { return new Chord(text, false).Traspose(semitones); }
+        { return new Chord(text, true).Traspose(semitones); }
     }
 }
