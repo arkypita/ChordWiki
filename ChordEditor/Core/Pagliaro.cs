@@ -258,6 +258,6 @@ namespace ChordEditor.Core
         { return new Chord(text).Traspose(semitones); }
 
         internal static string Normalize(string text)
-        {return new Chord(text).Normalized;}
+        { return new Chord(text).Normalized; }
     }
 }

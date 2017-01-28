@@ -38,6 +38,13 @@ namespace ChordEditor.Forms
             RefreshCategoryList();
             DockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
             SheetForm.DelayedTextChanged += SheetForm_DelayedTextChanged;
+            SheetForm.HeaderChanged += SheetForm_HeaderChanged;
+        }
+
+        void SheetForm_HeaderChanged(SheetForm sf)
+        {
+            if (object.Equals(sf.Sheet, ActiveSheet))
+                RefreshFileHeader();
         }
 
         void SheetForm_DelayedTextChanged(SheetForm sf)
@@ -83,6 +90,13 @@ namespace ChordEditor.Forms
         {
             CbSemitoni.SelectedIndex = 11;
 
+            RefreshFileHeader();
+            RefreshFileInfo();
+
+        }
+
+        private void RefreshFileHeader()
+        {
             if (ActiveSheet != null)
             {
                 TbTitle.Text = ActiveSheet.Header.Title;
@@ -112,9 +126,6 @@ namespace ChordEditor.Forms
 
                 TlpMain.Enabled = false;
             }
-
-            RefreshFileInfo();
-
         }
 
         String OnNull(string val, string replacement)

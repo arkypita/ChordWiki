@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChordEditor.Core
 {
+
+    
+
     [Serializable()]
     public class SheetHeader
     {
@@ -68,16 +71,10 @@ namespace ChordEditor.Core
             set { SetMeta("title", value); }
         }
 
-        public string Subtitle
+        public string Artist
         {
             get { return GetMeta("subtitle"); }
             set { SetMeta("subtitle", value); }
-        }
-
-        public string Artist
-        {
-            get { return GetMeta("artist"); }
-            set { SetMeta("artist", value); }
         }
 
         public string Key
@@ -178,7 +175,6 @@ namespace ChordEditor.Core
         {
             WriteNoNull(sw, "title");
             WriteNoNull(sw, "subtitle");
-            WriteNoNull(sw, "artist");
             WriteNoNull(sw, "key");
             WriteNoNull(sw, "tags");
             WriteNoNull(sw, "sheetcategory");

@@ -15,6 +15,7 @@ namespace ChordEditor.Forms
     {
         public delegate void SheetFormDelegate(SheetForm sf);
         public static event SheetFormDelegate DelayedTextChanged;
+        public static event SheetFormDelegate HeaderChanged;
 
         private Core.Sheet mSheet;
         private Core.ChordNotation mSheetNotation;
@@ -366,6 +367,28 @@ namespace ChordEditor.Forms
             TB.Text = text.ToString();
                 
 
+        }
+
+        private void TB_Pasting(object sender, TextChangingEventArgs e)
+        {
+            Core.Importer.ImportedContent content = Core.Importer.ImportClipbord(e.InsertingText);
+
+            if (content != null)
+            {
+                if (content.Artist != null)
+                    mSheet.Header.Artist = content.Artist;
+
+                if (content.Title != null)
+                    mSheet.Header.Title = content.Title;
+
+                if (content.Title != null || content.Artist != null)
+                    if (HeaderChanged != null)
+                        HeaderChanged(this);
+
+                e.InsertingText = content.Text;
+            }
+
+            e.Cancel = (content == null);
         }
     }
 }

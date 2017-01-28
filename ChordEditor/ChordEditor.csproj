@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Importer.cs" />
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\Sheet.cs" />
     <Compile Include="Core\SheetDB.cs" />
