@@ -277,7 +277,7 @@ namespace ChordEditor.Core
 				else if (Status == SharpSvn.SvnStatus.Modified)
 					return "Modified";
 				else if (Status == SharpSvn.SvnStatus.Normal)
-					return "Original";
+					return "Updated";
 				else
 					return Status.ToString();
 			}
