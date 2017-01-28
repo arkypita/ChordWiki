@@ -204,6 +204,45 @@ namespace ChordEditor.Core
 
             string[] lines = text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
+            //cerca di individuare titolo e artista
+            if (lines.Length > 10) //possiamo ipotizzare che stiamo importando una canzone intera?!
+            {
+                string guessTitle = null;
+                string guessArtist = null;
+
+                //se la prima linea è di testo
+                //e la seconda è uno spazio
+                if (IsSongLine(lines[0]) && (string.IsNullOrWhiteSpace(lines[1]) || string.IsNullOrWhiteSpace(lines[2])))
+                     guessTitle = lines[0];
+                if (IsSongLine(lines[1]) && (string.IsNullOrWhiteSpace(lines[2]) || string.IsNullOrWhiteSpace(lines[3])))
+                    guessArtist = lines[1];
+
+                if (guessTitle != null)
+                {
+                    guessTitle = Forms.InputBox.Show("Guess title", "Is this title correct?", guessTitle, false);
+                    if (guessTitle != null)
+                    {
+                        rv.Title = guessTitle;
+                        lines = lines.Skip(1).ToArray();
+                    }
+
+                    if (guessArtist != null)
+                    {
+                        guessArtist = Forms.InputBox.Show("Guess artist", "Is this artist correct?", guessArtist, false);
+                        if (guessArtist != null)
+                        {
+                            rv.Artist = guessArtist;
+                            lines = lines.Skip(1).ToArray();
+                        }
+                    }
+
+                    if (string.IsNullOrWhiteSpace(lines[0]))//se dopo queste operazioni sono rimasto con una linea vuota iniziale
+                        lines = lines.Skip(1).ToArray(); //me la levo
+                }
+ 
+            }
+
+
             string chords = null;
             foreach (string line in lines)
             {

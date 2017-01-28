@@ -17,12 +17,14 @@ namespace ChordEditor.Forms
 			InitializeComponent();
 		}
 
-		private InputBox(string p1, string p2)
+        private InputBox(string p1, string p2, string p3, bool e)
 		{
 			InitializeComponent();
 
 			Text = p1;
 			LblQuestion.Text = p2;
+            TbInput.Text = p3;
+            TbInput.ReadOnly = !e;
 		}
 
 		private void BtnOk_Click(object sender, EventArgs e)
@@ -31,9 +33,9 @@ namespace ChordEditor.Forms
 			Close();
 		}
 
-		internal static string Show(string title, string question)
+		internal static string Show(string title, string question, string suggestion = "", bool enable = true)
 		{
-			using (InputBox ib = new InputBox(title, question))
+			using (InputBox ib = new InputBox(title, question, suggestion, enable))
 			{
 				if (ib.ShowDialog() == DialogResult.OK)
 					return ib.TbInput.Text.Trim().Length > 0 ? ib.TbInput.Text.Trim() : null;
@@ -43,7 +45,16 @@ namespace ChordEditor.Forms
 
 		private void InputBox_Load(object sender, EventArgs e)
 		{
-			ActiveControl = TbInput;
+            if (TbInput.ReadOnly)
+                ActiveControl = BtnCancel;
+            else
+                ActiveControl = TbInput;
 		}
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            Close();
+        }
 	}
 }
