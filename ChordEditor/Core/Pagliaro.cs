@@ -32,7 +32,7 @@ namespace ChordEditor.Core
 
         #region Data Structures
 
-        private static Dictionary<ChordNotation, string[]> noteDictionary = new Dictionary<ChordNotation, string[]>
+        public static Dictionary<ChordNotation, string[]> noteDictionary = new Dictionary<ChordNotation, string[]>
         {
             {ChordNotation.Italian, new string[] {"DO", "DO#", "RE", "RE#", "MI", "FA", "FA#", "SOL", "SOL#", "LA", "LA#", "SI" }},
             {ChordNotation.American, new string[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }},

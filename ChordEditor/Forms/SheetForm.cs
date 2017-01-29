@@ -20,10 +20,10 @@ namespace ChordEditor.Forms
         private Core.Sheet mSheet;
         private Core.ChordNotation mSheetNotation;
         private bool mNormalized;
-		private bool mForceClose = false;
+        private bool mForceClose = false;
 
-		TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
-		TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
+        TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
+        TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
         private SheetForm()
         {
@@ -35,22 +35,22 @@ namespace ChordEditor.Forms
             InitializeComponent();
             mSheet = sheet;
 
-			FSW.Path = System.IO.Path.GetDirectoryName(sheet.Header.FilePath);
-			FSW.Filter = System.IO.Path.GetFileName(sheet.Header.FilePath);
+            FSW.Path = System.IO.Path.GetDirectoryName(sheet.Header.FilePath);
+            FSW.Filter = System.IO.Path.GetFileName(sheet.Header.FilePath);
 
             TB.Text = sheet.Content;
-			TB.ClearUndo();
-			TB_ZoomChanged(null, null);
+            TB.ClearUndo();
+            TB_ZoomChanged(null, null);
 
-			CbZoom.Items.Add(String.Format("{0} %", 50));
-			CbZoom.Items.Add(String.Format("{0} %", 70));
-			CbZoom.Items.Add(String.Format("{0} %", 90));
-			CbZoom.Items.Add(String.Format("{0} %", 100));
-			CbZoom.Items.Add(String.Format("{0} %", 125));
-			CbZoom.Items.Add(String.Format("{0} %", 150));
-			CbZoom.Items.Add(String.Format("{0} %", 175));
-			CbZoom.Items.Add(String.Format("{0} %", 200));
-			CbZoom.Items.Add(String.Format("{0} %", 300));
+            CbZoom.Items.Add(String.Format("{0} %", 50));
+            CbZoom.Items.Add(String.Format("{0} %", 70));
+            CbZoom.Items.Add(String.Format("{0} %", 90));
+            CbZoom.Items.Add(String.Format("{0} %", 100));
+            CbZoom.Items.Add(String.Format("{0} %", 125));
+            CbZoom.Items.Add(String.Format("{0} %", 150));
+            CbZoom.Items.Add(String.Format("{0} %", 175));
+            CbZoom.Items.Add(String.Format("{0} %", 200));
+            CbZoom.Items.Add(String.Format("{0} %", 300));
 
             MnUndo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Undo);
             MnRedo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Redo);
@@ -71,22 +71,22 @@ namespace ChordEditor.Forms
             return Keys.None;
         }
 
-		private void TryReloadRetry()
-		{
-			try
-			{
-				Sheet.ReloadFile();
-				TB.Text = Sheet.Content;
-				TB.ClearUndo();
-			}
-			catch {RetryReload.Start();}
-		}
+        private void TryReloadRetry()
+        {
+            try
+            {
+                Sheet.ReloadFile();
+                TB.Text = Sheet.Content;
+                TB.ClearUndo();
+            }
+            catch { RetryReload.Start(); }
+        }
 
-		private void RetryReload_Tick(object sender, EventArgs e)
-		{
-			RetryReload.Stop();
-			TryReloadRetry();
-		}
+        private void RetryReload_Tick(object sender, EventArgs e)
+        {
+            RetryReload.Stop();
+            TryReloadRetry();
+        }
 
         private void SheetForm_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -183,8 +183,8 @@ namespace ChordEditor.Forms
         public Core.Sheet Sheet
         { get { return mSheet; } }
 
-		public FastColoredTextBoxNS.FastColoredTextBox Editor
-		{ get { return TB; } }
+        public FastColoredTextBoxNS.FastColoredTextBox Editor
+        { get { return TB; } }
 
         private void TB_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
@@ -195,63 +195,63 @@ namespace ChordEditor.Forms
                 DelayedTextChanged(this);
         }
 
-		private void CbZoom_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				TB.Zoom = int.Parse(((string)CbZoom.SelectedItem).Trim(" %".ToCharArray()));
-			}
-			catch { TB_ZoomChanged(null, null); }
-		}
+        private void CbZoom_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                TB.Zoom = int.Parse(((string)CbZoom.SelectedItem).Trim(" %".ToCharArray()));
+            }
+            catch { TB_ZoomChanged(null, null); }
+        }
 
-		private void TB_ZoomChanged(object sender, EventArgs e)
-		{
-			int newval = Math.Min(Math.Max(TB.Zoom, 50), 300);
-			if (TB.Zoom != newval)
-				TB.Zoom = newval;
+        private void TB_ZoomChanged(object sender, EventArgs e)
+        {
+            int newval = Math.Min(Math.Max(TB.Zoom, 50), 300);
+            if (TB.Zoom != newval)
+                TB.Zoom = newval;
 
-			CbZoom.Text = String.Format("{0} %", TB.Zoom);
-		}
+            CbZoom.Text = String.Format("{0} %", TB.Zoom);
+        }
 
-		private void CbZoom_Validating(object sender, CancelEventArgs e)
-		{
-			try
-			{
-				TB.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
-			}
-			catch { TB_ZoomChanged(null, null); }
-		}
+        private void CbZoom_Validating(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                TB.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
+            }
+            catch { TB_ZoomChanged(null, null); }
+        }
 
-		private void TB_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
-		{
-           //clear previous highlighting
-			e.ChangedRange.ClearStyle();
+        private void TB_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        {
+            //clear previous highlighting
+            e.ChangedRange.ClearStyle();
             //highlight tags
             e.ChangedRange.SetStyle(mChordStyle, @"\[(.*?)\]");
             e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
-		}
+        }
 
         private void Analyze()
         {
 
-			int Unknown = 0;
-			int Italian = 0;
-			int American = 0;
+            int Unknown = 0;
+            int Italian = 0;
+            int American = 0;
 
-			//get matches with different notations
+            //get matches with different notations
             bool normal = true;
-			System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-			foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
-			{
-				string text = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
-				Core.Chord c = Core.Pagliaro.GetChord(text);
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
+            {
+                string text = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
+                Core.Chord c = Core.Pagliaro.GetChord(text);
 
-				if (c.Notation == Core.ChordNotation.Italian)
-					Italian++;
-				else if (c.Notation == Core.ChordNotation.American)
-					American++;
-				else
-					Unknown++;
+                if (c.Notation == Core.ChordNotation.Italian)
+                    Italian++;
+                else if (c.Notation == Core.ChordNotation.American)
+                    American++;
+                else
+                    Unknown++;
 
                 if (text != c.Normalized)
                     normal = false;
@@ -259,17 +259,19 @@ namespace ChordEditor.Forms
 
             mNormalized = normal;
 
-			if (Italian > 0 && Italian >= American && Italian >= Unknown)
-				mSheetNotation = Core.ChordNotation.Italian;
-			else if (American > 0 && American >= Italian && American >= Unknown)
-				mSheetNotation = Core.ChordNotation.American;
-			else
-				mSheetNotation = Core.ChordNotation.Unknown;
+            if (Italian > 0 && Italian >= American && Italian >= Unknown)
+                mSheetNotation = Core.ChordNotation.Italian;
+            else if (American > 0 && American >= Italian && American >= Unknown)
+                mSheetNotation = Core.ChordNotation.American;
+            else
+                mSheetNotation = Core.ChordNotation.Unknown;
+
+            GenerateAutocomplete();
         }
 
 
         public Core.ChordNotation SheetNotation
-        {get { return mSheetNotation; }}
+        { get { return mSheetNotation; } }
 
         public bool IsNormalized
         { get { return mNormalized; } }
@@ -284,39 +286,37 @@ namespace ChordEditor.Forms
 
             if (targetNotation != Core.ChordNotation.Unknown)
                 TB.Text = Core.Program.ChangeNotation(TB.Text, targetNotation);
-
-
         }
 
-		public bool ForceCloseWhenDelete()
-		{
-			mForceClose = true;
-			Close();
-			return true;
-		}
+        public bool ForceCloseWhenDelete()
+        {
+            mForceClose = true;
+            Close();
+            return true;
+        }
 
-		private void FSW_Deleted(object sender, System.IO.FileSystemEventArgs e)
-		{
-			VT.Enabled = true;
-		}
+        private void FSW_Deleted(object sender, System.IO.FileSystemEventArgs e)
+        {
+            VT.Enabled = true;
+        }
 
-		private void FSW_Changed(object sender, System.IO.FileSystemEventArgs e) //quando viene semplicemente sovrascritto
-		{
-			TryReloadRetry();
-		}
+        private void FSW_Changed(object sender, System.IO.FileSystemEventArgs e) //quando viene semplicemente sovrascritto
+        {
+            TryReloadRetry();
+        }
 
-		private void FSW_Created(object sender, System.IO.FileSystemEventArgs e) //quando viene cancellato e ricreato
-		{
-			TryReloadRetry();
-		}
+        private void FSW_Created(object sender, System.IO.FileSystemEventArgs e) //quando viene cancellato e ricreato
+        {
+            TryReloadRetry();
+        }
 
-		private void VT_Tick(object sender, EventArgs e)
-		{
-			VT.Enabled = false;
+        private void VT_Tick(object sender, EventArgs e)
+        {
+            VT.Enabled = false;
 
-			if (!System.IO.File.Exists(Sheet.Header.FilePath)) //se è stato eliminato per davvero -> chiudi
-				ForceCloseWhenDelete();
-		}
+            if (!System.IO.File.Exists(Sheet.Header.FilePath)) //se è stato eliminato per davvero -> chiudi
+                ForceCloseWhenDelete();
+        }
 
 
 
@@ -391,5 +391,73 @@ namespace ChordEditor.Forms
             MnPaste.Enabled = Clipboard.ContainsText();
             MnSelectAll.Enabled = !string.IsNullOrEmpty(TB.Text);
         }
+
+        private Core.ChordNotation mAcNotation = Core.ChordNotation.Unknown;
+        private void GenerateAutocomplete()
+        {
+            Core.ChordNotation target = mSheetNotation == Core.ChordNotation.Unknown ? Core.ChordNotation.Italian : mSheetNotation;
+
+
+            if (target != mAcNotation)
+            {
+                List<NoteSnippet> notes = new List<NoteSnippet>();
+
+                foreach (string note in Core.Chord.noteDictionary[target])
+                    notes.Add(new NoteSnippet(note));
+
+                foreach (string note in Core.Chord.noteDictionary[target])
+                    notes.Add(new NoteSnippet(note + "-"));
+
+                foreach (string note in Core.Chord.noteDictionary[target])
+                    notes.Add(new NoteSnippet(note + "7"));
+
+                foreach (string note in Core.Chord.noteDictionary[target])
+                    notes.Add(new NoteSnippet(note + "-7"));
+
+                foreach (string note in Core.Chord.noteDictionary[target])
+                    notes.Add(new NoteSnippet(note + "9"));
+
+                foreach (string note in Core.Chord.noteDictionary[target])
+                    notes.Add(new NoteSnippet(note + "-9"));
+
+                ACM.SetAutocompleteItems(notes);
+            }
+
+
+
+            mAcNotation = target;
+        }
+
+
+
+
+        internal class NoteSnippet : AutocompleteMenuNS.AutocompleteItem
+        {
+            public NoteSnippet(string note)
+                : base(string.Format("[{0}]",note), 0, note)
+            {
+                //ImageIndex = 0;
+                //ToolTipTitle = "Select note:";
+                //ToolTipText = note;
+                //MenuText = note;
+            }
+
+            public override AutocompleteMenuNS.CompareResult Compare(string fragmentText)
+            {
+                string digittext = fragmentText.Trim("[]".ToCharArray()).ToLower(); //testo digitato, ripulito dalle parentesi
+                string matchtext = Text.Trim("[]".ToCharArray()).ToLower(); //testo del campione, ripulito dalle parentesi
+
+                if (digittext == matchtext)
+                    return AutocompleteMenuNS.CompareResult.VisibleAndSelected;
+                if (matchtext.StartsWith(digittext))
+                    return AutocompleteMenuNS.CompareResult.Visible;
+                return AutocompleteMenuNS.CompareResult.Hidden;
+            }
+        }
+
+
+
+
+
     }
 }

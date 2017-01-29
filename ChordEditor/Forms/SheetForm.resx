@@ -117,6 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="ACM.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>345, 16</value>
+  </metadata>
+  <data name="ACM.Colors" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAEdBdXRvY29tcGxldGVNZW51LCBWZXJzaW9uPTEuMy40LjAsIEN1
+        bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbAwDAAAAUVN5c3RlbS5EcmF3aW5nLCBWZXJz
+        aW9uPTQuMC4wLjAsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49YjAzZjVmN2YxMWQ1MGEz
+        YQUBAAAAGUF1dG9jb21wbGV0ZU1lbnVOUy5Db2xvcnMGAAAAGjxGb3JlQ29sb3I+a19fQmFja2luZ0Zp
+        ZWxkGjxCYWNrQ29sb3I+a19fQmFja2luZ0ZpZWxkIjxTZWxlY3RlZEZvcmVDb2xvcj5rX19CYWNraW5n
+        RmllbGQiPFNlbGVjdGVkQmFja0NvbG9yPmtfX0JhY2tpbmdGaWVsZCM8U2VsZWN0ZWRCYWNrQ29sb3Iy
+        PmtfX0JhY2tpbmdGaWVsZCI8SGlnaGxpZ2h0aW5nQ29sb3I+a19fQmFja2luZ0ZpZWxkBAQEBAQEFFN5
+        c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAAUU3lzdGVtLkRyYXdp
+        bmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMA
+        AAAUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAgAAAAX8////FFN5c3RlbS5EcmF3aW5nLkNvbG9yBAAA
+        AARuYW1lBXZhbHVlCmtub3duQ29sb3IFc3RhdGUBAAAACQcHAwAAAAoAAAAAAAAAACMAAQAB+/////z/
+        //8KAAAAAAAAAACkAAEAAfr////8////CgAAAAAAAAAAIwABAAH5/////P///woAAAAAAAAAAH8AAQAB
+        +P////z///8KAAAAAAAAAACkAAEAAff////8////CgAAAAAAAAAAfwABAAs=
+</value>
+  </data>
+  <metadata name="IL.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>423, 16</value>
+  </metadata>
+  <data name="IL.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABm
+        BAAAAk1TRnQBSQFMAwEBAAEwAQEBMAEBARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
+        ARADAAEBAQABIAYAARD/ACYAAQEDBwEKAw8BFAMVAR0DGQEjAxcBIAMSARkDCwEPAwMBBNAAAwwBEAM4
+        AV0CSAFHAYMCSQFIAYcDOgFiAywBQwMyAVEDNwFaATYCNQFYAzABTAMpAT4DHwEsAxQBGwMGAQgDAAEB
+        xAABUwJPAaUBqAFOASYB/wG2AYUBOgH/AbMBgQE2Af8CXwEyAfsDTAGTAzkBXwM+AWwDPAFoAzYBWQIx
+        ATABTQMjATQDGAEiAwoBDgMAAQHEAAJZAUIB9QGwAVQBKwH/AaEBPwEQAf8BowFCARQB/wGxAVcBMAH/
+        AWIBSQFIAfYDIgExAzYBWQFcAloBzQFqAWYBQQH5AWMBNwErAfwCYQFYAeYCPwE+AWwDAAEByAABUgJQ
+        AaQBpQJAAf0BswGCATcB/wGwAVcBMgH/AbABVwExAf8BXwFKASEB+wQAAWQCWQHsAa4BVAEsAf8BogFA
+        ARIB/wGgAT0BDgH/Aa4BUgEpAf8BbQFkAVEB98wAAwcBCgI2ATUBWANDAXgDQgF2AX8BagFDAf4BXwFK
+        ASEB+wQAA04BlAFlATsBKwH8AaoBTQEkAf8BqwFPASUB/wGsAVABKAH/AaABQgEaAf/YAAMGAQgBfwFq
+        AUMB/gFfAUoBIQH7CAACPQE8AWcBYQJdAeIBXQJOAfABhwEkAQAB/wGhAUUBHQH/2AADBgEIAX8BaQFC
+        Af4BXwFKASEB+xQAAYcBJAEAAf8BoQFFAR0B/9gAAwYBCAF/AWkBQgH+AV8BSgEhAfsUAAGHASQBAAH/
+        AaEBRAEdAf/YAAMGAQgBfwFpAUIB/gGHAkAB/QNCAXUDPQFpAzcBWgMvAUkDJgE5AYcBJAEAAf8BoQFE
+        AR0B/9gAAwYBCAF/AWoBQwH+AbgBiAE9Af8BswGCATYB/wGuAVUBLwH/AakBTwEoAf8BowFIASEB/wFi
+        Ak0B+gFqAWABQQH5AaABQwEbAf/YAAMGAQgBfwFqAUMB/gGpAUwBIQH/AagBSgEeAf8BpgFGARoB/wGk
+        AUQBFwH/AaMBQwEWAf8BpQFFARkB/wGmAUcBGwH/AaEBRQEdAf/YAAMFAQcCXAE+AfgBZAFXAVMB8QFg
+        AV8BMgH7AasBUAEpAf8BtQGEATgB/wG3AYcBOwH/AbEBVwEuAf8BqgFNASIB/wGhAUUBHQH/3AADBwEJ
+        AxkBIwMqAUADOgFhA0QBegNKAYsCUwFSAagCXAFZAcwCXAFVAer/AMkAAUIBTQE+BwABPgMAASgDAAFA
+        AwABEAMAAQEBAAEBBQABgBcAA/8BAAL/BgAB8AEHBgABgAcAAYAHAAGAAQEGAAGBAQMGAAGBAQMGAAHx
+        AYMGAAHxAfMGAAHxAfMGAAHwAQMGAAHwAQMGAAHwAQMGAAHwAQMGAAH4AQMGAAL/BgAL
+</value>
+  </data>
   <metadata name="CMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>268, 16</value>
   </metadata>
@@ -226,7 +275,7 @@
 </value>
   </data>
   <data name="TB.Hotkeys" xml:space="preserve">
-    <value>Tab=IndentIncrease, Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+Tab=IndentDecrease, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Ctrl+Back=ClearWordLeft, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+C=Copy, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+I=AutoIndentChars, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Y=Redo, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+B=UnbookmarkLine, Ctrl+Shift+C=CommentSelected, Ctrl+Shift+N=GoPrevBookmark, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Up=MoveSelectedLinesUp, Alt+Down=MoveSelectedLinesDown, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode, Alt+Shift+Down=GoDown_ColumnSelectionMode</value>
+    <value>Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+C=Copy, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Y=Redo, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Up=MoveSelectedLinesUp, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode</value>
   </data>
   <data name="TB.ServiceColors" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>

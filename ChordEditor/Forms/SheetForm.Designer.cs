@@ -47,6 +47,8 @@
             this.FSW = new System.IO.FileSystemWatcher();
             this.VT = new System.Windows.Forms.Timer(this.components);
             this.RetryReload = new System.Windows.Forms.Timer(this.components);
+            this.ACM = new AutocompleteMenuNS.AutocompleteMenu();
+            this.IL = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.TB)).BeginInit();
             this.CMS.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -56,12 +58,12 @@
             // 
             // TB
             // 
-            this.TB.AutoCompleteBrackets = true;
             this.TB.AutoCompleteBracketsList = new char[] {
         '{',
         '}',
         '[',
         ']'};
+            this.ACM.SetAutocompleteMenu(this.TB, this.ACM);
             this.TB.AutoIndent = false;
             this.TB.AutoIndentChars = false;
             this.TB.AutoIndentExistingLines = false;
@@ -103,14 +105,14 @@
             this.toolStripMenuItem2,
             this.MnSelectAll});
             this.CMS.Name = "CMS";
-            this.CMS.Size = new System.Drawing.Size(153, 170);
+            this.CMS.Size = new System.Drawing.Size(121, 148);
             this.CMS.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Opening);
             // 
             // MnUndo
             // 
             this.MnUndo.Image = ((System.Drawing.Image)(resources.GetObject("MnUndo.Image")));
             this.MnUndo.Name = "MnUndo";
-            this.MnUndo.Size = new System.Drawing.Size(152, 22);
+            this.MnUndo.Size = new System.Drawing.Size(120, 22);
             this.MnUndo.Text = "Undo";
             this.MnUndo.Click += new System.EventHandler(this.ActionUndo);
             // 
@@ -118,20 +120,20 @@
             // 
             this.MnRedo.Image = ((System.Drawing.Image)(resources.GetObject("MnRedo.Image")));
             this.MnRedo.Name = "MnRedo";
-            this.MnRedo.Size = new System.Drawing.Size(152, 22);
+            this.MnRedo.Size = new System.Drawing.Size(120, 22);
             this.MnRedo.Text = "Redo";
             this.MnRedo.Click += new System.EventHandler(this.ActionRedo);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(117, 6);
             // 
             // MnCut
             // 
             this.MnCut.Image = ((System.Drawing.Image)(resources.GetObject("MnCut.Image")));
             this.MnCut.Name = "MnCut";
-            this.MnCut.Size = new System.Drawing.Size(152, 22);
+            this.MnCut.Size = new System.Drawing.Size(120, 22);
             this.MnCut.Text = "Cut";
             this.MnCut.Click += new System.EventHandler(this.SelectionCut);
             // 
@@ -139,7 +141,7 @@
             // 
             this.MnCopy.Image = ((System.Drawing.Image)(resources.GetObject("MnCopy.Image")));
             this.MnCopy.Name = "MnCopy";
-            this.MnCopy.Size = new System.Drawing.Size(152, 22);
+            this.MnCopy.Size = new System.Drawing.Size(120, 22);
             this.MnCopy.Text = "Copy";
             this.MnCopy.Click += new System.EventHandler(this.SelectionCopy);
             // 
@@ -147,20 +149,20 @@
             // 
             this.MnPaste.Image = ((System.Drawing.Image)(resources.GetObject("MnPaste.Image")));
             this.MnPaste.Name = "MnPaste";
-            this.MnPaste.Size = new System.Drawing.Size(152, 22);
+            this.MnPaste.Size = new System.Drawing.Size(120, 22);
             this.MnPaste.Text = "Paste";
             this.MnPaste.Click += new System.EventHandler(this.SelectionPaste);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(117, 6);
             // 
             // MnSelectAll
             // 
             this.MnSelectAll.Image = ((System.Drawing.Image)(resources.GetObject("MnSelectAll.Image")));
             this.MnSelectAll.Name = "MnSelectAll";
-            this.MnSelectAll.Size = new System.Drawing.Size(152, 22);
+            this.MnSelectAll.Size = new System.Drawing.Size(120, 22);
             this.MnSelectAll.Text = "Select all";
             this.MnSelectAll.Click += new System.EventHandler(this.ActionSelectAll);
             // 
@@ -238,6 +240,24 @@
             this.RetryReload.Interval = 500;
             this.RetryReload.Tick += new System.EventHandler(this.RetryReload_Tick);
             // 
+            // ACM
+            // 
+            this.ACM.AllowsTabKey = true;
+            this.ACM.AppearInterval = 100;
+            this.ACM.Colors = ((AutocompleteMenuNS.Colors)(resources.GetObject("ACM.Colors")));
+            this.ACM.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.ACM.ImageList = this.IL;
+            this.ACM.Items = new string[0];
+            this.ACM.MinFragmentLength = 1;
+            this.ACM.SearchPattern = "[\\w\\.\\[]";
+            this.ACM.TargetControlWrapper = null;
+            // 
+            // IL
+            // 
+            this.IL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("IL.ImageStream")));
+            this.IL.TransparentColor = System.Drawing.Color.Transparent;
+            this.IL.Images.SetKeyName(0, "musical-note.png");
+            // 
             // SheetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -283,5 +303,7 @@
         private System.Windows.Forms.ToolStripMenuItem MnPaste;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem MnSelectAll;
+        private AutocompleteMenuNS.AutocompleteMenu ACM;
+        private System.Windows.Forms.ImageList IL;
 	}
 }
