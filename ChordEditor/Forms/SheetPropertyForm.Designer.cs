@@ -525,6 +525,7 @@
             this.SF.TransparentColor = System.Drawing.Color.Transparent;
             this.SF.Images.SetKeyName(0, "ImgOK");
             this.SF.Images.SetKeyName(1, "ImgKO");
+            this.SF.Images.SetKeyName(2, "ImgUNK");
             // 
             // SheetPropertyForm
             // 

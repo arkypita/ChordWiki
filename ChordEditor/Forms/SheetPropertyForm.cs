@@ -65,7 +65,7 @@ namespace ChordEditor.Forms
             if (sf != null)
                 PbNormalized.Image = SF.Images[sf.IsNormalized ? "ImgOK" : "ImgKO"];
             else
-                PbNormalized.Image = SF.Images["ImgOK"];
+                PbNormalized.Image = SF.Images["ImgUNK"];
 
             PbNormalized.Enabled = (sf != null && !sf.IsNormalized);
             PbNotation.Enabled = (sf != null && (sf.SheetNotation == Core.ChordNotation.American || sf.SheetNotation == Core.ChordNotation.Italian));
