@@ -44,15 +44,21 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CbZoom = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.SC = new System.Windows.Forms.SplitContainer();
             this.FSW = new System.IO.FileSystemWatcher();
             this.VT = new System.Windows.Forms.Timer(this.components);
             this.RetryReload = new System.Windows.Forms.Timer(this.components);
             this.ACM = new AutocompleteMenuNS.AutocompleteMenu();
             this.IL = new System.Windows.Forms.ImageList(this.components);
+            this.WB = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.TB)).BeginInit();
             this.CMS.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SC)).BeginInit();
+            this.SC.Panel1.SuspendLayout();
+            this.SC.Panel2.SuspendLayout();
+            this.SC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FSW)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,16 +82,17 @@
             this.TB.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.TB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.TB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TB.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.TB.Hotkeys = resources.GetString("TB.Hotkeys");
             this.TB.IsReplaceMode = false;
-            this.TB.Location = new System.Drawing.Point(3, 3);
+            this.TB.Location = new System.Drawing.Point(0, 0);
             this.TB.Name = "TB";
             this.TB.Paddings = new System.Windows.Forms.Padding(8);
             this.TB.PreferredLineWidth = 60;
             this.TB.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
             this.TB.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("TB.ServiceColors")));
             this.TB.ShowLineNumbers = false;
-            this.TB.Size = new System.Drawing.Size(666, 470);
+            this.TB.Size = new System.Drawing.Size(400, 470);
             this.TB.TabIndex = 0;
             this.TB.Zoom = 100;
             this.TB.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChanged);
@@ -210,8 +217,8 @@
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.TB, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.SC, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -221,6 +228,24 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.Size = new System.Drawing.Size(672, 503);
             this.tableLayoutPanel2.TabIndex = 2;
+            // 
+            // SC
+            // 
+            this.SC.BackColor = System.Drawing.Color.LightGray;
+            this.SC.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SC.Location = new System.Drawing.Point(3, 3);
+            this.SC.Name = "SC";
+            // 
+            // SC.Panel1
+            // 
+            this.SC.Panel1.Controls.Add(this.TB);
+            // 
+            // SC.Panel2
+            // 
+            this.SC.Panel2.Controls.Add(this.WB);
+            this.SC.Size = new System.Drawing.Size(666, 470);
+            this.SC.SplitterDistance = 400;
+            this.SC.TabIndex = 2;
             // 
             // FSW
             // 
@@ -249,7 +274,7 @@
             this.ACM.ImageList = this.IL;
             this.ACM.Items = new string[0];
             this.ACM.MinFragmentLength = 1;
-            this.ACM.SearchPattern = "[\\w\\.\\[]";
+            this.ACM.SearchPattern = "\\[[[a-zA-Z]*#?\\-?[0-9]{0,2}\\+?\\]?";
             this.ACM.TargetControlWrapper = null;
             // 
             // IL
@@ -257,6 +282,19 @@
             this.IL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("IL.ImageStream")));
             this.IL.TransparentColor = System.Drawing.Color.Transparent;
             this.IL.Images.SetKeyName(0, "musical-note.png");
+            // 
+            // WB
+            // 
+            this.WB.AllowNavigation = false;
+            this.WB.AllowWebBrowserDrop = false;
+            this.WB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WB.IsWebBrowserContextMenuEnabled = false;
+            this.WB.Location = new System.Drawing.Point(0, 0);
+            this.WB.MinimumSize = new System.Drawing.Size(20, 20);
+            this.WB.Name = "WB";
+            this.WB.Size = new System.Drawing.Size(262, 470);
+            this.WB.TabIndex = 0;
+            this.WB.WebBrowserShortcutsEnabled = false;
             // 
             // SheetForm
             // 
@@ -279,6 +317,10 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.SC.Panel1.ResumeLayout(false);
+            this.SC.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.SC)).EndInit();
+            this.SC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.FSW)).EndInit();
             this.ResumeLayout(false);
 
@@ -305,5 +347,7 @@
         private System.Windows.Forms.ToolStripMenuItem MnSelectAll;
         private AutocompleteMenuNS.AutocompleteMenu ACM;
         private System.Windows.Forms.ImageList IL;
+        private System.Windows.Forms.SplitContainer SC;
+        private System.Windows.Forms.WebBrowser WB;
 	}
 }

@@ -675,34 +675,18 @@ namespace AutocompleteMenuNS
         {
             var tb = TargetControlWrapper;
 
-            if (tb.SelectionLength > 0) return new Range(tb);
+            if (tb.SelectionLength > 0)
+                return new Range(tb);
 
             string text = tb.Text;
-            var regex = new Regex(searchPattern);
-            var result = new Range(tb);
+            int position = tb.SelectionStart;
 
-            int startPos = tb.SelectionStart;
-            //go forward
-            int i = startPos;
-            while (i >= 0 && i < text.Length)
-            {
-                if (!regex.IsMatch(text[i].ToString()))
-                    break;
-                i++;
-            }
-            result.End = i;
+            MatchCollection matches = Regex.Matches(text, searchPattern);
+            foreach (Match match in matches)
+                if (match.Index <= position && position <= match.Index + match.Length) //ho un match dove ho il cursore!
+                    return new Range(tb, match.Index, match.Index + match.Length);
 
-            //go backward
-            i = startPos;
-            while (i > 0 && (i - 1) < text.Length)
-            {
-                if (!regex.IsMatch(text[i - 1].ToString()))
-                    break;
-                i--;
-            }
-            result.Start = i;
-
-            return result;
+            return new Range(tb);
         }
 
         public void Close()

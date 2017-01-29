@@ -11,9 +11,11 @@ namespace AutocompleteMenuNS
         public int Start { get; set; }
         public int End { get; set; }
 
-        public Range(ITextBoxWrapper targetWrapper)
+        public Range(ITextBoxWrapper targetWrapper, int start = 0, int end = 0)
         {
             this.TargetWrapper = targetWrapper;
+            Start = start;
+            End = end;
         }
 
         public string Text

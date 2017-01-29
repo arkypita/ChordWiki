@@ -193,7 +193,62 @@ namespace ChordEditor.Forms
 
             if (DelayedTextChanged != null)
                 DelayedTextChanged(this);
+
+            RefreshPreview();
         }
+
+        private void RefreshPreview()
+        {
+            StringBuilder html = new StringBuilder();
+
+            using (System.IO.StringReader sr = new System.IO.StringReader(TB.Text))
+            {
+                string line = null;
+                html.AppendLine(@"<html><body><pre>");
+                while((line = sr.ReadLine()) != null)
+                {
+                    //split chord and text;
+                    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+
+                    System.Text.RegularExpressions.MatchCollection matches = regex.Matches(line);
+                    if (matches.Count == 0)
+                    {
+                        html.Append(line + "\r\n");
+                    }
+                    else
+                    {
+                        int offset = 0;
+                        string chords = "";
+                        foreach (System.Text.RegularExpressions.Match match in matches)
+                        {
+                            string cval = match.Groups[1].Value;
+
+                            int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
+                            offset += match.Length;
+
+                            if (chords.Length < position)
+                                chords = chords + new string(' ', position - chords.Length);
+
+                            chords = chords + cval;
+                        }
+                        string song = regex.Replace(line, "");
+
+                        html.Append(chords + "\r\n");
+                        html.Append(song + "\r\n");
+                    }
+                }
+
+                html.AppendLine(@"</pre></body></html>");
+            }
+
+
+            WB.Navigate("about:blank");
+            //WB.Document.OpenNew(false);
+            WB.Document.Write(html.ToString());
+            WB.Refresh(WebBrowserRefreshOption.Completely);
+        }
+
+
 
         private void CbZoom_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -433,14 +488,8 @@ namespace ChordEditor.Forms
 
         internal class NoteSnippet : AutocompleteMenuNS.AutocompleteItem
         {
-            public NoteSnippet(string note)
-                : base(string.Format("[{0}]",note), 0, note)
-            {
-                //ImageIndex = 0;
-                //ToolTipTitle = "Select note:";
-                //ToolTipText = note;
-                //MenuText = note;
-            }
+            public NoteSnippet(string note): base(string.Format("[{0}]",note), 0, note)
+            {}
 
             public override AutocompleteMenuNS.CompareResult Compare(string fragmentText)
             {
@@ -449,7 +498,7 @@ namespace ChordEditor.Forms
 
                 if (digittext == matchtext)
                     return AutocompleteMenuNS.CompareResult.VisibleAndSelected;
-                if (matchtext.StartsWith(digittext))
+                if (matchtext.StartsWith(digittext) || digittext.StartsWith(matchtext))
                     return AutocompleteMenuNS.CompareResult.Visible;
                 return AutocompleteMenuNS.CompareResult.Hidden;
             }
