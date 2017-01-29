@@ -122,18 +122,15 @@ namespace ChordEditor.Core
 			{
 				SharpSvn.UI.SvnUI.Bind(cln, form);
 
-				SharpSvn.SvnInfoEventArgs info;
-				SharpSvn.SvnInfoArgs args = new SharpSvn.SvnInfoArgs();
-				args.ThrowOnError = true;
-				args.ThrowOnCancel = true;
+				
 
 				try
 				{
+                    SharpSvn.SvnInfoEventArgs info;
 					Uri totest = new Uri(repo);
 
 					if (totest.IsFile)
 						throw new InvalidOperationException("Repository url needs to be an internet resource.");
-
 					cln.GetInfo(SharpSvn.SvnTarget.FromUri(totest), out info); //deve fare eccezione, perché mi serve per avere certezza che sia un giusto db
 					if (info.NodeKind != SharpSvn.SvnNodeKind.Directory)
 						throw new InvalidOperationException("Url does not point to a valid repository folder.");
