@@ -52,7 +52,23 @@ namespace ChordEditor.Forms
 			CbZoom.Items.Add(String.Format("{0} %", 200));
 			CbZoom.Items.Add(String.Format("{0} %", 300));
 
+            MnUndo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Undo);
+            MnRedo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Redo);
+            MnCut.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Cut);
+            MnCopy.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Copy);
+            MnPaste.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Paste);
+            MnSelectAll.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.SelectAll);
+
+
             Core.Sheet.SheetChange += Sheet_SheetChange;
+        }
+
+        private Keys GetShortCut(FastColoredTextBoxNS.FCTBAction action)
+        {
+            foreach (KeyValuePair<Keys, FastColoredTextBoxNS.FCTBAction> kvp in TB.HotkeysMapping)
+                if (action == kvp.Value)
+                    return kvp.Key;
+            return Keys.None;
         }
 
 		private void TryReloadRetry()
@@ -389,6 +405,46 @@ namespace ChordEditor.Forms
             }
 
             e.Cancel = (content == null);
+        }
+
+        private void ActionUndo(object sender, EventArgs e)
+        {
+            TB.Undo();
+        }
+
+        private void ActionRedo(object sender, EventArgs e)
+        {
+            TB.Redo();
+        }
+
+        private void SelectionCut(object sender, EventArgs e)
+        {
+            TB.Cut();
+        }
+
+        private void SelectionCopy(object sender, EventArgs e)
+        {
+            TB.Copy();
+        }
+
+        private void SelectionPaste(object sender, EventArgs e)
+        {
+            TB.Paste();
+        }
+
+        private void ActionSelectAll(object sender, EventArgs e)
+        {
+            TB.SelectAll();
+        }
+
+        private void CMS_Opening(object sender, CancelEventArgs e)
+        {
+            MnUndo.Enabled = TB.UndoEnabled;
+            MnRedo.Enabled = TB.RedoEnabled;
+            MnCut.Enabled = !string.IsNullOrEmpty(TB.SelectedText);
+            MnCopy.Enabled = !string.IsNullOrEmpty(TB.SelectedText);
+            MnPaste.Enabled = Clipboard.ContainsText();
+            MnSelectAll.Enabled = !string.IsNullOrEmpty(TB.Text);
         }
     }
 }

@@ -31,6 +31,15 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SheetForm));
             this.TB = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.CMS = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.MnUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.MnRedo = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.MnCut = new System.Windows.Forms.ToolStripMenuItem();
+            this.MnCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.MnPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.MnSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.CbZoom = new System.Windows.Forms.ComboBox();
@@ -39,6 +48,7 @@
             this.VT = new System.Windows.Forms.Timer(this.components);
             this.RetryReload = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.TB)).BeginInit();
+            this.CMS.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FSW)).BeginInit();
@@ -60,10 +70,10 @@
             this.TB.CharHeight = 14;
             this.TB.CharWidth = 8;
             this.TB.CommentPrefix = "#";
+            this.TB.ContextMenuStrip = this.CMS;
             this.TB.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.TB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.TB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.TB.Hotkeys = resources.GetString("TB.Hotkeys");
             this.TB.IsReplaceMode = false;
             this.TB.Location = new System.Drawing.Point(3, 3);
@@ -80,6 +90,79 @@
             this.TB.Pasting += new System.EventHandler<FastColoredTextBoxNS.TextChangingEventArgs>(this.TB_Pasting);
             this.TB.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChangedDelayed);
             this.TB.ZoomChanged += new System.EventHandler(this.TB_ZoomChanged);
+            // 
+            // CMS
+            // 
+            this.CMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MnUndo,
+            this.MnRedo,
+            this.toolStripMenuItem1,
+            this.MnCut,
+            this.MnCopy,
+            this.MnPaste,
+            this.toolStripMenuItem2,
+            this.MnSelectAll});
+            this.CMS.Name = "CMS";
+            this.CMS.Size = new System.Drawing.Size(153, 170);
+            this.CMS.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Opening);
+            // 
+            // MnUndo
+            // 
+            this.MnUndo.Image = ((System.Drawing.Image)(resources.GetObject("MnUndo.Image")));
+            this.MnUndo.Name = "MnUndo";
+            this.MnUndo.Size = new System.Drawing.Size(152, 22);
+            this.MnUndo.Text = "Undo";
+            this.MnUndo.Click += new System.EventHandler(this.ActionUndo);
+            // 
+            // MnRedo
+            // 
+            this.MnRedo.Image = ((System.Drawing.Image)(resources.GetObject("MnRedo.Image")));
+            this.MnRedo.Name = "MnRedo";
+            this.MnRedo.Size = new System.Drawing.Size(152, 22);
+            this.MnRedo.Text = "Redo";
+            this.MnRedo.Click += new System.EventHandler(this.ActionRedo);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // MnCut
+            // 
+            this.MnCut.Image = ((System.Drawing.Image)(resources.GetObject("MnCut.Image")));
+            this.MnCut.Name = "MnCut";
+            this.MnCut.Size = new System.Drawing.Size(152, 22);
+            this.MnCut.Text = "Cut";
+            this.MnCut.Click += new System.EventHandler(this.SelectionCut);
+            // 
+            // MnCopy
+            // 
+            this.MnCopy.Image = ((System.Drawing.Image)(resources.GetObject("MnCopy.Image")));
+            this.MnCopy.Name = "MnCopy";
+            this.MnCopy.Size = new System.Drawing.Size(152, 22);
+            this.MnCopy.Text = "Copy";
+            this.MnCopy.Click += new System.EventHandler(this.SelectionCopy);
+            // 
+            // MnPaste
+            // 
+            this.MnPaste.Image = ((System.Drawing.Image)(resources.GetObject("MnPaste.Image")));
+            this.MnPaste.Name = "MnPaste";
+            this.MnPaste.Size = new System.Drawing.Size(152, 22);
+            this.MnPaste.Text = "Paste";
+            this.MnPaste.Click += new System.EventHandler(this.SelectionPaste);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            // 
+            // MnSelectAll
+            // 
+            this.MnSelectAll.Image = ((System.Drawing.Image)(resources.GetObject("MnSelectAll.Image")));
+            this.MnSelectAll.Name = "MnSelectAll";
+            this.MnSelectAll.Size = new System.Drawing.Size(152, 22);
+            this.MnSelectAll.Text = "Select all";
+            this.MnSelectAll.Click += new System.EventHandler(this.ActionSelectAll);
             // 
             // tableLayoutPanel1
             // 
@@ -171,6 +254,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SheetForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SheetForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.TB)).EndInit();
+            this.CMS.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -190,5 +274,14 @@
 		private System.IO.FileSystemWatcher FSW;
 		private System.Windows.Forms.Timer VT;
 		private System.Windows.Forms.Timer RetryReload;
+        private System.Windows.Forms.ContextMenuStrip CMS;
+        private System.Windows.Forms.ToolStripMenuItem MnUndo;
+        private System.Windows.Forms.ToolStripMenuItem MnRedo;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem MnCut;
+        private System.Windows.Forms.ToolStripMenuItem MnCopy;
+        private System.Windows.Forms.ToolStripMenuItem MnPaste;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem MnSelectAll;
 	}
 }
