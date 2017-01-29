@@ -133,13 +133,12 @@ namespace ChordEditor.Core
                 {
                     mNote = cm.Index;
                     mNotation = cm.Notation;
+                    mVariant = mBaseText.Substring(cm.Match.Length);
                 }
             }
 
             if (IsValid)
             {
-                mVariant = mBaseText.Substring(noteDictionary[mNotation][mNote].Length);
-
                 //if (normalize)
                 //{
                     if (mVariant.StartsWith("+"))                     //rimuovi notazione di maggiore iniziale

@@ -24,22 +24,24 @@ namespace ChordEditor.Core
 
         }
 
-        internal static ImportedContent ImportClipbord(string text)
+        internal static ImportedContent ImportClipbord(string text, bool ask)
         {
             text = CleanUp(text);
 
             if (IsChordPro(text))
                 return ImportChordPro(text); //search for artist and title and import as is
             else if (IsCOT(text))
-                return ImportCOT(text); //translate Chord Over Text -> ChordPro
+                return ImportCOT(text, ask); //translate Chord Over Text -> ChordPro
             else
                 return new ImportedContent() { Text = text }; //return as is
         }
 
         private static string CleanUp(string text)
         {
+            text = Regex.Replace(text, @"\r\n|\n\r|\n|\r", "\r\n"); //normalize to crlf
             text = Regex.Replace(text, @"\r\n[ \t]+\r\n", "\r\n\r\n", RegexOptions.Compiled); //remove empty line filled of spaces
             text = Regex.Replace(text, @"(\r\n){2,}", "\r\n\r\n", RegexOptions.Compiled); //remove multiple white lines, keep paragraph (2 line)
+            text = text.Trim("\r\n".ToCharArray());  //remove crlf before and after
             return text;
         }
 
@@ -88,7 +90,7 @@ namespace ChordEditor.Core
                 if (key == "title" || key == "t")
                 {
                     //assign title
-                    rv.Title = m.Groups[2].Value;
+                    rv.Title = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(m.Groups[2].Value.ToLower());
                     //remove tag from text
                     int position = m.Groups[0].Index + offset;
                     sb.Remove(position, m.Groups[0].Length);
@@ -97,7 +99,7 @@ namespace ChordEditor.Core
                 else if (key == "subtitle" || key == "st")
                 {
                     //assign artist
-                    rv.Artist = m.Groups[2].Value;
+                    rv.Artist = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(m.Groups[2].Value.ToLower());
                     //remove tag from text
                     int position = m.Groups[0].Index + offset;
                     sb.Remove(position, m.Groups[0].Length);
@@ -196,7 +198,7 @@ namespace ChordEditor.Core
             return true;
         }
 
-        static ImportedContent ImportCOT(string text)
+        static ImportedContent ImportCOT(string text, bool ask)
         {
             ImportedContent rv = new ImportedContent();
 
@@ -219,7 +221,8 @@ namespace ChordEditor.Core
 
                 if (guessTitle != null)
                 {
-                    guessTitle = Forms.InputBox.Show("Guess title", "Is this title correct?", guessTitle, false);
+                    guessTitle = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(guessTitle.Trim().ToLower());
+                    guessTitle = ask ? Forms.InputBox.Show("Guess title", "Is this title correct?", guessTitle, false) : guessTitle;
                     if (guessTitle != null)
                     {
                         rv.Title = guessTitle;
@@ -228,7 +231,8 @@ namespace ChordEditor.Core
 
                     if (guessArtist != null)
                     {
-                        guessArtist = Forms.InputBox.Show("Guess artist", "Is this artist correct?", guessArtist, false);
+                        guessArtist = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(guessArtist.Trim().ToLower());
+                        guessArtist = ask ? Forms.InputBox.Show("Guess artist", "Is this artist correct?", guessArtist, false) : guessArtist;
                         if (guessArtist != null)
                         {
                             rv.Artist = guessArtist;
@@ -316,5 +320,56 @@ namespace ChordEditor.Core
             return sb.ToString().Trim();
         }
 
+        internal static List<string> ParseMSWord(string filename)
+        {
+            Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+            Microsoft.Office.Interop.Word.Document doc = app.Documents.Open(filename);
+            string text = doc.Content.Text;
+
+            System.IO.File.WriteAllText("originaltext.txt", text);
+
+            text = CleanUp(text);
+
+            System.IO.File.WriteAllText("cleanedtext.txt", text);
+
+            doc.Close();
+            app.Quit();
+
+
+            List<string> rv = new List<string>();
+            List<string> blocks = new List<string>(text.Split(new Char[] { (Char)12, (Char)14 }));
+
+            foreach (String block in blocks)
+                rv.AddRange(ExtractSubBlock(block));
+
+            return rv;
+
+        }
+
+        private static List<string> ExtractSubBlock(string text)
+        {
+            List<string> rv = new List<string>();
+            //Cerco dei potenziali titoli (TUTTO MAIUSCOLO, ALMENO 8 CARATTERI, LINEA INTERA)
+            MatchCollection matches = Regex.Matches(text, @"\r\n([A-Z| |0-9|-]{8,})\r\n");
+
+            int i1 = 0;
+            int i2 = 0;
+            //verifico di non confonrderli con stringhe di accordi
+            foreach (Match m in matches)
+            {
+                if (!IsChordLine(m.Value)) //se non è una linea di accordi -> è un titolo!
+                {
+                    i2 = m.Index;
+                    rv.Add(text.Substring(i1, i2-i1)); //prendo tutto, dal punto precedente, all'inizio del titolo
+                    i1 = i2;                            //mi posiziono ai inizio titolo
+                }
+            }
+
+            if (i1 < text.Length - 1)
+                rv.Add(text.Substring(i1, text.Length - i1)); //aggiungo la parte finale
+
+
+            return rv;
+        }
     }
 }

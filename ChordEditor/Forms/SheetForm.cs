@@ -283,26 +283,7 @@ namespace ChordEditor.Forms
                 targetNotation = Core.ChordNotation.Italian;
 
             if (targetNotation != Core.ChordNotation.Unknown)
-            {
-                System.Text.StringBuilder text = new StringBuilder(TB.Text);
-                int offset = 0;
-
-                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-                foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
-                {
-					System.Text.RegularExpressions.Group g = m.Groups[1];
-
-                    string oldChord = g.Value;
-                    string newChord = Core.Pagliaro.ChangeNotation(oldChord, targetNotation);
-
-                    int position = g.Index + offset;
-                    text.Remove(position, oldChord.Length);
-                    text.Insert(position, newChord);
-
-                    offset += newChord.Length - oldChord.Length;
-                }
-                TB.Text = text.ToString();
-            }
+                TB.Text = Core.Program.ChangeNotation(TB.Text, targetNotation);
 
 
         }
@@ -341,53 +322,17 @@ namespace ChordEditor.Forms
 
         internal void Traspose(int semitones)
         {
-            System.Text.StringBuilder text = new StringBuilder(TB.Text);
-            int offset = 0;
-
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
-            {
-                System.Text.RegularExpressions.Group g = m.Groups[1];
-
-                string oldChord = g.Value;
-                string newChord = Core.Pagliaro.Traspose(oldChord, semitones);
-
-                int position = g.Index + offset;
-                text.Remove(position, oldChord.Length);
-                text.Insert(position, newChord);
-
-                offset += newChord.Length - oldChord.Length;
-            }
-            TB.Text = text.ToString();
+            TB.Text = Core.Program.Traspose(TB.Text, semitones);
         }
 
         internal void Normalize()
         {
-            System.Text.StringBuilder text = new StringBuilder(TB.Text);
-            int offset = 0;
-
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
-            {
-                System.Text.RegularExpressions.Group g = m.Groups[1];
-
-                string oldChord = g.Value;
-                string newChord = Core.Pagliaro.Normalize(oldChord);
-
-                int position = g.Index + offset;
-                text.Remove(position, oldChord.Length);
-                text.Insert(position, newChord);
-
-                offset += newChord.Length - oldChord.Length;
-            }
-            TB.Text = text.ToString();
-                
-
+            TB.Text = Core.Program.Normalize(TB.Text);
         }
 
         private void TB_Pasting(object sender, TextChangingEventArgs e)
         {
-            Core.Importer.ImportedContent content = Core.Importer.ImportClipbord(e.InsertingText);
+            Core.Importer.ImportedContent content = Core.Importer.ImportClipbord(e.InsertingText, true);
 
             if (content != null)
             {

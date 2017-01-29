@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Collections.Generic;
 
 namespace ChordEditor.Core
 {
@@ -441,7 +442,114 @@ namespace ChordEditor.Core
 			System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath);
 		}
 
+        internal static void ImportFile(string filename)
+        {
+            if (SvnOperationBegin != null)
+                SvnOperationBegin("------ IMPORT FILE ------");
+
+            string cat = Forms.InputBox.Show("Common category", "Category?");
+
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                try
+                {
+                    List<string> songs = Importer.ParseMSWord(filename);
+
+                    foreach (string song in songs)
+                    {
+                        if (!String.IsNullOrWhiteSpace(song.Trim()))
+                        {
+                            Importer.ImportedContent ic = Importer.ImportClipbord(song, false);
 
 
-	}
+                            Sheet sheet = new Sheet();
+                            sheet.Header.Artist = ic.Artist;
+                            sheet.Header.Title = ic.Title;
+                            sheet.Header.SheetCategory = cat;
+
+                            sheet.Content = Program.Normalize(ic.Text);
+                            sheet.Save();
+
+                            if (SvnOperationMessage != null)
+                                SvnOperationMessage(String.Format("Import: {0}{1}{2}", ic.Title, ic.Artist != null ? " - " : "", ic.Artist));
+                        }
+
+                    }
+                }
+                catch (Exception ex) { OnSvnEx(ex); }
+
+                SendOperationEnd();
+                SheetDB.ReloadDataBase();
+
+            });
+
+            
+        }
+
+        internal static string Normalize(string source)
+        {
+            System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+            int offset = 0;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (System.Text.RegularExpressions.Match m in regex.Matches(source))
+            {
+                System.Text.RegularExpressions.Group g = m.Groups[1];
+
+                string oldChord = g.Value;
+                string newChord = Core.Pagliaro.Normalize(oldChord);
+
+                int position = g.Index + offset;
+                text.Remove(position, oldChord.Length);
+                text.Insert(position, newChord);
+
+                offset += newChord.Length - oldChord.Length;
+            }
+            return text.ToString();
+        }
+
+        internal static string Traspose(string source, int semitones)
+        {
+            System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+            int offset = 0;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (System.Text.RegularExpressions.Match m in regex.Matches(source))
+            {
+                System.Text.RegularExpressions.Group g = m.Groups[1];
+
+                string oldChord = g.Value;
+                string newChord = Core.Pagliaro.Traspose(oldChord, semitones);
+
+                int position = g.Index + offset;
+                text.Remove(position, oldChord.Length);
+                text.Insert(position, newChord);
+
+                offset += newChord.Length - oldChord.Length;
+            }
+            return text.ToString();
+        }
+
+        internal static string ChangeNotation(string source, ChordNotation targetNotation)
+        {
+            System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+            int offset = 0;
+
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
+            foreach (System.Text.RegularExpressions.Match m in regex.Matches(source))
+            {
+                System.Text.RegularExpressions.Group g = m.Groups[1];
+
+                string oldChord = g.Value;
+                string newChord = Core.Pagliaro.ChangeNotation(oldChord, targetNotation);
+
+                int position = g.Index + offset;
+                text.Remove(position, oldChord.Length);
+                text.Insert(position, newChord);
+
+                offset += newChord.Length - oldChord.Length;
+            }
+            return text.ToString();
+        }
+    }
 }

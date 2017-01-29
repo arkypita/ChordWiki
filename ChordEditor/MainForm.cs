@@ -261,6 +261,51 @@ namespace ChordEditor
 				Program.DatabaseDownload(this);
 		}
 
+        private void MnImport_Click(object sender, EventArgs e)
+        {
+
+            using (System.Windows.Forms.OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Select file to import";
+                ofd.Filter = "Any supported file|*.txt;*.doc;*.docx";
+                ofd.CheckFileExists = true;
+                ofd.Multiselect = false;
+                ofd.RestoreDirectory = true;
+
+                if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    Program.ImportFile(ofd.FileName);
+            }
+
+        }
+
+        private void MnCloseAll_Click(object sender, EventArgs e)
+        {
+            List<Forms.SheetForm> toclose = new List<Forms.SheetForm>();
+            foreach (UserControls.DockingManager.DockContent document in DP.ActiveDocumentPane.Contents)
+            {
+                if (document is Forms.SheetForm)
+                    toclose.Add(document as Forms.SheetForm);
+            }
+
+            foreach (Forms.SheetForm sf in toclose)
+                sf.Close();
+        }
+
+        private void MnSaveAll_Click(object sender, EventArgs e)
+        {
+            List<Forms.SheetForm> toclose = new List<Forms.SheetForm>();
+            foreach (UserControls.DockingManager.DockContent document in DP.ActiveDocumentPane.Contents)
+            {
+                if (document is Forms.SheetForm)
+                    toclose.Add(document as Forms.SheetForm);
+            }
+
+            foreach (Forms.SheetForm sf in toclose)
+                sf.Save(false);
+
+            Program.SheetDB.ReloadDataBase();
+        }
+
 
 
 
