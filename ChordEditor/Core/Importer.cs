@@ -165,29 +165,8 @@ namespace ChordEditor.Core
             if (matches.Count == 0)
                 return false;
 
-            //verifico che davanti al primo match ci siano solo spazi bianchi
-            if (matches[0].Index != 0) //lo testo con posizione zero perché avendo trimmato non mi aspetto nulla davanti a lui
-                return false;
-
-            for (int i = 0; i < matches.Count -1 ; i++ )
-            {
-                //verifico di non avere nient'altro che spazi tra un match e l'altro
-
-                int i1 = matches[i].Index + matches[i].Length; //i1 = fine del primo match
-                int i2 = matches[i+1].Index; //i2 = inizio del successivo match
-
-                string bw = line.Substring(i1, i2 - i1);
-                if (bw.Trim().Length > 0) //se ho qualcosa che non sia spazio
-                    return false;
-            }
-
-            //verifico che dopo l'ultimo match ci siano solo spazi bianchi
-            if (matches[matches.Count - 1].Index + matches[matches.Count - 1].Length != line.Length) //lo testo verificando che non ci sia più nulla dopo di lui
-                return false;
-
-
-
-            return true;
+			line = RegexList.Chords.ValidChordCOT.Replace(line, ""); //rimuovo tutti gli accordi trovati
+			return string.IsNullOrWhiteSpace(line);
         }
 
         static ImportedContent ImportCOT(string text, bool ask)

@@ -194,7 +194,7 @@ namespace ChordEditor.Forms
             if (DelayedTextChanged != null)
                 DelayedTextChanged(this);
 
-            RefreshPreview();
+            //RefreshPreview();
         }
 
         private void RefreshPreview()
@@ -239,7 +239,6 @@ namespace ChordEditor.Forms
 
 
             WB.Navigate("about:blank");
-            //WB.Document.OpenNew(false);
             WB.Document.Write(html.ToString());
             WB.Refresh(WebBrowserRefreshOption.Completely);
         }
