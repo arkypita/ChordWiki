@@ -491,8 +491,7 @@ namespace ChordEditor.Core
             System.Text.StringBuilder text = new System.Text.StringBuilder(source);
             int offset = 0;
 
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (System.Text.RegularExpressions.Match m in regex.Matches(source))
+            foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
             {
                 System.Text.RegularExpressions.Group g = m.Groups[1];
 
@@ -513,8 +512,7 @@ namespace ChordEditor.Core
             System.Text.StringBuilder text = new System.Text.StringBuilder(source);
             int offset = 0;
 
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (System.Text.RegularExpressions.Match m in regex.Matches(source))
+			foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
             {
                 System.Text.RegularExpressions.Group g = m.Groups[1];
 
@@ -535,8 +533,7 @@ namespace ChordEditor.Core
             System.Text.StringBuilder text = new System.Text.StringBuilder(source);
             int offset = 0;
 
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (System.Text.RegularExpressions.Match m in regex.Matches(source))
+			foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
             {
                 System.Text.RegularExpressions.Group g = m.Groups[1];
 

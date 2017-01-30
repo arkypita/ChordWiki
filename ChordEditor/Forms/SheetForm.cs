@@ -208,9 +208,7 @@ namespace ChordEditor.Forms
                 while((line = sr.ReadLine()) != null)
                 {
                     //split chord and text;
-                    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-
-                    System.Text.RegularExpressions.MatchCollection matches = regex.Matches(line);
+                    System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
                     if (matches.Count == 0)
                     {
                         html.Append(line + "\r\n");
@@ -226,12 +224,10 @@ namespace ChordEditor.Forms
                             int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
                             offset += match.Length;
 
-                            if (chords.Length < position)
-                                chords = chords + new string(' ', position - chords.Length);
-
+							chords = chords + new string(' ', Math.Max(1, position - chords.Length)); //aggiungi spazi bianchi, almeno 1
                             chords = chords + cval;
                         }
-                        string song = regex.Replace(line, "");
+						string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
 
                         html.Append(chords + "\r\n");
                         html.Append(song + "\r\n");
@@ -295,8 +291,7 @@ namespace ChordEditor.Forms
 
             //get matches with different notations
             bool normal = true;
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\[(.*?)\]", System.Text.RegularExpressions.RegexOptions.Compiled);
-            foreach (System.Text.RegularExpressions.Match m in regex.Matches(TB.Text))
+            foreach (System.Text.RegularExpressions.Match m in Core.RegexList.Chords.ChordProNote.Matches(TB.Text))
             {
                 string text = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
                 Core.Chord c = Core.Pagliaro.GetChord(text);

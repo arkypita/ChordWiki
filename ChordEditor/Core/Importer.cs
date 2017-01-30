@@ -11,10 +11,6 @@ namespace ChordEditor.Core
 {
     class Importer
     {
-        const string CaptureChordCOT = @"(((DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)|([CDEFGAB]))(#|♯|b|♭)?(\+|M|maj|-|min|m|sus|ecc|dim)?((\d){0,2}(\+)?)?)";
-        const string CaptureChordPro = @"\[(((DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)|([CDEFGAB]))(#|♯|b|♭)?(\+|M|maj|-|min|m|sus|ecc|dim)?((\d){0,2}(\+)?)?)\]";
-        const string CaptureChordProTagAndVal = @"{([^}|:]+):([^}|:]+)}"; 
-
         public class ImportedContent
         {
             public string Artist;
@@ -38,10 +34,10 @@ namespace ChordEditor.Core
 
         private static string CleanUp(string text)
         {
-            text = Regex.Replace(text, @"\r\n|\n\r|\n|\r", "\r\n"); //normalize to crlf
-            text = Regex.Replace(text, @"\r\n[ \t]+\r\n", "\r\n\r\n", RegexOptions.Compiled); //remove empty line filled of spaces
-            text = Regex.Replace(text, @"(\r\n){2,}", "\r\n\r\n", RegexOptions.Compiled); //remove multiple white lines, keep paragraph (2 line)
-            text = text.Trim("\r\n".ToCharArray());  //remove crlf before and after
+            text = RegexList.Cleanup.AnyNewLine.Replace(text, "\r\n"); //normalize newline
+			text = RegexList.Cleanup.AnyWhitespacesLine.Replace(text, "\r\n\r\n"); //remove empty line filled of spaces
+			text = RegexList.Cleanup.MultipleSpacedLine.Replace(text, "\r\n\r\n"); //remove multiple white lines, keep paragraph (2 line)
+            text = text.Trim("\r\n".ToCharArray());  //trim crlf
             return text;
         }
 
@@ -53,9 +49,7 @@ namespace ChordEditor.Core
             //alla ricerca di un paragrafo "chordpro"
             foreach (string par in paragraph) 
             {
-                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(CaptureChordPro, System.Text.RegularExpressions.RegexOptions.Compiled);
-                MatchCollection matches = regex.Matches(par);
-
+				MatchCollection matches = RegexList.Chords.ValidChordCHP.Matches(par);
                 if (matches.Count >= 5) //voglio almeno 5 accordi!
                 {
                     int parlen = par.Length;
@@ -81,9 +75,8 @@ namespace ChordEditor.Core
             System.Text.StringBuilder sb = new StringBuilder(text);
             int offset = 0;
 
-            
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(CaptureChordProTagAndVal, System.Text.RegularExpressions.RegexOptions.Compiled);
-            MatchCollection matches = regex.Matches(text);
+
+			MatchCollection matches = RegexList.Chords.CHPTagAndVal.Matches(text);
             foreach (Match m in matches) //remove match and put it in header
             {
                 string key = m.Groups[1].Value.ToLower();
@@ -167,8 +160,7 @@ namespace ChordEditor.Core
             if (line.Length == 0)
                 return false;
 
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(CaptureChordCOT, System.Text.RegularExpressions.RegexOptions.Compiled);
-            MatchCollection matches = regex.Matches(line);
+			MatchCollection matches = RegexList.Chords.ValidChordCOT.Matches(line);
 
             if (matches.Count == 0)
                 return false;
@@ -287,8 +279,7 @@ namespace ChordEditor.Core
 
         private static string MergeCOT(string text, string chords)
         {
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(CaptureChordCOT, System.Text.RegularExpressions.RegexOptions.Compiled);
-            MatchCollection matches = regex.Matches(chords);
+			MatchCollection matches = RegexList.Chords.ValidChordCOT.Matches(chords);
 
             int chordlen = 0;
             foreach (Match m in matches)
@@ -350,7 +341,7 @@ namespace ChordEditor.Core
         {
             List<string> rv = new List<string>();
             //Cerco dei potenziali titoli (TUTTO MAIUSCOLO, ALMENO 8 CARATTERI, LINEA INTERA)
-            MatchCollection matches = Regex.Matches(text, @"\r\n([A-Z| |0-9|-]{8,})\r\n");
+			MatchCollection matches = RegexList.Import.PotentialTitle.Matches(text);
 
             int i1 = 0;
             int i2 = 0;
