@@ -34,10 +34,12 @@ namespace ChordEditor.Core
 
         private static string CleanUp(string text)
         {
+			text = RegexList.Cleanup.AnyTrash.Replace(text, "");
+			text = RegexList.Cleanup.AnyStrangeSpace.Replace(text, " ");
+			text = RegexList.Cleanup.AnyTabulation.Replace(text, "            "); //tabulation = 12 spaces
             text = RegexList.Cleanup.AnyNewLine.Replace(text, "\r\n"); //normalize newline
 			text = RegexList.Cleanup.AnyWhitespacesLine.Replace(text, "\r\n\r\n"); //remove empty line filled of spaces
 			text = RegexList.Cleanup.MultipleSpacedLine.Replace(text, "\r\n\r\n"); //remove multiple white lines, keep paragraph (2 line)
-            text = text.Trim("\r\n".ToCharArray());  //trim crlf
             return text;
         }
 
@@ -143,6 +145,16 @@ namespace ChordEditor.Core
 
         }
 
+		private static bool IsTitleLine(string line)
+		{
+			line = line.Trim();
+
+			if (line.Length == 0)
+				return false;
+
+			return RegexList.Import.PotentialTitle.IsMatch(line) && !IsChordLine(line);
+		}
+
         private static bool IsSongLine(string line)
         {
             line = line.Trim();
@@ -185,9 +197,10 @@ namespace ChordEditor.Core
 
                 //se la prima linea è di testo
                 //e la seconda è uno spazio
-                if (IsSongLine(lines[0]) && (string.IsNullOrWhiteSpace(lines[1]) || string.IsNullOrWhiteSpace(lines[2])))
-                     guessTitle = lines[0];
-                if (IsSongLine(lines[1]) && (string.IsNullOrWhiteSpace(lines[2]) || string.IsNullOrWhiteSpace(lines[3])))
+
+				if (IsTitleLine(lines[0]))
+					guessTitle = lines[0];
+				if (IsTitleLine(lines[1]))
                     guessArtist = lines[1];
 
                 if (guessTitle != null)
@@ -305,21 +318,13 @@ namespace ChordEditor.Core
             doc.Close();
             app.Quit();
 
-
-            List<string> rv = new List<string>();
-            List<string> blocks = new List<string>(text.Split(new Char[] { (Char)12, (Char)14 }));
-
-            foreach (String block in blocks)
-                rv.AddRange(ExtractSubBlock(block));
-
-            return rv;
-
+			return ExtractBlock(text);
         }
 
-        private static List<string> ExtractSubBlock(string text)
+        private static List<string> ExtractBlock(string text)
         {
             List<string> rv = new List<string>();
-            //Cerco dei potenziali titoli (TUTTO MAIUSCOLO, ALMENO 8 CARATTERI, LINEA INTERA)
+            //Cerco dei potenziali titoli (TUTTO MAIUSCOLO, ALMENO 4 CARATTERI, LINEA INTERA)
 			MatchCollection matches = RegexList.Import.PotentialTitle.Matches(text);
 
             int i1 = 0;
@@ -336,7 +341,7 @@ namespace ChordEditor.Core
             }
 
             if (i1 < text.Length - 1)
-                rv.Add(text.Substring(i1, text.Length - i1)); //aggiungo la parte finale
+                rv.Add(text.Substring(i1, text.Length - i1).Trim()); //aggiungo la parte finale
 
 
             return rv;
