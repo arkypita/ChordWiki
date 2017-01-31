@@ -152,7 +152,7 @@ namespace ChordEditor.Core
 			if (line.Length == 0)
 				return false;
 
-			return RegexList.Import.PotentialTitle.IsMatch(line) && !IsChordLine(line);
+			return RegexList.Import.PotentialTitle.IsMatch(line) && !ContainsMoreChordThanText(line);
 		}
 
         private static bool IsSongLine(string line)
@@ -164,6 +164,31 @@ namespace ChordEditor.Core
 
             return !IsChordLine(line);
         }
+
+		private static bool ContainsMoreChordThanText(string text)
+		{
+			text = text.Trim();
+
+			if (text.Length == 0)
+				return false;
+
+			MatchCollection matches = RegexList.Chords.ValidChordCOT.Matches(text);
+
+			if (matches.Count == 0)
+				return false;
+
+			int chordlen = 0;
+			foreach (Match m in matches)
+				chordlen += m.Length;
+
+
+			text = RegexList.Chords.ValidChordCOT.Replace(text, ""); //rimuovo tutti gli accordi trovati e vedo cosa resta
+			text = text.Replace(" ","");
+
+			return text.Length == 0 || chordlen > text.Length;
+		}
+
+
 
         private static bool IsChordLine(string line)
         {
@@ -309,11 +334,11 @@ namespace ChordEditor.Core
             Microsoft.Office.Interop.Word.Document doc = app.Documents.Open(filename);
             string text = doc.Content.Text;
 
-            System.IO.File.WriteAllText("originaltext.txt", text);
+            //System.IO.File.WriteAllText("originaltext.txt", text);
 
             text = CleanUp(text);
 
-            System.IO.File.WriteAllText("cleanedtext.txt", text);
+            //System.IO.File.WriteAllText("cleanedtext.txt", text);
 
             doc.Close();
             app.Quit();
@@ -325,24 +350,29 @@ namespace ChordEditor.Core
         {
             List<string> rv = new List<string>();
             //Cerco dei potenziali titoli (TUTTO MAIUSCOLO, ALMENO 4 CARATTERI, LINEA INTERA)
-			MatchCollection matches = RegexList.Import.PotentialTitle.Matches(text);
 
-            int i1 = 0;
-            int i2 = 0;
-            //verifico di non confonrderli con stringhe di accordi
-            foreach (Match m in matches)
-            {
-                if (!IsChordLine(m.Value)) //se non è una linea di accordi -> è un titolo!
-                {
-                    i2 = m.Index;
-                    rv.Add(text.Substring(i1, i2-i1)); //prendo tutto, dal punto precedente, all'inizio del titolo
-                    i1 = i2;                            //mi posiziono ai inizio titolo
-                }
-            }
+			string[] lines = text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
-            if (i1 < text.Length - 1)
-                rv.Add(text.Substring(i1, text.Length - i1).Trim()); //aggiungo la parte finale
+			int lasttitle = 0;
+			StringBuilder sb = new StringBuilder();
 
+			for (int i = 0; i < lines.Length; i++)
+			{
+				if (IsTitleLine(lines[i]) && (i - lasttitle) > 1) //abbiamo trovato una linea di titolo che dista più di 1 righe dalla precedente
+				{
+					lasttitle = i;
+					rv.Add(sb.ToString()); //estraggo il gruppo
+					sb.Clear();//svuoto il buffer
+				}
+
+				sb.AppendLine(lines[i]);
+			}
+
+			if (sb.Length > 0)
+			{
+				rv.Add(sb.ToString()); //estraggo il gruppo
+				sb.Clear();//svuoto il buffer
+			}
 
             return rv;
         }

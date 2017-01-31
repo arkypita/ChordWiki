@@ -18,7 +18,7 @@ namespace ChordEditor.Core
 
 		public static class Import
 		{
-			public static Regex PotentialTitle = new Regex(@"(?<=\r\n|^)([A-Z| |0-9|-]{4,})(?=\r\n|$)", RegexOptions.Compiled);
+			public static Regex PotentialTitle = new Regex(@"(?<=\r\n|^)([A-Z|ÀÈÒÌÉÙ| |0-9|-|,|!|""|'|’]{4,})(?=\r\n|$)", RegexOptions.Compiled);
 		}
 
 		public static class Cleanup
