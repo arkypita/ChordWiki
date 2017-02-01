@@ -137,7 +137,7 @@ namespace ChordEditor.Forms
         }
 
         SheetForm ActiveSheetForm
-        {get{return DockPanel.ActiveDocument as Forms.SheetForm;} }
+		{ get { return DockPanel != null ? DockPanel.ActiveDocument as Forms.SheetForm : null; } }
 
         Core.Sheet ActiveSheet
         {get{return ActiveSheetForm != null ? ActiveSheetForm.Sheet : null;} }

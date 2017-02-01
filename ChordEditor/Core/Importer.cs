@@ -228,7 +228,7 @@ namespace ChordEditor.Core
                 if (line.Trim().Length == 0) //linea vuota
                 {
                     if (chords != null)                                         //avevo una precedente linea di accordi
-                        sb.AppendLine(MergeCOT("", chords));                    //emetto gli accordi
+						sb.AppendLine(MergeCOT("", chords, ssize));                    //emetto gli accordi
 
                     sb.AppendLine("");                                          //e comunque emetto una linea vuota
                     chords = null;                                              //avendoli emessi posso dimenticarli
@@ -236,14 +236,14 @@ namespace ChordEditor.Core
                 else if (IsChordLine(line))
                 {
                     if (chords != null)                                         //avevo una precedente linea di accordi
-                        sb.AppendLine(MergeCOT("", chords));                    //emetto la precedente linea di accordi
+						sb.AppendLine(MergeCOT("", chords, ssize));                    //emetto la precedente linea di accordi
 
                     chords = line;                                              //memorizzo questa nuova linea di accordi
                 }
                 else if (IsSongLine(line))
                 {
                     if (chords != null)                                         //avevo una precedente linea di accordi
-                        sb.AppendLine(MergeCOT(line, chords));                  //eseguo il merge con gli accordi
+						sb.AppendLine(MergeCOT(line, chords, ssize));                  //eseguo il merge con gli accordi
                     else                                                        //altrimenti
                         sb.AppendLine(line);                                    //emetto la riga così come è
 
@@ -252,7 +252,7 @@ namespace ChordEditor.Core
             }
 
             if (chords != null)                                         //se finivo con una linea di accordi
-                sb.AppendLine(MergeCOT("", chords));                    //emetto gli accordi
+				sb.AppendLine(MergeCOT("", chords, ssize));                    //emetto gli accordi
 
 
             rv.Text = sb.ToString();
@@ -301,39 +301,44 @@ namespace ChordEditor.Core
             }
         }
 
-        private static string MergeCOT(string text, string chords)
+        private static string MergeCOT(string text, string chords, double ssize)
         {
 			MatchCollection matches = RegexList.Chords.ValidChordCOT.Matches(chords);
+			StringBuilder sb = new StringBuilder();
 
-            int chordlen = 0;
-            foreach (Match m in matches)
-                chordlen += m.Value.Length + 2;
 
-            StringBuilder sb = new StringBuilder();
 
-            //aggiungo tanti caratteri a sinistra per allinearmi con il primo accordo
-            //line = line.PadLeft(line.Length + matches[0].Index); 
-
-            //aggiungo tanti caratteri a destra per allinearmi ad ospitare l'ultimo accordo
-            text = text.PadRight(matches[matches.Count - 1].Index + matches[matches.Count - 1].Length); 
-
-            int i1 = 0;
-            int i2 = 0;
+			int cumulatedchords = 0;
+			int cumulatedspaces = 0;
+			int prev_chord_end = 0;
+			int prev_ipos = 0;
             foreach (Match m in matches)
             {
-                i2 = m.Index; //lo devo inserire in posizione index
+				cumulatedspaces += (m.Index - prev_chord_end); //inizio di questo accordo meno fine del precedente
 
-                sb.Append(text.Substring(i1, i2 - i1)); //aggiungo la parte precedente della linea
-                sb.AppendFormat("[{0}]", m.Value); //aggiungo l'accordo
+				int ipos = cumulatedchords + (int)(cumulatedspaces * ssize); //position of original string where to insert chord
 
-                i1 = i2;
+				sb.Append(SubstringOrSpaces(text, prev_ipos, ipos)); //aggiungo la parte precedente della linea
+				sb.AppendFormat("[{0}]", m.Value); //aggiungo l'accordo
+
+				cumulatedchords += m.Length;
+				prev_chord_end = m.Index + m.Length;
+				prev_ipos = ipos;
             }
 
-            if (i1 < text.Length-1)
-                sb.Append(text.Substring(i1, text.Length - i1)); //aggiungo la parte precedente della linea
+			//aggiungo tutto quello che resta della stringa
+			sb.Append(SubstringOrSpaces(text, prev_ipos, Math.Max(text.Length, prev_ipos)));
 
             return sb.ToString().Trim();
         }
+
+		private static string SubstringOrSpaces(string text, int from, int to)
+		{
+			if (to > text.Length)
+				text = text + new string(' ', to - text.Length);
+
+			return text.Substring(from, to - from);
+		}
 
         internal static string ParseMSWord(string filename, List<string> rv)
         {
