@@ -96,42 +96,20 @@ namespace ChordEditor.Core
             catch (Exception ex){OnSvnEx(ex);}
 		}
 
-		private static void CheckWorkingCopy(System.Windows.Forms.Form form)
+		private static void CheckWorkingCopy()
 		{
-
-			if (!VerifyURL(form, Settings.Default.CurrentRepo))
-			{
-				Settings.Default.CurrentRepo = null;
-				Settings.Default.LocalRepo = true;
-				Settings.Default.Save();
-			}
-
-			if (LocalOrInvalid)
-			{
-				string repo = Forms.InputBox.Show("Database URL", "Url?");
-				if (repo != null && VerifyURL(form, repo)) //verify repo
-				{
-					Settings.Default.CurrentRepo = repo;
-					Settings.Default.LocalRepo = repo == null;
-					Settings.Default.Save();
-				}
-
-
-			}
+			if (!VerifyURL())
+                Forms.RegistrationBox.CreateAndShowDialog();
 		}
 
-		private static bool VerifyURL(System.Windows.Forms.Form form, string repo)
+		public static bool VerifyURL()
 		{
 			using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
 			{
-				SharpSvn.UI.SvnUI.Bind(cln, form);
-
-				
-
 				try
 				{
                     SharpSvn.SvnInfoEventArgs info;
-					Uri totest = new Uri(repo);
+					Uri totest = new Uri(Settings.Default.CurrentRepo);
 
 					if (totest.IsFile)
 						throw new InvalidOperationException("Repository url needs to be an internet resource.");
@@ -148,12 +126,12 @@ namespace ChordEditor.Core
 		}
 
 
-        internal static void DatabaseSyncronize(System.Windows.Forms.Form form)
+        internal static void DatabaseSyncronize()
         {
             if (SvnOperationBegin != null)
                 SvnOperationBegin("------ SYNCRONIZE ------");
 
-            CheckWorkingCopy(form);
+            CheckWorkingCopy();
 
 			if (!LocalOrInvalid)
 			{
@@ -239,12 +217,12 @@ namespace ChordEditor.Core
 			return rv;
 		}
 
-		internal static void DatabaseDownload(System.Windows.Forms.Form form)
+		internal static void DatabaseDownload()
 		{
             if (SvnOperationBegin != null)
                 SvnOperationBegin("------ CHECKOUT ------");
 
-			CheckWorkingCopy(form);
+			CheckWorkingCopy();
 
 			if (!LocalOrInvalid)
 			{
@@ -275,12 +253,12 @@ namespace ChordEditor.Core
 				SendOperationSkip();
 		}
 
-		internal static void DatabaseUpload(System.Windows.Forms.Form form)
+		internal static void DatabaseUpload()
 		{
             if (SvnOperationBegin != null)
                 SvnOperationBegin("------ COMMIT ------");
 
-			CheckWorkingCopy(form);
+			CheckWorkingCopy();
 
 			if (!LocalOrInvalid)
 			{
@@ -311,7 +289,7 @@ namespace ChordEditor.Core
 		}
 
 		
-		internal static void TotalCleanup(System.Windows.Forms.Form form)
+		internal static void TotalCleanup()
 		{
 			if (SvnOperationBegin != null)
 				SvnOperationBegin("------ TOTAL CLEANUP ------");
@@ -329,7 +307,7 @@ namespace ChordEditor.Core
 
 		}
 
-		internal static void DatabaseCleanup(System.Windows.Forms.Form form)
+		internal static void DatabaseCleanup()
 		{
 			if (SvnOperationBegin != null)
 				SvnOperationBegin("------ CLEANUP ------");
@@ -361,12 +339,12 @@ namespace ChordEditor.Core
 				SendOperationSkip();
 		}
 
-		internal static void DatabaseRevert(System.Windows.Forms.Form form)
+		internal static void DatabaseRevert()
 		{
             if (SvnOperationBegin != null)
                 SvnOperationBegin("------ REVERT ------");
 
-			CheckWorkingCopy(form);
+			CheckWorkingCopy();
 
 			if (!LocalOrInvalid)
 			{
@@ -396,13 +374,13 @@ namespace ChordEditor.Core
 
 
         private static string GenerateLogMessage()
-        { return string.Format("Committed @ {0} by user {1}", DateTime.Now, UserLongName); }
+        { return string.Format("Committed @ {0} by user {1}", DateTime.Now, Username); }
 
-        public static string UserLongName
-        { get { return "Diego Settimi"; } }
-
-
-
+        public static string Username
+        {
+            get { return Settings.Default.UserName; } 
+            set { Settings.Default.UserName = value; } 
+        }
 
 		private static bool LocalRepo
 		{ get { return Settings.Default.LocalRepo; } }

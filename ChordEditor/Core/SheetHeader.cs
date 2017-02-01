@@ -28,7 +28,7 @@ namespace ChordEditor.Core
 
         public SheetHeader() : this(Guid.NewGuid().ToString() + ".cpw")
         {
-			SheetAuthor = Program.UserLongName;
+			SheetAuthor = Program.Username;
         }
 
         public SheetHeader(string filename)

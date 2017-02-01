@@ -78,7 +78,7 @@ namespace ChordEditor
 		void VerifyTotalCleanup()
 		{
 			if (TokenFile.TestAndDelete("cleanup.tok"))
-				Program.TotalCleanup(this);
+				Program.TotalCleanup();
 		}
 
 		void VerifyErrorCount()
@@ -181,21 +181,21 @@ namespace ChordEditor
 		}
 
 		private void DatabaseSyncronize(object sender, EventArgs e)
-		{Program.DatabaseSyncronize(this);}
+		{Program.DatabaseSyncronize();}
 
 		private void DatabaseDownload(object sender, EventArgs e)
-		{Program.DatabaseDownload(this);}
+		{Program.DatabaseDownload();}
 
 		private void DatabaseUpload(object sender, EventArgs e)
-		{Program.DatabaseUpload(this);}
+		{Program.DatabaseUpload();}
 
 		private void DatabaseRevert(object sender, EventArgs e)
-		{Program.DatabaseRevert(this);}
+		{Program.DatabaseRevert();}
 
 		private void DatabaseCleanup(object sender, EventArgs e)
 		{
 			mErrorCount = 0;
-			Program.DatabaseCleanup(this);
+			Program.DatabaseCleanup();
 		}
 
         #endregion
@@ -228,7 +228,7 @@ namespace ChordEditor
 				{
 					mClosePending = true;
 					Enabled = false;
-					Program.DatabaseUpload(this); //è asincrono
+					Program.DatabaseUpload(); //è asincrono
 					e.Cancel = true;
 				}
 				else if (rv == System.Windows.Forms.DialogResult.Cancel)
@@ -258,7 +258,7 @@ namespace ChordEditor
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			if (!Program.LocalOrInvalid)
-				Program.DatabaseDownload(this);
+				Program.DatabaseDownload();
 		}
 
         private void MnImport_Click(object sender, EventArgs e)

@@ -53,9 +53,6 @@
     <Reference Include="SharpSvn">
       <HintPath>external\SharpSvn.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn.UI">
-      <HintPath>external\SharpSvn.UI.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -82,6 +79,12 @@
     <Compile Include="Core\SheetList.cs" />
     <Compile Include="Core\TokenFile.cs" />
     <Compile Include="Core\Pagliaro.cs" />
+    <Compile Include="Forms\RegistrationBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RegistrationBox.Designer.cs">
+      <DependentUpon>RegistrationBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,6 +284,9 @@
     <None Include="UserControls\DockingManager\Resources\DockPane_OptionOverflow.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\RegistrationBox.resx">
+      <DependentUpon>RegistrationBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
     </EmbeddedResource>
