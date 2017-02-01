@@ -30,7 +30,7 @@
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SheetForm));
-            this.TB = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.CHP = new FastColoredTextBoxNS.FastColoredTextBox();
             this.CMS = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.MnUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.MnRedo = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,13 +45,13 @@
             this.CbZoom = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.SC = new System.Windows.Forms.SplitContainer();
+            this.COT = new FastColoredTextBoxNS.FastColoredTextBox();
             this.FSW = new System.IO.FileSystemWatcher();
             this.VT = new System.Windows.Forms.Timer(this.components);
             this.RetryReload = new System.Windows.Forms.Timer(this.components);
             this.ACM = new AutocompleteMenuNS.AutocompleteMenu();
             this.IL = new System.Windows.Forms.ImageList(this.components);
-            this.WB = new System.Windows.Forms.WebBrowser();
-            ((System.ComponentModel.ISupportInitialize)(this.TB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CHP)).BeginInit();
             this.CMS.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -59,46 +59,47 @@
             this.SC.Panel1.SuspendLayout();
             this.SC.Panel2.SuspendLayout();
             this.SC.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.COT)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FSW)).BeginInit();
             this.SuspendLayout();
             // 
-            // TB
+            // CHP
             // 
-            this.TB.AutoCompleteBracketsList = new char[] {
+            this.CHP.AutoCompleteBracketsList = new char[] {
         '{',
         '}',
         '[',
         ']'};
-            this.ACM.SetAutocompleteMenu(this.TB, this.ACM);
-            this.TB.AutoIndent = false;
-            this.TB.AutoIndentChars = false;
-            this.TB.AutoIndentExistingLines = false;
-            this.TB.AutoScrollMinSize = new System.Drawing.Size(18, 30);
-            this.TB.BackBrush = null;
-            this.TB.CharHeight = 14;
-            this.TB.CharWidth = 8;
-            this.TB.CommentPrefix = "#";
-            this.TB.ContextMenuStrip = this.CMS;
-            this.TB.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.TB.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.TB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TB.Font = new System.Drawing.Font("Courier New", 9.75F);
-            this.TB.Hotkeys = resources.GetString("TB.Hotkeys");
-            this.TB.IsReplaceMode = false;
-            this.TB.Location = new System.Drawing.Point(0, 0);
-            this.TB.Name = "TB";
-            this.TB.Paddings = new System.Windows.Forms.Padding(8);
-            this.TB.PreferredLineWidth = 60;
-            this.TB.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
-            this.TB.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("TB.ServiceColors")));
-            this.TB.ShowLineNumbers = false;
-            this.TB.Size = new System.Drawing.Size(400, 470);
-            this.TB.TabIndex = 0;
-            this.TB.Zoom = 100;
-            this.TB.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChanged);
-            this.TB.Pasting += new System.EventHandler<FastColoredTextBoxNS.TextChangingEventArgs>(this.TB_Pasting);
-            this.TB.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChangedDelayed);
-            this.TB.ZoomChanged += new System.EventHandler(this.TB_ZoomChanged);
+            this.ACM.SetAutocompleteMenu(this.CHP, this.ACM);
+            this.CHP.AutoIndent = false;
+            this.CHP.AutoIndentChars = false;
+            this.CHP.AutoIndentExistingLines = false;
+            this.CHP.AutoScrollMinSize = new System.Drawing.Size(18, 30);
+            this.CHP.BackBrush = null;
+            this.CHP.CharHeight = 14;
+            this.CHP.CharWidth = 8;
+            this.CHP.CommentPrefix = "#";
+            this.CHP.ContextMenuStrip = this.CMS;
+            this.CHP.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.CHP.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.CHP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CHP.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.CHP.Hotkeys = resources.GetString("CHP.Hotkeys");
+            this.CHP.IsReplaceMode = false;
+            this.CHP.Location = new System.Drawing.Point(0, 0);
+            this.CHP.Name = "CHP";
+            this.CHP.Paddings = new System.Windows.Forms.Padding(8);
+            this.CHP.PreferredLineWidth = 60;
+            this.CHP.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
+            this.CHP.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("CHP.ServiceColors")));
+            this.CHP.ShowLineNumbers = false;
+            this.CHP.Size = new System.Drawing.Size(400, 470);
+            this.CHP.TabIndex = 0;
+            this.CHP.Zoom = 100;
+            this.CHP.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChanged);
+            this.CHP.Pasting += new System.EventHandler<FastColoredTextBoxNS.TextChangingEventArgs>(this.TB_Pasting);
+            this.CHP.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.TB_TextChangedDelayed);
+            this.CHP.ZoomChanged += new System.EventHandler(this.TB_ZoomChanged);
             // 
             // CMS
             // 
@@ -238,14 +239,48 @@
             // 
             // SC.Panel1
             // 
-            this.SC.Panel1.Controls.Add(this.TB);
+            this.SC.Panel1.Controls.Add(this.CHP);
             // 
             // SC.Panel2
             // 
-            this.SC.Panel2.Controls.Add(this.WB);
+            this.SC.Panel2.Controls.Add(this.COT);
             this.SC.Size = new System.Drawing.Size(666, 470);
             this.SC.SplitterDistance = 400;
             this.SC.TabIndex = 2;
+            // 
+            // COT
+            // 
+            this.COT.AutoCompleteBracketsList = new char[] {
+        '{',
+        '}',
+        '[',
+        ']'};
+            this.ACM.SetAutocompleteMenu(this.COT, this.ACM);
+            this.COT.AutoIndent = false;
+            this.COT.AutoIndentChars = false;
+            this.COT.AutoIndentExistingLines = false;
+            this.COT.AutoScrollMinSize = new System.Drawing.Size(18, 30);
+            this.COT.BackBrush = null;
+            this.COT.CharHeight = 14;
+            this.COT.CharWidth = 8;
+            this.COT.CommentPrefix = "#";
+            this.COT.ContextMenuStrip = this.CMS;
+            this.COT.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.COT.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.COT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.COT.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.COT.Hotkeys = resources.GetString("COT.Hotkeys");
+            this.COT.IsReplaceMode = false;
+            this.COT.Location = new System.Drawing.Point(0, 0);
+            this.COT.Name = "COT";
+            this.COT.Paddings = new System.Windows.Forms.Padding(8);
+            this.COT.PreferredLineWidth = 60;
+            this.COT.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
+            this.COT.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("COT.ServiceColors")));
+            this.COT.ShowLineNumbers = false;
+            this.COT.Size = new System.Drawing.Size(262, 470);
+            this.COT.TabIndex = 1;
+            this.COT.Zoom = 100;
             // 
             // FSW
             // 
@@ -283,19 +318,6 @@
             this.IL.TransparentColor = System.Drawing.Color.Transparent;
             this.IL.Images.SetKeyName(0, "musical-note.png");
             // 
-            // WB
-            // 
-            this.WB.AllowNavigation = false;
-            this.WB.AllowWebBrowserDrop = false;
-            this.WB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.WB.IsWebBrowserContextMenuEnabled = false;
-            this.WB.Location = new System.Drawing.Point(0, 0);
-            this.WB.MinimumSize = new System.Drawing.Size(20, 20);
-            this.WB.Name = "WB";
-            this.WB.Size = new System.Drawing.Size(262, 470);
-            this.WB.TabIndex = 0;
-            this.WB.WebBrowserShortcutsEnabled = false;
-            // 
             // SheetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,13 +327,14 @@
             this.Controls.Add(this.tableLayoutPanel2);
             this.DockAreas = ChordEditor.UserControls.DockingManager.DockAreas.Document;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SheetForm";
             this.TabText = "";
             this.Text = "New sheet";
             this.ToolTipText = "";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SheetForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SheetForm_FormClosed);
-            ((System.ComponentModel.ISupportInitialize)(this.TB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CHP)).EndInit();
             this.CMS.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -321,6 +344,7 @@
             this.SC.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SC)).EndInit();
             this.SC.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.COT)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FSW)).EndInit();
             this.ResumeLayout(false);
 
@@ -328,7 +352,7 @@
 
 		#endregion
 
-		private FastColoredTextBoxNS.FastColoredTextBox TB;
+		private FastColoredTextBoxNS.FastColoredTextBox CHP;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -348,6 +372,6 @@
         private AutocompleteMenuNS.AutocompleteMenu ACM;
         private System.Windows.Forms.ImageList IL;
         private System.Windows.Forms.SplitContainer SC;
-        private System.Windows.Forms.WebBrowser WB;
+        private FastColoredTextBoxNS.FastColoredTextBox COT;
 	}
 }

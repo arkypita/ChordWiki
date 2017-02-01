@@ -53,7 +53,6 @@
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctb.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.fctb.Hotkeys = resources.GetString("fctb.Hotkeys");
             this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(0, 0);
@@ -76,6 +75,7 @@
             this.DockAreas = ((ChordEditor.UserControls.DockingManager.DockAreas)((ChordEditor.UserControls.DockingManager.DockAreas.Float | ChordEditor.UserControls.DockingManager.DockAreas.DockBottom)));
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HideOnClose = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LogMessageForm";
             this.TabText = "Messages";
             this.Text = "Messages";

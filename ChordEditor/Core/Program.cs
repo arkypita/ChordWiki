@@ -16,6 +16,9 @@ namespace ChordEditor.Core
     /// </summary>
     public static class Program
     {
+        private static string lotoftext = "Rianimo possono carrara gia sue milizie potermi affonda ora. Regge solca fossi mio poi lei. Vicende mia pei custode secondo ben trovare piacera pur. Ho finito vedrai te ad ah faccia. Ride moto vai vite anno mie sta otri anch ora. Intero col quindi fra scossa. ";
+        private static string lotofspace = "                                                                                                             ";
+
         public delegate void SvnOperationDelegate(string message);
 		public delegate void SvnOperationErrorDelegate(Exception ex);
         public static event SvnOperationDelegate SvnOperationBegin;
@@ -207,7 +210,7 @@ namespace ChordEditor.Core
                 SheetHeader sh = SheetDB.GetByFileName(filename);
 
                 if (sh != null)
-                    SvnOperationMessage(String.Format("{0}\t{1}{2}{3}\t[{4}]", e.Action, sh.Artist, sh.Artist != null ? @"\" : "", sh.Title, filename));
+                    SvnOperationMessage(String.Format("{0}\t[{4}]\t{1}{2}{3}", e.Action, sh.Artist, sh.Artist != null ? @"\" : "", sh.Title, filename));
                 else
                     SvnOperationMessage(String.Format("{0}\t[{1}]", e.Action, filename));
             }
@@ -453,13 +456,21 @@ namespace ChordEditor.Core
             {
                 try
                 {
-                    List<string> songs = Importer.ParseMSWord(filename);
+                    List<string> songs = new List<string>();
+                    string font = Importer.ParseMSWord(filename, songs);
+                    double charW = 1.0;
+                    double spaceW = 1.0;
+                    using (System.Drawing.Font f = new System.Drawing.Font(font, 10))
+                    {
+                        charW = System.Windows.Forms.TextRenderer.MeasureText(lotoftext, f).Width / (double)lotoftext.Length;
+                        spaceW = System.Windows.Forms.TextRenderer.MeasureText(lotofspace, f).Width / (double)lotofspace.Length;
+                    }
 
                     foreach (string song in songs)
                     {
                         if (!String.IsNullOrWhiteSpace(song.Trim()))
                         {
-                            Importer.ImportedContent ic = Importer.ImportClipbord(song, false);
+                            Importer.ImportedContent ic = Importer.ImportCOT(song, false, spaceW / charW);
 
 
                             Sheet sheet = new Sheet();

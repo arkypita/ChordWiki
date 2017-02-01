@@ -79,6 +79,7 @@
             this.LV.View = System.Windows.Forms.View.Details;
             this.LV.SelectionChanged += new System.EventHandler(this.LV_SelectionChanged);
             this.LV.ItemActivate += new System.EventHandler(this.LV_ItemActivate);
+            this.LV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_KeyDown);
             // 
             // ChTitle
             // 
@@ -204,6 +205,7 @@
             this.DockAreas = ChordEditor.UserControls.DockingManager.DockAreas.Document;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.HideOnClose = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SheetDatabase";
             this.TabText = "Sheet Database";
             this.Text = "Sheet Database";

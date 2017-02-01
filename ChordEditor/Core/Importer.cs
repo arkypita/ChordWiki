@@ -206,56 +206,22 @@ namespace ChordEditor.Core
 			return string.IsNullOrWhiteSpace(line);
         }
 
-        static ImportedContent ImportCOT(string text, bool ask)
+        internal static ImportedContent ImportCOT(string text, bool ask, double ssize = 1.0)
         {
             ImportedContent rv = new ImportedContent();
 
-            System.Text.StringBuilder sb = new StringBuilder();
-
-            string[] lines = text.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            List<string> lines = new List<string>(text.Split(new string[] { "\r\n" }, StringSplitOptions.None));
 
             //cerca di individuare titolo e artista
-            if (lines.Length > 10) //possiamo ipotizzare che stiamo importando una canzone intera?!
-            {
-                string guessTitle = null;
-                string guessArtist = null;
+            GuessCOT(ask, rv, lines);
+            ParseCOT(rv, lines, ssize);
 
-                //se la prima linea è di testo
-                //e la seconda è uno spazio
+            return rv;
+        }
 
-				if (IsTitleLine(lines[0]))
-					guessTitle = lines[0];
-				if (IsTitleLine(lines[1]))
-                    guessArtist = lines[1];
-
-                if (guessTitle != null)
-                {
-                    guessTitle = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(guessTitle.Trim().ToLower());
-                    guessTitle = ask ? Forms.InputBox.Show("Guess title", "Is this title correct?", guessTitle, false) : guessTitle;
-                    if (guessTitle != null)
-                    {
-                        rv.Title = guessTitle;
-                        lines = lines.Skip(1).ToArray();
-                    }
-
-                    if (guessArtist != null)
-                    {
-                        guessArtist = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(guessArtist.Trim().ToLower());
-                        guessArtist = ask ? Forms.InputBox.Show("Guess artist", "Is this artist correct?", guessArtist, false) : guessArtist;
-                        if (guessArtist != null)
-                        {
-                            rv.Artist = guessArtist;
-                            lines = lines.Skip(1).ToArray();
-                        }
-                    }
-
-                    if (string.IsNullOrWhiteSpace(lines[0]))//se dopo queste operazioni sono rimasto con una linea vuota iniziale
-                        lines = lines.Skip(1).ToArray(); //me la levo
-                }
- 
-            }
-
-
+        private static void ParseCOT(ImportedContent rv, List<string> lines, double ssize = 1.0)
+        {
+            System.Text.StringBuilder sb = new StringBuilder();
             string chords = null;
             foreach (string line in lines)
             {
@@ -273,7 +239,7 @@ namespace ChordEditor.Core
                         sb.AppendLine(MergeCOT("", chords));                    //emetto la precedente linea di accordi
 
                     chords = line;                                              //memorizzo questa nuova linea di accordi
-                } 
+                }
                 else if (IsSongLine(line))
                 {
                     if (chords != null)                                         //avevo una precedente linea di accordi
@@ -290,8 +256,49 @@ namespace ChordEditor.Core
 
 
             rv.Text = sb.ToString();
+        }
 
-            return rv;
+        private static void GuessCOT(bool ask, ImportedContent rv, List<string> lines)
+        {
+            if (lines.Count > 10) //possiamo ipotizzare che stiamo importando una canzone intera?!
+            {
+                string guessTitle = null;
+                string guessArtist = null;
+
+                //se la prima linea è di testo
+                //e la seconda è uno spazio
+
+                if (IsTitleLine(lines[0]))
+                    guessTitle = lines[0];
+                if (IsTitleLine(lines[1]))
+                    guessArtist = lines[1];
+
+                if (guessTitle != null)
+                {
+                    guessTitle = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(guessTitle.Trim().ToLower());
+                    guessTitle = ask ? Forms.InputBox.Show("Guess title", "Is this title correct?", guessTitle, false) : guessTitle;
+                    if (guessTitle != null)
+                    {
+                        rv.Title = guessTitle;
+                        lines.RemoveAt(0);
+                    }
+
+                    if (guessArtist != null)
+                    {
+                        guessArtist = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(guessArtist.Trim().ToLower());
+                        guessArtist = ask ? Forms.InputBox.Show("Guess artist", "Is this artist correct?", guessArtist, false) : guessArtist;
+                        if (guessArtist != null)
+                        {
+                            rv.Artist = guessArtist;
+                            lines.RemoveAt(0);
+                        }
+                    }
+
+                    while (string.IsNullOrWhiteSpace(lines[0])) //rimuovi tutte le linee vuote dopo il titolo
+                        lines.RemoveAt(0);
+                }
+
+            }
         }
 
         private static string MergeCOT(string text, string chords)
@@ -328,22 +335,28 @@ namespace ChordEditor.Core
             return sb.ToString().Trim();
         }
 
-        internal static List<string> ParseMSWord(string filename)
+        internal static string ParseMSWord(string filename, List<string> rv)
         {
             Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
             Microsoft.Office.Interop.Word.Document doc = app.Documents.Open(filename);
             string text = doc.Content.Text;
+            string font = "";
 
-            //System.IO.File.WriteAllText("originaltext.txt", text);
-
-            text = CleanUp(text);
-
-            //System.IO.File.WriteAllText("cleanedtext.txt", text);
+            foreach (Microsoft.Office.Interop.Word.Paragraph par in doc.Content.Paragraphs)
+            {
+                try
+                {
+                    font = par.Range.Font.Name;
+                    break;
+                }
+                catch { }
+            }
 
             doc.Close();
             app.Quit();
 
-			return ExtractBlock(text);
+            rv.AddRange(ExtractBlock(CleanUp(text)));
+            return font;
         }
 
         private static List<string> ExtractBlock(string text)

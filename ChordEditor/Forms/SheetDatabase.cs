@@ -135,5 +135,11 @@ namespace ChordEditor.Forms
 
             Core.Program.SheetDB.ReloadDataBase();
         }
+
+        private void LV_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+                BtnDelete_Click(sender, e);
+        }
     }
 }

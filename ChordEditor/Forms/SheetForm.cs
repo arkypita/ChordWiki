@@ -38,8 +38,8 @@ namespace ChordEditor.Forms
             FSW.Path = System.IO.Path.GetDirectoryName(sheet.Header.FilePath);
             FSW.Filter = System.IO.Path.GetFileName(sheet.Header.FilePath);
 
-            TB.Text = sheet.Content;
-            TB.ClearUndo();
+            CHP.Text = sheet.Content;
+            CHP.ClearUndo();
             TB_ZoomChanged(null, null);
 
             CbZoom.Items.Add(String.Format("{0} %", 50));
@@ -65,7 +65,7 @@ namespace ChordEditor.Forms
 
         private Keys GetShortCut(FastColoredTextBoxNS.FCTBAction action)
         {
-            foreach (KeyValuePair<Keys, FastColoredTextBoxNS.FCTBAction> kvp in TB.HotkeysMapping)
+            foreach (KeyValuePair<Keys, FastColoredTextBoxNS.FCTBAction> kvp in CHP.HotkeysMapping)
                 if (action == kvp.Value)
                     return kvp.Key;
             return Keys.None;
@@ -76,8 +76,8 @@ namespace ChordEditor.Forms
             try
             {
                 Sheet.ReloadFile();
-                TB.Text = Sheet.Content;
-                TB.ClearUndo();
+                CHP.Text = Sheet.Content;
+                CHP.ClearUndo();
             }
             catch { RetryReload.Start(); }
         }
@@ -184,11 +184,11 @@ namespace ChordEditor.Forms
         { get { return mSheet; } }
 
         public FastColoredTextBoxNS.FastColoredTextBox Editor
-        { get { return TB; } }
+        { get { return CHP; } }
 
         private void TB_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
-            mSheet.Content = TB.Text;
+            mSheet.Content = CHP.Text;
             Analyze();
 
             if (DelayedTextChanged != null)
@@ -197,51 +197,51 @@ namespace ChordEditor.Forms
             //RefreshPreview();
         }
 
-        private void RefreshPreview()
-        {
-            StringBuilder html = new StringBuilder();
+        //private void RefreshPreview()
+        //{
+        //    StringBuilder html = new StringBuilder();
 
-            using (System.IO.StringReader sr = new System.IO.StringReader(TB.Text))
-            {
-                string line = null;
-                html.AppendLine(@"<html><body><pre>");
-                while((line = sr.ReadLine()) != null)
-                {
-                    //split chord and text;
-                    System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
-                    if (matches.Count == 0)
-                    {
-                        html.Append(line + "\r\n");
-                    }
-                    else
-                    {
-                        int offset = 0;
-                        string chords = "";
-                        foreach (System.Text.RegularExpressions.Match match in matches)
-                        {
-                            string cval = match.Groups[1].Value;
+        //    using (System.IO.StringReader sr = new System.IO.StringReader(CHP.Text))
+        //    {
+        //        string line = null;
+        //        html.AppendLine(@"<html><body><pre>");
+        //        while((line = sr.ReadLine()) != null)
+        //        {
+        //            //split chord and text;
+        //            System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
+        //            if (matches.Count == 0)
+        //            {
+        //                html.Append(line + "\r\n");
+        //            }
+        //            else
+        //            {
+        //                int offset = 0;
+        //                string chords = "";
+        //                foreach (System.Text.RegularExpressions.Match match in matches)
+        //                {
+        //                    string cval = match.Groups[1].Value;
 
-                            int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
-                            offset += match.Length;
+        //                    int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
+        //                    offset += match.Length;
 
-							chords = chords + new string(' ', Math.Max(1, position - chords.Length)); //aggiungi spazi bianchi, almeno 1
-                            chords = chords + cval;
-                        }
-						string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
+        //                    chords = chords + new string(' ', Math.Max(1, position - chords.Length)); //aggiungi spazi bianchi, almeno 1
+        //                    chords = chords + cval;
+        //                }
+        //                string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
 
-                        html.Append(chords + "\r\n");
-                        html.Append(song + "\r\n");
-                    }
-                }
+        //                html.Append(chords + "\r\n");
+        //                html.Append(song + "\r\n");
+        //            }
+        //        }
 
-                html.AppendLine(@"</pre></body></html>");
-            }
+        //        html.AppendLine(@"</pre></body></html>");
+        //    }
 
 
-            WB.Navigate("about:blank");
-            WB.Document.Write(html.ToString());
-            WB.Refresh(WebBrowserRefreshOption.Completely);
-        }
+        //    WB.Navigate("about:blank");
+        //    WB.Document.Write(html.ToString());
+        //    WB.Refresh(WebBrowserRefreshOption.Completely);
+        //}
 
 
 
@@ -249,25 +249,25 @@ namespace ChordEditor.Forms
         {
             try
             {
-                TB.Zoom = int.Parse(((string)CbZoom.SelectedItem).Trim(" %".ToCharArray()));
+                CHP.Zoom = int.Parse(((string)CbZoom.SelectedItem).Trim(" %".ToCharArray()));
             }
             catch { TB_ZoomChanged(null, null); }
         }
 
         private void TB_ZoomChanged(object sender, EventArgs e)
         {
-            int newval = Math.Min(Math.Max(TB.Zoom, 50), 300);
-            if (TB.Zoom != newval)
-                TB.Zoom = newval;
+            int newval = Math.Min(Math.Max(CHP.Zoom, 50), 300);
+            if (CHP.Zoom != newval)
+                CHP.Zoom = newval;
 
-            CbZoom.Text = String.Format("{0} %", TB.Zoom);
+            CbZoom.Text = String.Format("{0} %", CHP.Zoom);
         }
 
         private void CbZoom_Validating(object sender, CancelEventArgs e)
         {
             try
             {
-                TB.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
+                CHP.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
             }
             catch { TB_ZoomChanged(null, null); }
         }
@@ -290,7 +290,7 @@ namespace ChordEditor.Forms
 
             //get matches with different notations
             bool normal = true;
-            foreach (System.Text.RegularExpressions.Match m in Core.RegexList.Chords.ChordProNote.Matches(TB.Text))
+            foreach (System.Text.RegularExpressions.Match m in Core.RegexList.Chords.ChordProNote.Matches(CHP.Text))
             {
                 string text = m.Groups[1].Value; //estrai il gruppo ricercato, ovvero solo il contenuto delle parentesi quadre
                 Core.Chord c = Core.Pagliaro.GetChord(text);
@@ -334,7 +334,7 @@ namespace ChordEditor.Forms
                 targetNotation = Core.ChordNotation.Italian;
 
             if (targetNotation != Core.ChordNotation.Unknown)
-                TB.Text = Core.Program.ChangeNotation(TB.Text, targetNotation);
+                CHP.Text = Core.Program.ChangeNotation(CHP.Text, targetNotation);
         }
 
         public bool ForceCloseWhenDelete()
@@ -371,12 +371,12 @@ namespace ChordEditor.Forms
 
         internal void Traspose(int semitones)
         {
-            TB.Text = Core.Program.Traspose(TB.Text, semitones);
+            CHP.Text = Core.Program.Traspose(CHP.Text, semitones);
         }
 
         internal void Normalize()
         {
-            TB.Text = Core.Program.Normalize(TB.Text);
+            CHP.Text = Core.Program.Normalize(CHP.Text);
         }
 
         private void TB_Pasting(object sender, TextChangingEventArgs e)
@@ -403,42 +403,42 @@ namespace ChordEditor.Forms
 
         private void ActionUndo(object sender, EventArgs e)
         {
-            TB.Undo();
+            CHP.Undo();
         }
 
         private void ActionRedo(object sender, EventArgs e)
         {
-            TB.Redo();
+            CHP.Redo();
         }
 
         private void SelectionCut(object sender, EventArgs e)
         {
-            TB.Cut();
+            CHP.Cut();
         }
 
         private void SelectionCopy(object sender, EventArgs e)
         {
-            TB.Copy();
+            CHP.Copy();
         }
 
         private void SelectionPaste(object sender, EventArgs e)
         {
-            TB.Paste();
+            CHP.Paste();
         }
 
         private void ActionSelectAll(object sender, EventArgs e)
         {
-            TB.SelectAll();
+            CHP.SelectAll();
         }
 
         private void CMS_Opening(object sender, CancelEventArgs e)
         {
-            MnUndo.Enabled = TB.UndoEnabled;
-            MnRedo.Enabled = TB.RedoEnabled;
-            MnCut.Enabled = !string.IsNullOrEmpty(TB.SelectedText);
-            MnCopy.Enabled = !string.IsNullOrEmpty(TB.SelectedText);
+            MnUndo.Enabled = CHP.UndoEnabled;
+            MnRedo.Enabled = CHP.RedoEnabled;
+            MnCut.Enabled = !string.IsNullOrEmpty(CHP.SelectedText);
+            MnCopy.Enabled = !string.IsNullOrEmpty(CHP.SelectedText);
             MnPaste.Enabled = Clipboard.ContainsText();
-            MnSelectAll.Enabled = !string.IsNullOrEmpty(TB.Text);
+            MnSelectAll.Enabled = !string.IsNullOrEmpty(CHP.Text);
         }
 
         private Core.ChordNotation mAcNotation = Core.ChordNotation.Unknown;
