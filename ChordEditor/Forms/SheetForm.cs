@@ -22,6 +22,7 @@ namespace ChordEditor.Forms
         private bool mNormalized;
         private bool mForceClose = false;
 
+		TextStyle mChordCOTStyle = new TextStyle(Brushes.Black, null, FontStyle.Bold);
         TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
         TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
@@ -40,7 +41,7 @@ namespace ChordEditor.Forms
 
             CHP.Text = sheet.Content;
             CHP.ClearUndo();
-            TB_ZoomChanged(null, null);
+            CHPZoomChanged(null, null);
 
             CbZoom.Items.Add(String.Format("{0} %", 50));
             CbZoom.Items.Add(String.Format("{0} %", 70));
@@ -186,7 +187,7 @@ namespace ChordEditor.Forms
         public FastColoredTextBoxNS.FastColoredTextBox Editor
         { get { return CHP; } }
 
-        private void TB_TextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        private void CHPTextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             mSheet.Content = CHP.Text;
             Analyze();
@@ -194,54 +195,49 @@ namespace ChordEditor.Forms
             if (DelayedTextChanged != null)
                 DelayedTextChanged(this);
 
-            //RefreshPreview();
+            RefreshPreview();
         }
 
-        //private void RefreshPreview()
-        //{
-        //    StringBuilder html = new StringBuilder();
+		private void RefreshPreview()
+		{
+			StringBuilder text = new StringBuilder();
 
-        //    using (System.IO.StringReader sr = new System.IO.StringReader(CHP.Text))
-        //    {
-        //        string line = null;
-        //        html.AppendLine(@"<html><body><pre>");
-        //        while((line = sr.ReadLine()) != null)
-        //        {
-        //            //split chord and text;
-        //            System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
-        //            if (matches.Count == 0)
-        //            {
-        //                html.Append(line + "\r\n");
-        //            }
-        //            else
-        //            {
-        //                int offset = 0;
-        //                string chords = "";
-        //                foreach (System.Text.RegularExpressions.Match match in matches)
-        //                {
-        //                    string cval = match.Groups[1].Value;
+			using (System.IO.StringReader sr = new System.IO.StringReader(CHP.Text))
+			{
+				string line = null;
+				while ((line = sr.ReadLine()) != null)
+				{
+					//split chord and text;
+					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
+					if (matches.Count == 0)
+					{
+						text.Append(line + "\r\n");
+					}
+					else
+					{
+						int offset = 0;
+						string chords = "";
+						foreach (System.Text.RegularExpressions.Match match in matches)
+						{
+							string cval = match.Groups[1].Value;
 
-        //                    int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
-        //                    offset += match.Length;
+							int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
+							offset += match.Length;
 
-        //                    chords = chords + new string(' ', Math.Max(1, position - chords.Length)); //aggiungi spazi bianchi, almeno 1
-        //                    chords = chords + cval;
-        //                }
-        //                string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
+							chords = chords + new string(' ', Math.Max(1, position - chords.Length)); //aggiungi spazi bianchi, almeno 1
+							chords = chords + cval;
+						}
+						string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
 
-        //                html.Append(chords + "\r\n");
-        //                html.Append(song + "\r\n");
-        //            }
-        //        }
-
-        //        html.AppendLine(@"</pre></body></html>");
-        //    }
+						text.Append(chords + "\r\n");
+						text.Append(song + "\r\n");
+					}
+				}
+			}
 
 
-        //    WB.Navigate("about:blank");
-        //    WB.Document.Write(html.ToString());
-        //    WB.Refresh(WebBrowserRefreshOption.Completely);
-        //}
+			COT.Text = text.ToString();
+		}
 
 
 
@@ -251,10 +247,10 @@ namespace ChordEditor.Forms
             {
                 CHP.Zoom = int.Parse(((string)CbZoom.SelectedItem).Trim(" %".ToCharArray()));
             }
-            catch { TB_ZoomChanged(null, null); }
+            catch { CHPZoomChanged(null, null); }
         }
 
-        private void TB_ZoomChanged(object sender, EventArgs e)
+        private void CHPZoomChanged(object sender, EventArgs e)
         {
             int newval = Math.Min(Math.Max(CHP.Zoom, 50), 300);
             if (CHP.Zoom != newval)
@@ -269,10 +265,10 @@ namespace ChordEditor.Forms
             {
                 CHP.Zoom = int.Parse(((string)CbZoom.Text).Trim(" %".ToCharArray()));
             }
-            catch { TB_ZoomChanged(null, null); }
+            catch { CHPZoomChanged(null, null); }
         }
 
-        private void TB_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        private void CHPTextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             //clear previous highlighting
             e.ChangedRange.ClearStyle();
@@ -280,6 +276,15 @@ namespace ChordEditor.Forms
             e.ChangedRange.SetStyle(mChordStyle, @"\[(.*?)\]");
             e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
         }
+
+
+		private void COTTextChanged(object sender, TextChangedEventArgs e)
+		{
+			//clear previous highlighting
+			e.ChangedRange.ClearStyle();
+			//highlight tags
+			e.ChangedRange.SetStyle(mChordCOTStyle, @"(?<=^| |\r\n)(?:(?:(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)|(?:[CDEFGAB]))(?:#|♯|b|♭)?(?:\+|M|MAJ|maj|-|MIN|min|m|SUS|sus|ECC|ecc|DIM|dim)?(?:(?:\d){1,2}(?:\+)?)?)(?= |$|\r\n)");
+		}
 
         private void Analyze()
         {
@@ -379,7 +384,7 @@ namespace ChordEditor.Forms
             CHP.Text = Core.Program.Normalize(CHP.Text);
         }
 
-        private void TB_Pasting(object sender, TextChangingEventArgs e)
+        private void CHPPasting(object sender, TextChangingEventArgs e)
         {
             Core.Importer.ImportedContent content = Core.Importer.ImportClipbord(e.InsertingText, true);
 
@@ -497,6 +502,7 @@ namespace ChordEditor.Forms
                 return AutocompleteMenuNS.CompareResult.Hidden;
             }
         }
+
 
 
 

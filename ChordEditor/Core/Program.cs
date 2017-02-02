@@ -98,31 +98,38 @@ namespace ChordEditor.Core
 
 		private static void CheckWorkingCopy()
 		{
-			if (!VerifyURL())
-                Forms.RegistrationBox.CreateAndShowDialog();
-		}
-
-		public static bool VerifyURL()
-		{
+			bool show = false;
 			using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
 			{
-				try
-				{
-                    SharpSvn.SvnInfoEventArgs info;
-					Uri totest = new Uri(Settings.Default.CurrentRepo);
+				show = VerifyURL(cln, Settings.CurrentRepo) != null ;
+				if (show) cln.Authentication.Clear(); // Clear a previous authentication
+			}		
+			if (show)
+				Forms.RegistrationBox.CreateAndShowDialog();
+		}
 
-					if (totest.IsFile)
-						throw new InvalidOperationException("Repository url needs to be an internet resource.");
-					cln.GetInfo(SharpSvn.SvnTarget.FromUri(totest), out info); //deve fare eccezione, perché mi serve per avere certezza che sia un giusto db
-					if (info.NodeKind != SharpSvn.SvnNodeKind.Directory)
-						throw new InvalidOperationException("Url does not point to a valid repository folder.");
+		public static Exception VerifyURL(SharpSvn.SvnClient cln, string repo)
+		{
+			if (repo == "")
+				return new Exception("Please fill repository information!");
 
-					return true;
-				}
-				catch (Exception ex) //not a valid url
-				{OnSvnEx(ex);}
+			try
+			{
+                SharpSvn.SvnInfoEventArgs info;
+				Uri totest = new Uri(Settings.CurrentRepo);
+
+				if (totest.IsFile)
+					throw new InvalidOperationException("Repository url needs to be an internet resource.");
+				cln.GetInfo(SharpSvn.SvnTarget.FromUri(totest), out info); //deve fare eccezione, perché mi serve per avere certezza che sia un giusto db
+				if (info.NodeKind != SharpSvn.SvnNodeKind.Directory)
+					throw new InvalidOperationException("Url does not point to a valid repository folder.");
+
+				return null;
 			}
-			return false;
+			catch (Exception ex)
+			{
+				return ex; 
+			}
 		}
 
 
@@ -378,12 +385,12 @@ namespace ChordEditor.Core
 
         public static string Username
         {
-            get { return Settings.Default.UserName; } 
-            set { Settings.Default.UserName = value; } 
+            get { return Settings.Username; } 
+            set { Settings.Username = value; } 
         }
 
 		private static bool LocalRepo
-		{ get { return Settings.Default.LocalRepo; } }
+		{ get { return Settings.LocalRepo; } }
 
 		public static bool LocalOrInvalid
 		{ get { return LocalRepo || CurrentRepoUri == null; } }
@@ -395,10 +402,10 @@ namespace ChordEditor.Core
 				if (LocalRepo)
 					return null;
 
-				if (Settings.Default.CurrentRepo == null || Settings.Default.CurrentRepo.Trim().Length == 0)
+				if (Settings.CurrentRepo == null || Settings.CurrentRepo.Trim().Length == 0)
 					return null;
 
-				try { return new Uri(Settings.Default.CurrentRepo); }
+				try { return new Uri(Settings.CurrentRepo); }
 				catch { return null; }
 			}
 		}

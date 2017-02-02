@@ -73,6 +73,7 @@
     <Compile Include="Core\Importer.cs" />
     <Compile Include="Core\Program.cs" />
     <Compile Include="Core\RegexList.cs" />
+    <Compile Include="Core\Settings.cs" />
     <Compile Include="Core\Sheet.cs" />
     <Compile Include="Core\SheetDB.cs" />
     <Compile Include="Core\SheetHeader.cs" />
@@ -133,11 +134,6 @@
     </Compile>
     <Compile Include="Forms\SpashScreen.Designer.cs">
       <DependentUpon>SpashScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DockingManager\Docking\AutoHideStripBase.cs">
       <SubType>Component</SubType>
@@ -251,10 +247,6 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Transpose.py" />
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ChordEditor.Core;
 
 namespace ChordEditor.Forms
 {
@@ -15,6 +16,8 @@ namespace ChordEditor.Forms
 		private RegistrationBox()
 		{
 			InitializeComponent();
+			TbUsername.Text = Settings.Username;
+			TbURL.Text = Settings.CurrentRepo;
 		}
 
 
@@ -23,40 +26,39 @@ namespace ChordEditor.Forms
 		{
             using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
             {
-                cln.Authentication.Clear(); // Clear a previous authentication
-                cln.Authentication.DefaultCredentials = new System.Net.NetworkCredential(TbUsername.Text, TbPassword.Text);
+				cln.Configuration.SetOption("servers", "global", "http-auth-types", "basic;digest");
+				cln.Authentication.UserNamePasswordHandlers += DialogUserNamePasswordHandler;
+				cln.Authentication.SslServerTrustHandlers += DialogSslServerTrustHandler;
 
-                Settings.Default.UserName = TbUsername.Text;
-                Settings.Default.CurrentRepo = TbURL.Text;
+				Settings.Username = TbUsername.Text;
+				Settings.CurrentRepo = TbURL.Text;
 
+				Exception error = Core.Program.VerifyURL(cln, TbURL.Text);
+				if (error != null)
+					System.Windows.Forms.MessageBox.Show(String.Format("{0}\r\n\r\n{1}", error.Message, error.InnerException != null ? error.InnerException.Message : null), "Configuration error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); 
 
-                try
-                {
-                    if (Core.Program.VerifyURL())
-                    {
-                        Settings.Default.LocalRepo = false;
-                    }
-                    else
-                    {
-                        cln.Authentication.Clear(); // Clear a previous authentication
-                        Settings.Default.UserName = "";
-                        Settings.Default.CurrentRepo = "";
-                        Settings.Default.LocalRepo = true;
-                    }
-                }
-                catch 
-                {
-                    cln.Authentication.Clear(); // Clear a previous authentication
-                    Settings.Default.UserName = "";
-                    Settings.Default.CurrentRepo = "";
-                }
+				Settings.LocalRepo = (error != null);
+				Settings.Save();
 
-                Settings.Default.Save();
-
-            }
+				cln.Authentication.UserNamePasswordHandlers -= DialogUserNamePasswordHandler;
+				cln.Authentication.SslServerTrustHandlers -= DialogSslServerTrustHandler;
+			}
 
 			DialogResult = System.Windows.Forms.DialogResult.OK;
 			Close();
+		}
+
+		private void DialogSslServerTrustHandler(object sender, SharpSvn.Security.SvnSslServerTrustEventArgs e)
+		{
+			e.AcceptedFailures = e.Failures;
+			e.Save = e.MaySave && true;
+		}
+
+		private void DialogUserNamePasswordHandler(object sender, SharpSvn.Security.SvnUserNamePasswordEventArgs e)
+		{
+			e.UserName = TbUsername.Text;
+			e.Password = TbPassword.Text;
+			e.Save = true;
 		}
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -68,7 +70,14 @@ namespace ChordEditor.Forms
         internal static void CreateAndShowDialog()
         {
             using (RegistrationBox rb = new RegistrationBox())
-            { rb.ShowDialog(); }
+            { 
+				if (Application.OpenForms.Count > 0)
+					rb.ShowDialog(Application.OpenForms[Application.OpenForms.Count-1]);
+				else
+					rb.ShowDialog(Application.OpenForms[Application.OpenForms.Count - 1]);
+
+				rb.BringToFront();
+			}
         }
     }
 }
