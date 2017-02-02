@@ -42,6 +42,10 @@ namespace ChordEditor.Forms
                             group.Header = "Not reviewed";
                         else if (args.Parameters.GroupByColumn == ChCategory)
                             group.Header = "Uncategorised";
+						else if (args.Parameters.GroupByColumn == ChArtist)
+							group.Header = "Unknown artist";
+						else if (args.Parameters.GroupByColumn == ChTitle)
+							group.Header = "No Title";
                     }
                 }
             };
