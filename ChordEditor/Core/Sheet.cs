@@ -17,7 +17,7 @@ namespace ChordEditor.Core
         public Sheet()
         {
             mHeader = new SheetHeader();
-            mHeader.Progress = SheetHeader.SheetProgress.Incomplete;
+            mHeader.Progress = SheetHeader.SheetProgress.Added;
 
             SheetHeader.HeaderChanged += SheetHeader_HeaderChanged;
         }

@@ -20,9 +20,9 @@ namespace ChordEditor.Forms
             {
                 Core.SheetHeader sh = (Core.SheetHeader)rowObject;
 
-                if (sh.Progress == Core.SheetHeader.SheetProgress.Incomplete)
+                if (sh.Progress == Core.SheetHeader.SheetProgress.Added)
                     return "incomplete";
-                if (sh.Progress == Core.SheetHeader.SheetProgress.Complete)
+                if (sh.Progress == Core.SheetHeader.SheetProgress.Verified)
                     return "suspended";
                 if (sh.Progress == Core.SheetHeader.SheetProgress.Reviewed)
                     return "verified";

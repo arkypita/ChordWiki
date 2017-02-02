@@ -30,7 +30,6 @@ namespace ChordEditor.Forms
                 CbSemitoni.Items.Add(new TrasposeCbItem() { howMany = i });
             CbSemitoni.SelectedIndex = 11;
             CbSemitoni.EndUpdate();
-
 		}
 
         private void SheetPropertyForm_Load(object sender, EventArgs e)
@@ -38,14 +37,15 @@ namespace ChordEditor.Forms
             RefreshCategoryList();
             DockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
             SheetForm.DelayedTextChanged += SheetForm_DelayedTextChanged;
-            SheetForm.HeaderChanged += SheetForm_HeaderChanged;
+			Core.SheetHeader.HeaderChanged += SheetHeader_HeaderChanged;
         }
 
-        void SheetForm_HeaderChanged(SheetForm sf)
-        {
-            if (object.Equals(sf.Sheet, ActiveSheet))
-                RefreshFileHeader();
-        }
+		void SheetHeader_HeaderChanged(Core.SheetHeader sh)
+		{
+			if (object.Equals(ActiveSheet != null ? ActiveSheet.Header : null, sh))
+				RefreshFileHeader();
+
+		}
 
         void SheetForm_DelayedTextChanged(SheetForm sf)
         {
@@ -89,10 +89,8 @@ namespace ChordEditor.Forms
         void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
             CbSemitoni.SelectedIndex = 11;
-
             RefreshFileHeader();
             RefreshFileInfo();
-
         }
 
         private void RefreshFileHeader()
@@ -101,30 +99,47 @@ namespace ChordEditor.Forms
             {
                 TbTitle.Text = ActiveSheet.Header.Title;
                 TbArtist.Text = ActiveSheet.Header.Artist;
-                TbSheetAuthor.Text = ActiveSheet.Header.SheetAuthor;
-                TbSheetRevisor.Text = ActiveSheet.Header.SheetRevisor;
-                TbProgress.Text = ActiveSheet.Header.Progress.ToString();
 
-                PbSheetRevisor.Visible = TbSheetRevisor.Visible = ActiveSheet.Header.SheetRevisor != null;
-
-                TlpMain.Enabled = true;
+                TlpMain.Enabled = ActiveSheet.Header.Progress != Core.SheetHeader.SheetProgress.Locked || ActiveSheet.Header.LockedBy == Core.Program.Username;
 
                 if (ActiveSheet != null && ActiveSheet.Header.SheetCategory != null && CbCategory.Items.Contains(ActiveSheet.Header.SheetCategory))
                     CbCategory.SelectedItem = ActiveSheet.Header.SheetCategory;
                 else
                     CbCategory.SelectedIndex = -1;
+
+
+				PbAdd.Image = SF.Images[ActiveSheet.Header.Progress >= Core.SheetHeader.SheetProgress.Added  ? "ImgOK" : "ImgKO"];
+				PbVerify.Image = SF.Images[ActiveSheet.Header.Progress >= Core.SheetHeader.SheetProgress.Verified ? "ImgOK" : "ImgKO"];
+				PbReview.Image = SF.Images[ActiveSheet.Header.Progress >= Core.SheetHeader.SheetProgress.Reviewed ? "ImgOK" : "ImgKO"];
+				PbLock.Image = SF.Images[ActiveSheet.Header.Progress >= Core.SheetHeader.SheetProgress.Locked ? "ImgOK" : "ImgKO"];
+
+				TbSheetAuthor.Text = ActiveSheet.Header.SheetAuthor;
+				TbVerified.Text = ActiveSheet.Header.VerifiedBy;
+				TbSheetRevisor.Text = ActiveSheet.Header.SheetRevisor;
+				TbLocked.Text = ActiveSheet.Header.LockedBy;
+
+				PbAdd.Enabled = false;
+				PbVerify.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Added || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified);
+				PbReview.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed);
+				PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked && ActiveSheet.Header.LockedBy == Core.Program.Username);
             }
             else
             {
                 foreach (Control c in TlpHeader.Controls)
                     if (c is TextBox)
                         ((TextBox)c).Text = "";
-
-                PbSheetRevisor.Visible = TbSheetRevisor.Visible = false;
+				foreach (Control c in TlpProgress.Controls)
+					if (c is TextBox)
+						((TextBox)c).Text = "";
 
                 CbCategory.SelectedIndex = -1;
 
-                TlpMain.Enabled = false;
+				PbAdd.Image = SF.Images["ImgUNK"];
+				PbVerify.Image = SF.Images["ImgUNK"];
+				PbReview.Image = SF.Images["ImgUNK"];
+				PbLock.Image = SF.Images["ImgUNK"];
+
+				TlpMain.Enabled = false;
             }
         }
 
@@ -209,6 +224,61 @@ namespace ChordEditor.Forms
             if (ActiveSheetForm != null)
                 ActiveSheetForm.Normalize();
         }
-		
+
+		private void PbVerify_Click(object sender, EventArgs e)
+		{
+			if (ActiveSheet != null)
+			{
+				if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified)
+				{
+					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Added;
+					ActiveSheet.Header.VerifiedBy = "";
+				}
+				else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Added)
+				{
+					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
+					ActiveSheet.Header.VerifiedBy = Core.Program.Username;
+				}
+			}
+		}
+
+		private void PbReview_Click(object sender, EventArgs e)
+		{
+			if (ActiveSheet != null)
+			{
+				if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
+				{
+					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
+					ActiveSheet.Header.SheetRevisor = "";
+				}
+				else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified)
+				{
+					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
+					ActiveSheet.Header.SheetRevisor = Core.Program.Username;
+				}
+			}
+		}
+
+		private void PbLock_Click(object sender, EventArgs e)
+		{
+			if (ActiveSheet != null)
+			{
+				if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked)
+				{
+					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
+					ActiveSheet.Header.LockedBy = "";
+				}
+				else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
+				{
+					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Locked;
+					ActiveSheet.Header.LockedBy = Core.Program.Username;
+				}
+			}
+		}
+
+		private void PbAdd_Click(object sender, EventArgs e)
+		{
+			;
+		}
 	}
 }

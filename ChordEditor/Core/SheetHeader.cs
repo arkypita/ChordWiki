@@ -13,7 +13,7 @@ namespace ChordEditor.Core
     public class SheetHeader
     {
         public enum SheetProgress
-        { Incomplete, Complete, Reviewed, Locked }
+        { Added, Verified, Reviewed, Locked }
 
         public delegate void SheetHeaderDelegate(SheetHeader sh);
         public static event SheetHeaderDelegate HeaderChanged;
@@ -101,9 +101,21 @@ namespace ChordEditor.Core
             set { SetMeta("sheetrevisor", value); }
         }
 
+		public string LockedBy
+		{
+			get { return GetMeta("lockedby"); }
+			set { SetMeta("lockedby", value); }
+		}
+
+		public string VerifiedBy
+		{
+			get { return GetMeta("verifiedby"); }
+			set { SetMeta("verifiedby", value); }
+		}
+
         public SheetProgress Progress
         {
-            get { return GetMeta("sheetprogress") == null ? SheetProgress.Incomplete : (SheetProgress)Enum.Parse(typeof(SheetProgress), GetMeta("sheetprogress")); }
+            get { return GetMeta("sheetprogress") == null ? SheetProgress.Added : (SheetProgress)Enum.Parse(typeof(SheetProgress), GetMeta("sheetprogress")); }
             set { SetMeta("sheetprogress", value.ToString()); }
         }
 
@@ -181,6 +193,8 @@ namespace ChordEditor.Core
             WriteNoNull(sw, "sheetauthor");
             WriteNoNull(sw, "sheetrevisor");
             WriteNoNull(sw, "sheetprogress");
+			WriteNoNull(sw, "lockedby");
+			WriteNoNull(sw, "verifiedby");
         }
 
         private void WriteNoNull(System.IO.StreamWriter sw, string key)
@@ -288,5 +302,5 @@ namespace ChordEditor.Core
 			get { return mSvnStatus; }
 			set { mSvnStatus = value; }
 		}
-    }
+	}
 }
