@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Security.Cryptography;
 
 namespace ChordEditor.Forms
 {
@@ -30,6 +31,13 @@ namespace ChordEditor.Forms
                 CbSemitoni.Items.Add(new TrasposeCbItem() { howMany = i });
             CbSemitoni.SelectedIndex = 11;
             CbSemitoni.EndUpdate();
+
+            PbAdd.Image = SF.Images["ImgUNK"];
+            PbVerify.Image = SF.Images["ImgUNK"];
+            PbReview.Image = SF.Images["ImgUNK"];
+            PbLock.Image = SF.Images["ImgUNK"];
+            PbNormalized.Image = SF.Images["ImgUNK"];
+            PbNotation.Image = NF.Images[Core.ChordNotation.Unknown.ToString()];
 		}
 
         private void SheetPropertyForm_Load(object sender, EventArgs e)
@@ -37,15 +45,14 @@ namespace ChordEditor.Forms
             RefreshCategoryList();
             DockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
             SheetForm.DelayedTextChanged += SheetForm_DelayedTextChanged;
-			Core.SheetHeader.HeaderChanged += SheetHeader_HeaderChanged;
+            SheetForm.HeaderChanged += SheetForm_HeaderChanged;
         }
 
-		void SheetHeader_HeaderChanged(Core.SheetHeader sh)
-		{
-			if (object.Equals(ActiveSheet != null ? ActiveSheet.Header : null, sh))
-				RefreshFileHeader();
-
-		}
+        void SheetForm_HeaderChanged(SheetForm sf)
+        {
+            if (object.Equals(ActiveSheet, sf))
+                RefreshFileHeader();
+        }
 
         void SheetForm_DelayedTextChanged(SheetForm sf)
         {
@@ -100,8 +107,6 @@ namespace ChordEditor.Forms
                 TbTitle.Text = ActiveSheet.Header.Title;
                 TbArtist.Text = ActiveSheet.Header.Artist;
 
-                TlpMain.Enabled = ActiveSheet.Header.Progress != Core.SheetHeader.SheetProgress.Locked || ActiveSheet.Header.LockedBy == Core.Program.Username;
-
                 if (ActiveSheet != null && ActiveSheet.Header.SheetCategory != null && CbCategory.Items.Contains(ActiveSheet.Header.SheetCategory))
                     CbCategory.SelectedItem = ActiveSheet.Header.SheetCategory;
                 else
@@ -121,7 +126,11 @@ namespace ChordEditor.Forms
 				PbAdd.Enabled = false;
 				PbVerify.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Added || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified);
 				PbReview.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed);
-				PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked && ActiveSheet.Header.LockedBy == Core.Program.Username);
+                PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked) && (ActiveSheet.Header.LockedBy == null || Core.Program.Username == null || ActiveSheet.Header.LockedBy == Core.Program.Username);
+
+                TlpMain.Enabled = true;
+
+                GbSongInfo.Enabled = GbTools.Enabled = ActiveSheet.Header.Progress < Core.SheetHeader.SheetProgress.Reviewed;
             }
             else
             {
@@ -239,6 +248,7 @@ namespace ChordEditor.Forms
 					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
 					ActiveSheet.Header.VerifiedBy = Core.Program.Username;
 				}
+                RefreshFileHeader();
 			}
 		}
 
@@ -246,33 +256,91 @@ namespace ChordEditor.Forms
 		{
 			if (ActiveSheet != null)
 			{
-				if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
-				{
-					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
-					ActiveSheet.Header.SheetRevisor = "";
-				}
-				else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified)
-				{
-					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
-					ActiveSheet.Header.SheetRevisor = Core.Program.Username;
-				}
+                if (VerifyMd5Hash(InputBox.Show("Privileged option", "Password?", "Enter revisor password"), "5e32071dfea812699c2582eb6ac00eb9"))
+                {
+                    if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
+                    {
+                        ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
+                        ActiveSheet.Header.SheetRevisor = "";
+                    }
+                    else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified)
+                    {
+                        ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
+                        ActiveSheet.Header.SheetRevisor = Core.Program.Username;
+                    }
+                    RefreshFileHeader();
+                }
 			}
 		}
+
+
+        static string GetMd5Hash(string input)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                // Convert the input string to a byte array and compute the hash.
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                // Create a new Stringbuilder to collect the bytes
+                // and create a string.
+                StringBuilder sBuilder = new StringBuilder();
+
+                // Loop through each byte of the hashed data 
+                // and format each one as a hexadecimal string.
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                // Return the hexadecimal string.
+                return sBuilder.ToString();
+            }
+        }
+
+        // Verify a hash against a string.
+        static bool VerifyMd5Hash(string input, string hash)
+        {
+            if (string.IsNullOrWhiteSpace(input) || string.IsNullOrWhiteSpace(hash))
+                return false;
+
+            using (MD5 md5Hash = MD5.Create())
+            {
+                // Hash the input.
+                string hashOfInput = GetMd5Hash(input);
+
+                // Create a StringComparer an compare the hashes.
+                StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+                if (0 == comparer.Compare(hashOfInput, hash))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
 
 		private void PbLock_Click(object sender, EventArgs e)
 		{
 			if (ActiveSheet != null)
 			{
-				if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked)
-				{
-					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
-					ActiveSheet.Header.LockedBy = "";
-				}
-				else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
-				{
-					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Locked;
-					ActiveSheet.Header.LockedBy = Core.Program.Username;
-				}
+                if (VerifyMd5Hash(InputBox.Show("Privileged option", "Password?", "Enter revisor password"), "8af0c15085845360b61b67ea41a87cfb"))
+                {
+                    if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked)
+                    {
+                        ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
+                        ActiveSheet.Header.LockedBy = "";
+                    }
+                    else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
+                    {
+                        ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Locked;
+                        ActiveSheet.Header.LockedBy = Core.Program.Username;
+                    }
+                    RefreshFileHeader();
+                }
 			}
 		}
 

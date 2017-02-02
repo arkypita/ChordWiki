@@ -283,7 +283,6 @@
 			this.COT.Size = new System.Drawing.Size(448, 468);
 			this.COT.TabIndex = 1;
 			this.COT.Zoom = 100;
-			this.COT.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.COTTextChanged);
 			// 
 			// FSW
 			// 

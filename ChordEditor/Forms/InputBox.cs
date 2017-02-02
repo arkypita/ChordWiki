@@ -33,9 +33,9 @@ namespace ChordEditor.Forms
 			Close();
 		}
 
-		internal static string Show(string title, string question, string suggestion = "", bool enable = true)
+		internal static string Show(string title, string question, string suggestion = "", bool editable = true)
 		{
-			using (InputBox ib = new InputBox(title, question, suggestion, enable))
+			using (InputBox ib = new InputBox(title, question, suggestion, editable))
 			{
 				if (ib.ShowDialog() == DialogResult.OK)
 					return ib.TbInput.Text.Trim().Length > 0 ? ib.TbInput.Text.Trim() : null;

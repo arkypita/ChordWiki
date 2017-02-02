@@ -436,6 +436,7 @@ namespace ChordEditor.Core
                 SvnOperationBegin("------ IMPORT FILE ------");
 
             string cat = Forms.InputBox.Show("Common category", "Category?");
+            string aut = Forms.InputBox.Show("Common author", "Author?");
 
             System.Threading.Tasks.Task.Run(() =>
             {
@@ -462,6 +463,7 @@ namespace ChordEditor.Core
                             sheet.Header.Artist = ic.Artist;
                             sheet.Header.Title = ic.Title;
                             sheet.Header.SheetCategory = cat;
+                            sheet.Header.SheetAuthor = aut;
 
                             sheet.Content = Program.Normalize(ic.Text);
                             sheet.Save();

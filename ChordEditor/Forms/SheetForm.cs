@@ -118,6 +118,8 @@ namespace ChordEditor.Forms
 
             if (mSheet.HasMemoryChanges)
                 Text = "* " + Text;
+
+            CHP.ReadOnly = !(mSheet.Header.Progress < Core.SheetHeader.SheetProgress.Reviewed);
         }
 
         public static void CreateAndShow(Core.Sheet sheet, UserControls.DockingManager.DockPanel panel)
@@ -200,7 +202,8 @@ namespace ChordEditor.Forms
 
 		private void RefreshPreview()
 		{
-			StringBuilder text = new StringBuilder();
+            COT.BeginUpdate();
+            COT.Clear();
 
 			using (System.IO.StringReader sr = new System.IO.StringReader(CHP.Text))
 			{
@@ -211,7 +214,7 @@ namespace ChordEditor.Forms
 					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
 					if (matches.Count == 0)
 					{
-						text.Append(line + "\r\n");
+						COT.AppendText(line + "\r\n");
 					}
 					else
 					{
@@ -229,14 +232,14 @@ namespace ChordEditor.Forms
 						}
 						string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
 
-						text.Append(chords + "\r\n");
-						text.Append(song + "\r\n");
+                        COT.AppendText(chords + "\r\n", mChordCOTStyle);
+                        COT.AppendText(song + "\r\n");
 					}
 				}
 			}
 
 
-			COT.Text = text.ToString();
+            COT.EndUpdate();
 		}
 
 
@@ -276,15 +279,6 @@ namespace ChordEditor.Forms
             e.ChangedRange.SetStyle(mChordStyle, @"\[(.*?)\]");
             e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
         }
-
-
-		private void COTTextChanged(object sender, TextChangedEventArgs e)
-		{
-			//clear previous highlighting
-			e.ChangedRange.ClearStyle();
-			//highlight tags
-			e.ChangedRange.SetStyle(mChordCOTStyle, @"(?<=^| |\r\n)(?:(?:(?:DO|RE|MI|FA|SOL|LA|SI|Do|Re|Mi|Fa|Sol|La|Si)|(?:[CDEFGAB]))(?:#|♯|b|♭)?(?:\+|M|MAJ|maj|-|MIN|min|m|SUS|sus|ECC|ecc|DIM|dim)?(?:(?:\d){1,2}(?:\+)?)?)(?= |$|\r\n)");
-		}
 
         private void Analyze()
         {

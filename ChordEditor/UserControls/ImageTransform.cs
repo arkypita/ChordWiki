@@ -244,7 +244,7 @@ namespace ChordEditor.UserControls
 		{
 
 			// noramlize the color components to 1
-			float sa = Convert.ToSingle(alpha / 255);
+			float sa = Convert.ToSingle(alpha / 255f);
 
 			// create the color matrix
 			ColorMatrix cm = new ColorMatrix(new float[][] {

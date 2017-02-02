@@ -82,7 +82,10 @@ namespace ChordEditor.UserControls
 			get { return _image; }
 			set
 			{
-				_image = value;
+                if (_image != null)
+                    _image.Dispose();
+
+				_image = (value != null ? (Image)value.Clone() : null);
 				SizingMode = SizingMode;
 				Invalidate();
 			}
@@ -122,7 +125,7 @@ namespace ChordEditor.UserControls
 			base.OnPaint(e);
 
 
-			if ((Image != null) & this.Visible)
+			if ((Image != null) /*& this.Visible*/)
 			{
 				e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 				e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
