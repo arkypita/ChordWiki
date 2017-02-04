@@ -23,8 +23,11 @@ namespace ChordEditor.Forms
         private bool mForceClose = false;
 
 		TextStyle mChordCOTStyle = new TextStyle(Brushes.Black, null, FontStyle.Bold);
-        TextStyle mChordStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
-        TextStyle mMetaStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
+        TextStyle mChorusCOTStyle = new TextStyle(Brushes.Black, null, FontStyle.Italic);
+        TextStyle mVerseCOTStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
+        
+        TextStyle mChordCHPStyle = new TextStyle(Brushes.OliveDrab, null, FontStyle.Regular);
+        TextStyle mMetaCHPStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
         private SheetForm()
         {
@@ -208,33 +211,32 @@ namespace ChordEditor.Forms
 			using (System.IO.StringReader sr = new System.IO.StringReader(CHP.Text))
 			{
 				string line = null;
+                bool chorus = false;
 				while ((line = sr.ReadLine()) != null)
 				{
-					//split chord and text;
-					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
-					if (matches.Count == 0)
-					{
-						COT.AppendText(line + "\r\n");
-					}
-					else
-					{
-						int offset = 0;
-						string chords = "";
-						foreach (System.Text.RegularExpressions.Match match in matches)
-						{
-							string cval = match.Groups[1].Value;
+                    if (line == "{soc}")
+                        chorus = true;
+                    else if (line == "{eoc}")
+                        chorus = false;
+                    else
+                    {
+                        //split chord and text;
+                        System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
 
-							int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
-							offset += match.Length;
+                        if (matches.Count == 0) //non ci sono accordi in questa linea
+                        {
+                            AppendSongLine(line, chorus);
+                        }
+                        else
+                        {
+                            string chords;
+                            string song;
+                            ExtractSongChord(line, matches, out chords, out song);
 
-							chords = chords + new string(' ', Math.Max(1, position - chords.Length)); //aggiungi spazi bianchi, almeno 1
-							chords = chords + cval;
-						}
-						string song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
-
-                        COT.AppendText(chords + "\r\n", mChordCOTStyle);
-                        COT.AppendText(song + "\r\n");
-					}
+                            AppendChordLine(chords);
+                            AppendSongLine(song, chorus);
+                        }
+                    }
 				}
 			}
 
@@ -242,7 +244,44 @@ namespace ChordEditor.Forms
             COT.EndUpdate();
 		}
 
+        private static void ExtractSongChord(string line, System.Text.RegularExpressions.MatchCollection matches, out string chords, out string song)
+        {
+            int offset = 0;
+            chords = "";
+            foreach (System.Text.RegularExpressions.Match match in matches)
+            {
+                string cval = match.Groups[1].Value;
 
+                int position = match.Index - offset; //posizione dell'accordo corrente - cumulativo di tutti quelli che ho già tolto
+                offset += match.Length;
+
+                chords = chords + new string(' ', Math.Max(Math.Min(1, chords.Length), position - chords.Length)); //aggiungi spazi bianchi, almeno 1 (tranne all'inizio quando va bene anche zero)
+                chords = chords + cval;
+            }
+            song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
+        }
+
+        private void AppendChordLine(string chords)
+        {
+            COT.AppendText(chords + "\r\n", mChordCOTStyle);
+        }
+
+        private void AppendSongLine(string song, bool chorus)
+        {
+            System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.CHPTagAndVal.Matches(song);
+            song = Core.RegexList.Chords.CHPTagAndVal.Replace(song, delegate(System.Text.RegularExpressions.Match match)
+            {
+                string tag = match.Groups[1].Value;
+                string value = match.Groups[2].Value;
+
+                if (tag == "c")
+                    return "(" + value + ")";
+                else
+                    return match.Value;
+            });
+
+            COT.AppendText(song + "\r\n", chorus ? mChorusCOTStyle : mVerseCOTStyle);
+        }
 
         private void CbZoom_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -259,7 +298,10 @@ namespace ChordEditor.Forms
             if (CHP.Zoom != newval)
                 CHP.Zoom = newval;
 
+            COT.Zoom = CHP.Zoom;
+
             CbZoom.Text = String.Format("{0} %", CHP.Zoom);
+            ActiveControl = CHP;
         }
 
         private void CbZoom_Validating(object sender, CancelEventArgs e)
@@ -276,8 +318,8 @@ namespace ChordEditor.Forms
             //clear previous highlighting
             e.ChangedRange.ClearStyle();
             //highlight tags
-            e.ChangedRange.SetStyle(mChordStyle, @"\[(.*?)\]");
-            e.ChangedRange.SetStyle(mMetaStyle, @"{[^}]+}");
+            e.ChangedRange.SetStyle(mChordCHPStyle, @"\[(.*?)\]");
+            e.ChangedRange.SetStyle(mMetaCHPStyle, @"{[^}]+}");
         }
 
         private void Analyze()
@@ -402,16 +444,19 @@ namespace ChordEditor.Forms
 
         private void ActionUndo(object sender, EventArgs e)
         {
+            if (CHP.ReadOnly) return;
             CHP.Undo();
         }
 
         private void ActionRedo(object sender, EventArgs e)
         {
+            if (CHP.ReadOnly) return;
             CHP.Redo();
         }
 
         private void SelectionCut(object sender, EventArgs e)
         {
+            if (CHP.ReadOnly) return;
             CHP.Cut();
         }
 
@@ -422,6 +467,7 @@ namespace ChordEditor.Forms
 
         private void SelectionPaste(object sender, EventArgs e)
         {
+            if (CHP.ReadOnly) return;
             CHP.Paste();
         }
 
@@ -432,11 +478,13 @@ namespace ChordEditor.Forms
 
         private void CMS_Opening(object sender, CancelEventArgs e)
         {
-            MnUndo.Enabled = CHP.UndoEnabled;
-            MnRedo.Enabled = CHP.RedoEnabled;
-            MnCut.Enabled = !string.IsNullOrEmpty(CHP.SelectedText);
+            MnChorus.Enabled = !CHP.ReadOnly;
+            MnComment.Enabled = !CHP.ReadOnly;
+            MnUndo.Enabled = CHP.UndoEnabled && !CHP.ReadOnly;
+            MnRedo.Enabled = CHP.RedoEnabled && !CHP.ReadOnly;
+            MnCut.Enabled = !string.IsNullOrEmpty(CHP.SelectedText) && !CHP.ReadOnly;
             MnCopy.Enabled = !string.IsNullOrEmpty(CHP.SelectedText);
-            MnPaste.Enabled = Clipboard.ContainsText();
+            MnPaste.Enabled = Clipboard.ContainsText() && !CHP.ReadOnly;
             MnSelectAll.Enabled = !string.IsNullOrEmpty(CHP.Text);
         }
 
@@ -497,9 +545,106 @@ namespace ChordEditor.Forms
             }
         }
 
+        private void SheetForm_Load(object sender, EventArgs e)
+        {
+            ActiveControl = CHP;
+        }
+
+        private void CbZoom_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                ActiveControl = CHP; //leave focus
+        }
+
+        private void CHP_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (CHP.ReadOnly) return;
+
+            if (e.Button == System.Windows.Forms.MouseButtons.Left && e.Clicks == 1)
+            {
+                Range chord = CurrentChord(e.Location);
+
+                if (chord != null)
+                {
+                    CHP.Selection = chord;
+                    Cursor.Current = Cursors.SizeAll;
+                }
+            }
+        }
+
+        private Range CurrentChord(Point pt)
+        {
+            Place p = CHP.PointToPlace(pt);
+
+            int fromX = p.iChar;
+            int toX = p.iChar;
 
 
 
+            string line = CHP.Lines[p.iLine];
+            if (p.iChar < 1 || p.iChar >= line.Length || line[p.iChar] == '[' || line[p.iChar] == ']') //non autoselezionare se si clicca sulle parentesi, ma solo nel centro del testo
+                return null;
+
+            for (int i = p.iChar; i < line.Length; i++)
+            {
+                char c = line[i];
+                toX = i + 1;
+
+                if (c == ']')
+                    break;
+
+                if (c == ' ')//end of a word
+                    break;
+            }
+
+            for (int i = p.iChar - 1; i >= 0; i--)
+            {
+                char c = line[i];
+                fromX = i;
+
+                if (c == '[')
+                    break;
+
+                if (c == ' ')//end of a word
+                    break;
+            }
+
+            Range r = new Range(CHP, toX, p.iLine, fromX, p.iLine);
+            
+            if (r.Text.StartsWith("[") && r.Text.EndsWith("]"))
+                return r;
+            else
+                return null;
+        }
+
+        private void BtnChorus_Click(object sender, EventArgs e)
+        {
+            if (CHP.ReadOnly) return;
+
+            Range r = CHP.Selection;
+            if (r.FromLine != r.ToLine) //enlarge range to take all the full line
+            {
+                r.Expand();
+                CHP.InsertText("{soc}\r\n" + r.Text + "\r\n{eoc}");
+            }
+
+        }
+
+        private void BtnComment_Click(object sender, EventArgs e)
+        {
+            if (CHP.ReadOnly) return;
+
+            Range r = CHP.Selection;
+            bool empty = r.Length == 0;
+
+            CHP.InsertText("{c:" + r.Text + "}");
+
+            if (empty)
+            {
+                r.GoLeft();
+                CHP.Selection = r;
+            }
+        }
 
 
     }

@@ -79,7 +79,14 @@ namespace ChordEditor.Forms
         private void LV_SelectionChanged(object sender, EventArgs e)
         {
             BtnOpen.Enabled = LV.SelectedObjects.Count > 0;
-            BtnDelete.Enabled = LV.SelectedObjects.Count > 0;
+
+
+            bool enab = LV.SelectedObjects.Count > 0;
+            foreach (Core.SheetHeader sh in LV.SelectedObjects)
+                if (sh.Progress >= Core.SheetHeader.SheetProgress.Reviewed)
+                    enab = false;
+
+            BtnDelete.Enabled = enab;
         }
 
         private void BtnOpen_Click(object sender, EventArgs e)
@@ -121,7 +128,7 @@ namespace ChordEditor.Forms
         {
             foreach (Core.SheetHeader sh in LV.SelectedObjects)
             {
-				if (System.IO.File.Exists(sh.FilePath))
+				if (System.IO.File.Exists(sh.FilePath) && sh.Progress < Core.SheetHeader.SheetProgress.Reviewed)
 				{
                     if (Core.Program.LocalOrInvalid)
                         System.IO.File.Delete(sh.FilePath); //delete file from filesystem
