@@ -28,7 +28,7 @@ namespace ChordEditor.Core
 
         public SheetHeader() : this(Guid.NewGuid().ToString() + ".cpw")
         {
-			SheetAuthor = Program.Username;
+            SheetAuthor = SVN.Username;
         }
 
         public SheetHeader(string filename)
@@ -284,20 +284,20 @@ namespace ChordEditor.Core
 		{
 			get
 			{
-				if (Status == SharpSvn.SvnStatus.Zero)
+				if (SVNStatus == SharpSvn.SvnStatus.Zero)
 					return "";
-				else if (Status == SharpSvn.SvnStatus.Added)
+				else if (SVNStatus == SharpSvn.SvnStatus.Added)
 					return "Added";
-				else if (Status == SharpSvn.SvnStatus.Modified)
+				else if (SVNStatus == SharpSvn.SvnStatus.Modified)
 					return "Modified";
-				else if (Status == SharpSvn.SvnStatus.Normal)
+				else if (SVNStatus == SharpSvn.SvnStatus.Normal)
 					return "Updated";
 				else
-					return Status.ToString();
+					return SVNStatus.ToString();
 			}
 		}
 
-		public SharpSvn.SvnStatus Status
+		public SharpSvn.SvnStatus SVNStatus
 		{
 			get { return mSvnStatus; }
 			set { mSvnStatus = value; }

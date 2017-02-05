@@ -50,9 +50,9 @@ namespace ChordEditor
 			SheetDataBase = new Forms.SheetDatabase();
 			SheetDataBase.Show(DP);
 
-            Program.SvnOperationBegin += Program_SvnOperationBegin;
-            Program.SvnOperationEnd += Program_SvnOperationEnd;
-			Program.SvnOperationError += Program_SvnOperationError;
+            SVN.SvnBegin += Program_SvnOperationBegin;
+            SVN.SvnEnd += Program_SvnOperationEnd;
+            SVN.SvnOError += Program_SvnOperationError;
 
 			Program.SheetDB.ReloadDataBase();
 		}
@@ -61,7 +61,7 @@ namespace ChordEditor
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new Program.SvnOperationErrorDelegate(Program_SvnOperationError), ex);
+                Invoke(new SVN.SvnError(Program_SvnOperationError), ex);
 			}
 			else
 			{
@@ -78,7 +78,7 @@ namespace ChordEditor
 		void VerifyTotalCleanup()
 		{
 			if (TokenFile.TestAndDelete("cleanup.tok"))
-				Program.TotalCleanup();
+                SVN.TotalCleanup();
 		}
 
 		void VerifyErrorCount()
@@ -107,7 +107,7 @@ namespace ChordEditor
         {
             if (InvokeRequired)
             {
-                Invoke(new Program.SvnOperationDelegate(Program_SvnOperationBegin), message);
+                Invoke(new SVN.SvnBeginMessage(Program_SvnOperationBegin), message);
             }
             else
             {
@@ -118,11 +118,11 @@ namespace ChordEditor
             }
         }
 
-        void Program_SvnOperationEnd(string message)
+        void Program_SvnOperationEnd(string message, bool reload)
         {
             if (InvokeRequired)
             {
-                Invoke(new Program.SvnOperationDelegate(Program_SvnOperationEnd), message);
+                Invoke(new SVN.SvnEndMessage(Program_SvnOperationEnd), message, reload);
             }
             else
             {
@@ -181,21 +181,21 @@ namespace ChordEditor
 		}
 
 		private void DatabaseSyncronize(object sender, EventArgs e)
-		{Program.DatabaseSyncronize();}
+        { SVN.DatabaseSyncronize(); }
 
 		private void DatabaseDownload(object sender, EventArgs e)
-		{Program.DatabaseDownload();}
+        { SVN.DatabaseDownload(); }
 
 		private void DatabaseUpload(object sender, EventArgs e)
-		{Program.DatabaseUpload();}
+        { SVN.DatabaseUpload(); }
 
 		private void DatabaseRevert(object sender, EventArgs e)
-		{Program.DatabaseRevert();}
+        { SVN.DatabaseRevert(); }
 
 		private void DatabaseCleanup(object sender, EventArgs e)
 		{
 			mErrorCount = 0;
-			Program.DatabaseCleanup();
+            SVN.DatabaseCleanup();
 		}
 
         #endregion
@@ -219,7 +219,7 @@ namespace ChordEditor
 		private bool mClosePending = false;
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (!mForceClose && Program.DatabaseHasChanges())
+			if (!mForceClose && SVN.DatabaseHasChanges())
 			{
 				DialogResult rv = System.Windows.Forms.MessageBox.Show("There are some changes not yet sent to the server.\r\nSubmit your changes?",
 																		"Uncommitted changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -228,7 +228,7 @@ namespace ChordEditor
 				{
 					mClosePending = true;
 					Enabled = false;
-					Program.DatabaseUpload(); //è asincrono
+					SVN.DatabaseUpload(); //è asincrono
 					e.Cancel = true;
 				}
 				else if (rv == System.Windows.Forms.DialogResult.Cancel)
@@ -257,8 +257,8 @@ namespace ChordEditor
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			if (!Program.LocalOrInvalid)
-				Program.DatabaseDownload();
+            if (!SVN.LocalOrInvalid)
+                SVN.DatabaseDownload();
 		}
 
         private void MnImport_Click(object sender, EventArgs e)

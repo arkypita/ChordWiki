@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Security.Cryptography;
+using ChordEditor.Core;
 
 namespace ChordEditor.Forms
 {
@@ -126,7 +127,7 @@ namespace ChordEditor.Forms
 				PbAdd.Enabled = false;
 				PbVerify.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Added || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified);
 				PbReview.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed);
-                PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked) && (ActiveSheet.Header.LockedBy == null || Core.Program.Username == null || ActiveSheet.Header.LockedBy == Core.Program.Username);
+                PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked) && (ActiveSheet.Header.LockedBy == null || SVN.Username == null || ActiveSheet.Header.LockedBy == SVN.Username);
 
                 TlpMain.Enabled = true;
 
@@ -246,7 +247,7 @@ namespace ChordEditor.Forms
 				else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Added)
 				{
 					ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
-					ActiveSheet.Header.VerifiedBy = Core.Program.Username;
+                    ActiveSheet.Header.VerifiedBy = SVN.Username;
 				}
                 RefreshFileHeader();
 			}
@@ -266,7 +267,7 @@ namespace ChordEditor.Forms
                     else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified)
                     {
                         ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
-                        ActiveSheet.Header.SheetRevisor = Core.Program.Username;
+                        ActiveSheet.Header.SheetRevisor = SVN.Username;
                     }
                     RefreshFileHeader();
                 }
@@ -337,7 +338,7 @@ namespace ChordEditor.Forms
                     else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
                     {
                         ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Locked;
-                        ActiveSheet.Header.LockedBy = Core.Program.Username;
+                        ActiveSheet.Header.LockedBy = SVN.Username;
                     }
                     RefreshFileHeader();
                 }

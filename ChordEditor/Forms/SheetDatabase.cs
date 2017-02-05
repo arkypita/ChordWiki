@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ChordEditor.Core;
 
 namespace ChordEditor.Forms
 {
@@ -130,7 +131,7 @@ namespace ChordEditor.Forms
             {
 				if (System.IO.File.Exists(sh.FilePath) && sh.Progress < Core.SheetHeader.SheetProgress.Reviewed)
 				{
-                    if (Core.Program.LocalOrInvalid)
+                    if (SVN.LocalOrInvalid)
                         System.IO.File.Delete(sh.FilePath); //delete file from filesystem
                     else
                     {

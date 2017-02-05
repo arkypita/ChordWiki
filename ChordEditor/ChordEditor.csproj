@@ -98,6 +98,7 @@
     <Compile Include="Core\SheetDB.cs" />
     <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
+    <Compile Include="Core\SVN.cs" />
     <Compile Include="Core\TokenFile.cs" />
     <Compile Include="Core\Pagliaro.cs" />
     <Compile Include="Forms\RegistrationBox.cs">

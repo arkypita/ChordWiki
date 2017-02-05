@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using ChordEditor.Core;
 
 namespace ChordEditor.Forms
 {
@@ -16,10 +17,10 @@ namespace ChordEditor.Forms
 		{
 			InitializeComponent();
 
-            Core.Program.SvnOperationBegin += Program_SvnOperationBegin;
-            Core.Program.SvnOperationEnd += Program_SvnOperationEnd;
-            Core.Program.SvnOperationMessage += Program_SvnOperationMessage;
-            Core.Program.SvnOperationError += Program_SvnOperationError;
+            SVN.SvnBegin += Program_SvnOperationBegin;
+            SVN.SvnEnd += Program_SvnOperationEnd;
+            SVN.SvnAction += Program_SvnOperationMessage;
+            SVN.SvnOError += Program_SvnOperationError;
 		}
 
         void Program_SvnOperationError(Exception ex)
@@ -27,12 +28,12 @@ namespace ChordEditor.Forms
             Log(ex.Message, errorStyle);
         }
 
-        void Program_SvnOperationMessage(string message)
+        void Program_SvnOperationMessage(string filename, SharpSvn.SvnNotifyAction action)
         {
-            Log(message, messStyle);
+            Log(String.Format("{0}\t{1}", action, filename), messStyle);
         }
 
-        void Program_SvnOperationEnd(string message)
+        void Program_SvnOperationEnd(string message, bool reload)
         {
             Log(message + "\r\n", opStyle);
         }
