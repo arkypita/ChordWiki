@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace ChordEditor.Core
 {
-	public class TokenFile
-	{
-		public static bool TestAndDelete(string filename)
+		public class TokenFile
 		{
-			try
-			{
-				if (System.IO.File.Exists(filename))
+				public static bool TestAndDelete(string filename)
 				{
-					System.IO.File.Delete(filename);
-					return true;
+						try
+						{
+								if (System.IO.File.Exists(filename))
+								{
+										System.IO.File.Delete(filename);
+										return true;
+								}
+
+						}
+						catch { }
+
+						return false;
 				}
 
-			}
-			catch { }
-
-			return false;
+				internal static void Set(string filename)
+				{
+						using (System.IO.FileStream fs = System.IO.File.Create(filename))
+								fs.Close();
+				}
 		}
-
-		internal static void Set(string filename)
-		{
-			using (System.IO.FileStream fs = System.IO.File.Create(filename))
-				fs.Close();
-		}	
-	}
 }

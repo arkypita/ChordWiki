@@ -51,7 +51,7 @@ namespace ChordEditor.Forms
                 }
             };
 
-            Core.Program.SheetDB.ListChanged += SheetDB_ListChanged;
+            SheetDB.ListChanged += SheetDB_ListChanged;
         }
 
         //void SheetHeader_HeaderChange(Core.SheetHeader sh)
@@ -63,7 +63,7 @@ namespace ChordEditor.Forms
         {
             if (InvokeRequired)
             {
-                Invoke(new Core.SheetDB.ListChangedDelegate(SheetDB_ListChanged));
+                Invoke(new SheetDB.ListChangedDelegate(SheetDB_ListChanged));
             }
             else
             {
@@ -74,7 +74,7 @@ namespace ChordEditor.Forms
 
         private void SheetDatabase_Load(object sender, EventArgs e)
         {
-            LV.SetObjects(Core.Program.SheetDB);
+            LV.SetObjects(SheetDB.List);
         }
 
         private void LV_SelectionChanged(object sender, EventArgs e)
@@ -145,7 +145,7 @@ namespace ChordEditor.Forms
 				}
             }
 
-            Core.Program.SheetDB.ReloadDataBase();
+            SheetDB.ReloadDataBase();
         }
 
         private void LV_KeyDown(object sender, KeyEventArgs e)

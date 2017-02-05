@@ -6,33 +6,61 @@ using System.Threading.Tasks;
 
 namespace ChordEditor.Core
 {
-		public class SheetDB : IEnumerable<SheetHeader>
+		public static class SheetDB
 		{
 				public delegate void ListChangedDelegate();
-				public event ListChangedDelegate ListChanged;
+				public static event ListChangedDelegate ListChanged;
 
-				List<SheetHeader> mList = new List<SheetHeader>();
-				List<string> mCategories = new List<string>();
-				List<string> mTags = new List<string>();
+				static List<SheetHeader> mList = new List<SheetHeader>();
+				static List<SheetHeader> mDeleted = new List<SheetHeader>();
 
-				public SheetDB()
+				static List<string> mCategories = new List<string>();
+				static List<string> mTags = new List<string>();
+
+				static SheetDB()
 				{
-
+						Importer.ImportEnd += Importer_ImportEnd;
+						SVN.SvnEnd += SVN_SvnEnd;
 				}
 
-				public void ReloadDataBase()
+				static void SVN_SvnEnd(string message, bool reload)
 				{
-						if (System.IO.Directory.Exists(Program.CurrentFolder))
+						if (reload)
+								ReloadDataBase();
+				}
+
+				static void Importer_ImportEnd(string message, bool reload)
+				{
+						if (reload)
+								ReloadDataBase();
+				}
+
+
+
+				private static string CurrentFolder
+				{ get { return SVN.CurrentFolder; } }
+
+				public static void ReloadDataBase()
+				{
+						if (System.IO.Directory.Exists(CurrentFolder))
 						{
 								//load from disk
-								mList = LoadIndex();
+								mList.Clear();
+								mList.AddRange(LoadIndex());
+								
+								//store deleted to mDeleted
+								foreach (SheetHeader sh in mList)
+										if (!System.IO.File.Exists(sh.FilePath))
+												mDeleted.Add(sh);
+
 								//remove all deleted files
-								mList.RemoveAll(item => !System.IO.File.Exists(item.FilePath));
+  							mList.RemoveAll(item => !System.IO.File.Exists(item.FilePath));
+								
 								//update changed files           
 								mList.ForEach(item => item.ReloadChangedHeader());
 								//add new files
 
-								string[] filenames = System.IO.Directory.GetFiles(Program.CurrentFolder);
+								string[] filenames = System.IO.Directory.GetFiles(CurrentFolder);
 								foreach (string filename in filenames)
 								{
 										if (System.IO.Path.GetFileName(filename).ToLower().EndsWith(".cpw"))
@@ -59,7 +87,7 @@ namespace ChordEditor.Core
 
 								SaveIndex();
 
-								Dictionary<string, SharpSvn.SvnStatus> statuses = SVN.GetAllFileStatus(Program.CurrentFolder);
+								Dictionary<string, SharpSvn.SvnStatus> statuses = SVN.GetAllFileStatus(CurrentFolder);
 
 								foreach (SheetHeader sh in mList)
 								{
@@ -69,19 +97,18 @@ namespace ChordEditor.Core
 
 								if (ListChanged != null)
 										ListChanged();
-
 						}
 				}
 
-				private List<SheetHeader> LoadIndex()
+				private static List<SheetHeader> LoadIndex()
 				{
 						List<SheetHeader> rv = null;
 						try
 						{
-								if (System.IO.File.Exists(Program.CurrentFolder + "index.bin"))
+								if (System.IO.File.Exists(CurrentFolder + "index.bin"))
 								{
 										System.Runtime.Serialization.Formatters.Binary.BinaryFormatter f = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-										using (System.IO.FileStream fs = new System.IO.FileStream(Program.CurrentFolder + "index.bin", System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.None))
+										using (System.IO.FileStream fs = new System.IO.FileStream(CurrentFolder + "index.bin", System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.None))
 										{
 												rv = (List<SheetHeader>)f.Deserialize(fs);
 												fs.Close();
@@ -96,38 +123,36 @@ namespace ChordEditor.Core
 								return new List<SheetHeader>();
 				}
 
-				private void SaveIndex()
+				private static void SaveIndex()
 				{
 						System.Runtime.Serialization.Formatters.Binary.BinaryFormatter f = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-						using (System.IO.FileStream fs = new System.IO.FileStream(Program.CurrentFolder + "index.bin", System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
+						using (System.IO.FileStream fs = new System.IO.FileStream(CurrentFolder + "index.bin", System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
 						{
 								f.Serialize(fs, mList);
 								fs.Close();
 						}
 				}
 
-				public List<string> Categories
+				public static List<string> Categories
 				{ get { return mCategories; } }
 
-				public List<string> Tags
+				public static List<string> Tags
 				{ get { return mTags; } }
 
-				IEnumerator<SheetHeader> IEnumerable<SheetHeader>.GetEnumerator()
-				{
-						return mList.GetEnumerator();
-				}
+				public static List<SheetHeader> List
+				{ get { return mList; } }
 
-				System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-				{
-						return mList.GetEnumerator();
-				}
-
-				internal SheetHeader GetByFileName(string p)
+				public static SheetHeader GetByFileNameWithDeleted(string p)
 				{
 						if (p != null && p.Length > 0)
 						{
+								p = System.IO.Path.GetFileName(p).ToLower();
+
 								foreach (SheetHeader sh in mList)
-										if (sh.FileName.ToLower() == p.ToLower())
+										if (System.IO.Path.GetFileName(sh.FileName).ToLower() == p)
+												return sh;
+								foreach (SheetHeader sh in mDeleted)
+										if (System.IO.Path.GetFileName(sh.FileName).ToLower() == p)
 												return sh;
 						}
 

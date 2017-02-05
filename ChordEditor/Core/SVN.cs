@@ -12,22 +12,37 @@ namespace ChordEditor.Core
 				public delegate void SvnBeginMessage(string message);
 				public delegate void SvnEndMessage(string message, bool reload);
 				public delegate void SvnFileAction(string filename, SharpSvn.SvnNotifyAction action);
-				public delegate void SvnError(Exception ex);
+				public delegate void SvnOperationError(Exception ex);
 				public static event SvnBeginMessage SvnBegin;
 				public static event SvnEndMessage SvnEnd;
 				public static event SvnFileAction SvnAction;
-				public static event SvnError SvnOError;
+				public static event SvnOperationError SvnError;
 
 				private static SharpSvn.SvnClient cln;
 
 				static SVN()
 				{
-						System.IO.Directory.CreateDirectory(CurrentFolder); //ensure path
+						Recreate();
+				}
 
+				public static void Recreate()
+				{
+						Dispose();
 						cln = new SharpSvn.SvnClient();
-						cln.Notify += cln_Notify;
-						cln.SvnError += cln_SvnError;
-						cln.Conflict += cln_Conflict;
+						cln.Notify += OnNotify;
+						cln.SvnError += OnError;
+						cln.Conflict += OnConflict;
+				}
+
+				public static void Dispose()
+				{
+						if (cln != null)
+						{
+								cln.Notify -= OnNotify;
+								cln.SvnError -= OnError;
+								cln.Conflict -= OnConflict;
+								cln.Dispose();
+						}
 				}
 
 				public static string Username
@@ -43,10 +58,15 @@ namespace ChordEditor.Core
 				{
 						get
 						{
+								string path;
+
 								if (LocalOrInvalid)
-										return @"./localhost/database/";
+										path = @"./localhost/database/";
 								else
-										return String.Format("./{0}{1}/", CurrentRepoUri.Host, CurrentRepoUri.AbsolutePath);
+										path = String.Format("./{0}{1}/", CurrentRepoUri.Host, CurrentRepoUri.AbsolutePath);
+
+								System.IO.Directory.CreateDirectory(path); //ensure path
+								return path;
 						}
 				}
 
@@ -151,15 +171,18 @@ namespace ChordEditor.Core
 				{
 						try
 						{
-								lock (cln)
-										cln.Add(filepath); //mark for svn add
+								if (!UseLocalRepo)
+								{
+										lock (cln)
+												cln.Add(filepath); //mark for svn add
+								}
 						}
 						catch (Exception ex) { }
 				}
 
-				public static Exception VerifyURL(string repo)
+				private static Exception VerifyRepo()
 				{
-						if (repo == "")
+						if (Core.Settings.CurrentRepo == "")
 								return new Exception("Please fill repository information!");
 
 						try
@@ -206,8 +229,13 @@ namespace ChordEditor.Core
 
 				public static System.Collections.Generic.Dictionary<string, SharpSvn.SvnStatus> GetAllFileStatus(string directory)
 				{
-						lock(cln)
-								return GetStatus(directory);
+						if (!UseLocalRepo)
+						{
+								lock (cln)
+										return GetStatus(directory);
+						}
+						else
+								return new Dictionary<string, SharpSvn.SvnStatus>();
 				}
 
 				#region Property private
@@ -238,16 +266,16 @@ namespace ChordEditor.Core
 				private static System.Collections.Generic.Dictionary<string, SharpSvn.SvnStatus> GetStatus(string directory)
 				{
 						System.Collections.Generic.Dictionary<string, SharpSvn.SvnStatus> rv = new System.Collections.Generic.Dictionary<string, SharpSvn.SvnStatus>();
-						
+
 						try
 						{
 								System.Collections.ObjectModel.Collection<SharpSvn.SvnStatusEventArgs> statuses;
 								cln.GetStatus(directory, new SharpSvn.SvnStatusArgs { Depth = SharpSvn.SvnDepth.Files, RetrieveAllEntries = true }, out statuses);
 
 								foreach (SharpSvn.SvnStatusEventArgs ea in statuses)
-										rv.Add(System.IO.Path.GetFileName(ea.FullPath).ToLower() , ea.LocalContentStatus);
+										rv.Add(System.IO.Path.GetFileName(ea.FullPath).ToLower(), ea.LocalContentStatus);
 						}
-						catch (Exception ex){  }
+						catch (Exception ex) { }
 
 						return rv;
 				}
@@ -303,8 +331,8 @@ namespace ChordEditor.Core
 
 				private static void OnSvnEx(Exception ex)
 				{
-						if (SvnOError != null)
-								SvnOError(ex);
+						if (SvnError != null)
+								SvnError(ex);
 				}
 
 				private static void Commit()
@@ -315,14 +343,14 @@ namespace ChordEditor.Core
 
 				private static bool CheckWorkingCopy()
 				{
-						bool show = VerifyURL(Core.Settings.CurrentRepo) != null;
+						bool show = VerifyRepo() != null;
 						if (show) cln.Authentication.Clear(); // Clear a previous authentication
 						if (show) Forms.RegistrationBox.CreateAndShowDialog();
 
 						return !LocalOrInvalid;
 				}
 
-				private static void cln_Conflict(object sender, SharpSvn.SvnConflictEventArgs e)
+				private static void OnConflict(object sender, SharpSvn.SvnConflictEventArgs e)
 				{
 						e.Choice = SharpSvn.SvnAccept.Mine; //assume mine is better, i don't want to lose my job!
 				}
@@ -345,10 +373,10 @@ namespace ChordEditor.Core
 								SvnEnd("Skipped!", false);
 				}
 
-				private static void cln_SvnError(object sender, SharpSvn.SvnErrorEventArgs e)
+				private static void OnError(object sender, SharpSvn.SvnErrorEventArgs e)
 				{ OnSvnEx(e.Exception); }
 
-				private static void cln_Notify(object sender, SharpSvn.SvnNotifyEventArgs e)
+				private static void OnNotify(object sender, SharpSvn.SvnNotifyEventArgs e)
 				{
 						if (SvnAction != null)
 						{

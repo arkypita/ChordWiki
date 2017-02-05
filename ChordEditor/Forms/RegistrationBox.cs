@@ -30,14 +30,24 @@ namespace ChordEditor.Forms
 								cln.Authentication.UserNamePasswordHandlers += DialogUserNamePasswordHandler;
 								cln.Authentication.SslServerTrustHandlers += DialogSslServerTrustHandler;
 
-								Settings.Username = TbUsername.Text;
-								Settings.CurrentRepo = TbURL.Text;
+								Exception error = VerifyURL(cln, TbURL.Text);
 
-								Exception error = SVN.VerifyURL(TbURL.Text);
 								if (error != null)
+								{
 										System.Windows.Forms.MessageBox.Show(String.Format("{0}\r\n\r\n{1}", error.Message, error.InnerException != null ? error.InnerException.Message : null), "Configuration error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
-								Settings.LocalRepo = (error != null);
+										Settings.LocalRepo = true;
+										Settings.Username = TbUsername.Text;
+										Settings.CurrentRepo = TbURL.Text;
+								}
+								else
+								{
+										Settings.LocalRepo = false;
+										Settings.Username = TbUsername.Text;
+										Settings.CurrentRepo = TbURL.Text;
+										SVN.Recreate();
+								}
+
 								Settings.Save();
 
 								cln.Authentication.UserNamePasswordHandlers -= DialogUserNamePasswordHandler;
@@ -47,6 +57,36 @@ namespace ChordEditor.Forms
 						DialogResult = System.Windows.Forms.DialogResult.OK;
 						Close();
 				}
+
+
+				public static Exception VerifyURL(SharpSvn.SvnClient cln, string repo)
+				{
+						if (repo == "")
+								return new Exception("Please fill repository information!");
+
+						try
+						{
+								SharpSvn.SvnInfoEventArgs info;
+								Uri totest = new Uri(repo);
+
+								if (totest.IsFile)
+										throw new InvalidOperationException("Repository url needs to be an internet resource.");
+
+								lock (cln)
+										cln.GetInfo(SharpSvn.SvnTarget.FromUri(totest), out info); //deve fare eccezione, perché mi serve per avere certezza che sia un giusto db
+
+								if (info.NodeKind != SharpSvn.SvnNodeKind.Directory)
+										throw new InvalidOperationException("Url does not point to a valid repository folder.");
+
+								return null;
+						}
+						catch (Exception ex)
+						{
+								return ex;
+						}
+				}
+
+
 
 				private void DialogSslServerTrustHandler(object sender, SharpSvn.Security.SvnSslServerTrustEventArgs e)
 				{

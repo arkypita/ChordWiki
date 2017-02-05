@@ -10,74 +10,74 @@ using System;
 
 namespace ChordEditor.Core
 {
-	/// <summary>
-	/// Description of Settings.
-	/// </summary>
-	public static class Settings
-	{
-		private static System.Collections.Generic.Dictionary<string, object> dic;
-
-		static Settings()
+		/// <summary>
+		/// Description of Settings.
+		/// </summary>
+		public static class Settings
 		{
-			try 
-			{
-				if (System.IO.File.Exists("ChordEditor.Settings.bin"))
+				private static System.Collections.Generic.Dictionary<string, object> dic;
+
+				static Settings()
 				{
-					System.Runtime.Serialization.Formatters.Binary.BinaryFormatter f = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-					using (System.IO.FileStream fs = new System.IO.FileStream("ChordEditor.Settings.bin", System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.None))
-					{
-						dic = (System.Collections.Generic.Dictionary<string, object>)f.Deserialize(fs);
-						fs.Close();
-					}
+						try
+						{
+								if (System.IO.File.Exists("ChordEditor.Settings.bin"))
+								{
+										System.Runtime.Serialization.Formatters.Binary.BinaryFormatter f = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+										using (System.IO.FileStream fs = new System.IO.FileStream("ChordEditor.Settings.bin", System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.None))
+										{
+												dic = (System.Collections.Generic.Dictionary<string, object>)f.Deserialize(fs);
+												fs.Close();
+										}
+								}
+
+						}
+						catch { }
+
+						if (dic == null)
+								dic = new System.Collections.Generic.Dictionary<string, object>();
 				}
-				
-			}
-			catch {}
-			
-			if (dic == null)
-				dic = new System.Collections.Generic.Dictionary<string, object>();
-		}
 
-		
-		public static object GetObject(string key, object defval)
-		{
-			return dic.ContainsKey(key) ? dic[key] : defval;
-		}
-		
-		public static void SetObject(string key, object value)
-		{
-			if (dic.ContainsKey(key))
-				dic[key] = value;
-			else
-				dic.Add(key, value);
-		}
-		
-		public static void Save()
-		{
-			System.Runtime.Serialization.Formatters.Binary.BinaryFormatter f = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-			using (System.IO.FileStream fs = new System.IO.FileStream("ChordEditor.Settings.bin", System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
-			{
-				f.Serialize(fs, dic);
-				fs.Close();
-			}
-		}
 
-		public static string Username 
-		{
-			get {return (string)GetObject("Username", ""); }
-			set { SetObject("Username", value); }
-		}
+				public static object GetObject(string key, object defval)
+				{
+						return dic.ContainsKey(key) ? dic[key] : defval;
+				}
 
-		public static string CurrentRepo
-		{
-			get {return (string)GetObject("CurrentRepo", ""); }
-			set { SetObject("CurrentRepo", value); }
-		}
+				public static void SetObject(string key, object value)
+				{
+						if (dic.ContainsKey(key))
+								dic[key] = value;
+						else
+								dic.Add(key, value);
+				}
 
-		public static bool LocalRepo
-		{
-			get { return (bool)GetObject("UseLocalRepo", true); }
-			set { SetObject("UseLocalRepo", value); }
+				public static void Save()
+				{
+						System.Runtime.Serialization.Formatters.Binary.BinaryFormatter f = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+						using (System.IO.FileStream fs = new System.IO.FileStream("ChordEditor.Settings.bin", System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
+						{
+								f.Serialize(fs, dic);
+								fs.Close();
+						}
+				}
+
+				public static string Username
+				{
+						get { return (string)GetObject("Username", ""); }
+						set { SetObject("Username", value); }
+				}
+
+				public static string CurrentRepo
+				{
+						get { return (string)GetObject("CurrentRepo", ""); }
+						set { SetObject("CurrentRepo", value); }
+				}
+
+				public static bool LocalRepo
+				{
+						get { return (bool)GetObject("UseLocalRepo", true); }
+						set { SetObject("UseLocalRepo", value); }
+				}
 		}
-	}
 }

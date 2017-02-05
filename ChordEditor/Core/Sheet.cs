@@ -59,8 +59,6 @@ namespace ChordEditor.Core
 								return;
 
 						bool createNew = !System.IO.File.Exists(mHeader.FilePath);
-
-						System.IO.Directory.CreateDirectory(Program.CurrentFolder); //ensure path
 						using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mHeader.FilePath))
 						{
 								//write header

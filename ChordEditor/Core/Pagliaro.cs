@@ -6,39 +6,39 @@ using System.Threading.Tasks;
 
 namespace ChordEditor.Core
 {
-    public enum ChordNotation
-    { Unknown, Italian, American }
+		public enum ChordNotation
+		{ Unknown, Italian, American }
 
-    //formato accordo
-    //[DO#][-/ecc/dim]([4/7/9/11/13][+])
-    public class Chord
-    {
+		//formato accordo
+		//[DO#][-/ecc/dim]([4/7/9/11/13][+])
+		public class Chord
+		{
 
-        private static int mNoteCount = 12;
+				private static int mNoteCount = 12;
 
-        private struct chordMatch
-        {
-            public ChordNotation Notation;
-            public string Match;
-            public int Index;
+				private struct chordMatch
+				{
+						public ChordNotation Notation;
+						public string Match;
+						public int Index;
 
-            public chordMatch(ChordNotation n, string m, int i)
-            {
-                Notation = n;
-                Match = m;
-                Index = i;
-            }
-        }
+						public chordMatch(ChordNotation n, string m, int i)
+						{
+								Notation = n;
+								Match = m;
+								Index = i;
+						}
+				}
 
-        #region Data Structures
+				#region Data Structures
 
-        public static Dictionary<ChordNotation, string[]> noteDictionary = new Dictionary<ChordNotation, string[]>
+				public static Dictionary<ChordNotation, string[]> noteDictionary = new Dictionary<ChordNotation, string[]>
         {
             {ChordNotation.Italian, new string[] {"DO", "DO#", "RE", "RE#", "MI", "FA", "FA#", "SOL", "SOL#", "LA", "LA#", "SI" }},
             {ChordNotation.American, new string[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" }},
         };
 
-        private static chordMatch[] matchDictionary = new chordMatch[]
+				private static chordMatch[] matchDictionary = new chordMatch[]
         {
             //notazione italiana
 
@@ -111,152 +111,251 @@ namespace ChordEditor.Core
 
 
 
-        #endregion
+				#endregion
 
-        private ChordNotation mNotation = ChordNotation.Unknown;
-        private int mNote = -1; //note index
-        private string mVariant = ""; //all the text next to note, in normalized format
-        private string mBaseText;
+				private ChordNotation mNotation = ChordNotation.Unknown;
+				private int mNote = -1; //note index
+				private string mVariant = ""; //all the text next to note, in normalized format
+				private string mBaseText;
 
-        public Chord(string text)
-        {
-            if (text == null)
-                return;
+				public Chord(string text)
+				{
+						if (text == null)
+								return;
 
-            mBaseText = text.Trim();
-            text = mBaseText.ToUpper();
+						mBaseText = text.Trim();
+						text = mBaseText.ToUpper();
 
-            for (int i = 0; mNote < 0 && i < matchDictionary.Length; i++)
-            {
-                chordMatch cm = matchDictionary[i];
-                if (text.StartsWith(cm.Match))
-                {
-                    mNote = cm.Index;
-                    mNotation = cm.Notation;
-                    mVariant = mBaseText.Substring(cm.Match.Length);
-                }
-            }
+						for (int i = 0; mNote < 0 && i < matchDictionary.Length; i++)
+						{
+								chordMatch cm = matchDictionary[i];
+								if (text.StartsWith(cm.Match))
+								{
+										mNote = cm.Index;
+										mNotation = cm.Notation;
+										mVariant = mBaseText.Substring(cm.Match.Length);
+								}
+						}
 
-            if (IsValid)
-            {
-                //if (normalize)
-                //{
-                    if (mVariant.StartsWith("+"))                     //rimuovi notazione di maggiore iniziale
-                        mVariant = mVariant.Substring(1);
-                    else if (mVariant.ToLower().StartsWith("maj"))    //rimuovi notazione di maggiore iniziale
-                        mVariant = mVariant.Substring(3);
-                    else if (mVariant.StartsWith("M"))                //rimuovi notazione di maggiore iniziale
-                        mVariant = mVariant.Substring(1);
-                    else if (mVariant.ToLower().StartsWith("min"))                      //notazione di minore standardizzata
-                    { mVariant = mVariant.Substring(3); mVariant = "-" + mVariant; }
-                    else if (mVariant.StartsWith("m"))                                  //notazione di minore standardizzata
-                    { mVariant = mVariant.Substring(1); mVariant = "-" + mVariant; }
+						if (IsValid)
+						{
+								//if (normalize)
+								//{
+								if (mVariant.StartsWith("+"))                     //rimuovi notazione di maggiore iniziale
+										mVariant = mVariant.Substring(1);
+								else if (mVariant.ToLower().StartsWith("maj"))    //rimuovi notazione di maggiore iniziale
+										mVariant = mVariant.Substring(3);
+								else if (mVariant.StartsWith("M"))                //rimuovi notazione di maggiore iniziale
+										mVariant = mVariant.Substring(1);
+								else if (mVariant.ToLower().StartsWith("min"))                      //notazione di minore standardizzata
+								{ mVariant = mVariant.Substring(3); mVariant = "-" + mVariant; }
+								else if (mVariant.StartsWith("m"))                                  //notazione di minore standardizzata
+								{ mVariant = mVariant.Substring(1); mVariant = "-" + mVariant; }
 
-                    mVariant = mVariant.ToLower(); //può essere fatto solo a questo punto del codice, perché prima si rischia di confondere M con m
+								mVariant = mVariant.ToLower(); //può essere fatto solo a questo punto del codice, perché prima si rischia di confondere M con m
 
-                    //mVariant = mVariant.Replace("sus", "ecc");  //normalizza eccedenti
-                //}
-            }   
-        }
+								//mVariant = mVariant.Replace("sus", "ecc");  //normalizza eccedenti
+								//}
+						}
+				}
 
-        public bool IsValid
-        { get { return mNote >= 0; } }
+				public bool IsValid
+				{ get { return mNote >= 0; } }
 
-        public ChordNotation Notation
-        { get { return mNotation; } }
+				public ChordNotation Notation
+				{ get { return mNotation; } }
 
-        public string ToNotation(ChordNotation notation)
-        {
-            if (!IsValid)
-                return mBaseText;
-            else
-                return noteDictionary[notation][mNote] + mVariant;
-        }
+				public string ToNotation(ChordNotation notation)
+				{
+						if (!IsValid)
+								return mBaseText;
+						else
+								return noteDictionary[notation][mNote] + mVariant;
+				}
 
-        public string Normalized
-        {
-            get
-            {
-                if (!IsValid)
-                    return mBaseText;
-                else
-                    return noteDictionary[mNotation][mNote] + mVariant;
-            }
-        }
+				public string Normalized
+				{
+						get
+						{
+								if (!IsValid)
+										return mBaseText;
+								else
+										return noteDictionary[mNotation][mNote] + mVariant;
+						}
+				}
 
-        internal string Traspose(int semitones)
-        {
-            if (!IsValid)
-                return mBaseText;
-            else
-            {
-                int idx = (mNote + semitones) % mNoteCount;
-                if (idx < 0)
-                    idx = mNoteCount + idx;
+				internal string Traspose(int semitones)
+				{
+						if (!IsValid)
+								return mBaseText;
+						else
+						{
+								int idx = (mNote + semitones) % mNoteCount;
+								if (idx < 0)
+										idx = mNoteCount + idx;
 
-                return noteDictionary[mNotation][idx] + mVariant;
-            }
-        }
-    }
+								return noteDictionary[mNotation][idx] + mVariant;
+						}
+				}
+		}
 
-    public class NotationInfo
-    {
-        public NotationInfo(ChordNotation notation, List<string> notes, Dictionary<string, string> replacement, string desc)
-        {
-            mNotation = notation;
-            mNotes = notes;
-            mUpperNotes = notes.ConvertAll(s => s.ToUpper());
-            mReplacement = replacement;
-            mDescription = desc;
-        }
+		public class NotationInfo
+		{
+				public NotationInfo(ChordNotation notation, List<string> notes, Dictionary<string, string> replacement, string desc)
+				{
+						mNotation = notation;
+						mNotes = notes;
+						mUpperNotes = notes.ConvertAll(s => s.ToUpper());
+						mReplacement = replacement;
+						mDescription = desc;
+				}
 
-        private readonly ChordNotation mNotation;
-        private readonly List<string> mNotes;
-        private readonly List<string> mUpperNotes;
-        private readonly Dictionary<string, string> mReplacement;
-        private readonly string mDescription;
+				private readonly ChordNotation mNotation;
+				private readonly List<string> mNotes;
+				private readonly List<string> mUpperNotes;
+				private readonly Dictionary<string, string> mReplacement;
+				private readonly string mDescription;
 
-        public string Description
-        { get { return mDescription; } }
+				public string Description
+				{ get { return mDescription; } }
 
-        public bool MatchNotation(string text)
-        { return mUpperNotes.Any(n => text.ToUpper().StartsWith(n)); }
+				public bool MatchNotation(string text)
+				{ return mUpperNotes.Any(n => text.ToUpper().StartsWith(n)); }
 
-        public int NoteIndex(string text)
-        { return mUpperNotes.FindIndex(n => text.ToUpper().StartsWith(n)); }
+				public int NoteIndex(string text)
+				{ return mUpperNotes.FindIndex(n => text.ToUpper().StartsWith(n)); }
 
-        internal string NormalizeChord(string text)
-        {
-            string matchtext = text.ToUpper();
-            foreach (string un in mUpperNotes)
-                if (matchtext.StartsWith(un))
-                    return mNotes[mUpperNotes.IndexOf(un)] + text.Substring(un.Length); //if match
+				internal string NormalizeChord(string text)
+				{
+						string matchtext = text.ToUpper();
+						foreach (string un in mUpperNotes)
+								if (matchtext.StartsWith(un))
+										return mNotes[mUpperNotes.IndexOf(un)] + text.Substring(un.Length); //if match
 
-            //todo: normalize variation (maj, min, 7...)
+						//todo: normalize variation (maj, min, 7...)
 
-            return text; //if no match
-        }
+						return text; //if no match
+				}
 
-        internal string GetNote(int index)
-        { return mNotes[index]; }
+				internal string GetNote(int index)
+				{ return mNotes[index]; }
 
-        internal string GetVariation(string text)
-        { return text.Substring(mUpperNotes[NoteIndex(text)].Length); }
+				internal string GetVariation(string text)
+				{ return text.Substring(mUpperNotes[NoteIndex(text)].Length); }
 
-    }
+		}
 
-    public class Pagliaro
-    {
-        public static Chord GetChord(string text)
-        {return new Chord(text);}
+		public static class Pagliaro
+		{
+				internal static string Normalize(string source)
+				{
+						System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+						int offset = 0;
 
-        public static string ChangeNotation(string text, ChordNotation notation)
-        {return new Chord(text).ToNotation(notation);}
+						foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
+						{
+								System.Text.RegularExpressions.Group g = m.Groups[1];
 
-        public static string Traspose(string text, int semitones)
-        { return new Chord(text).Traspose(semitones); }
+								string oldChord = g.Value;
+								string newChord = cNormalize(oldChord);
 
-        internal static string Normalize(string text)
-        { return new Chord(text).Normalized; }
-    }
+								int position = g.Index + offset;
+								text.Remove(position, oldChord.Length);
+								text.Insert(position, newChord);
+
+								offset += newChord.Length - oldChord.Length;
+						}
+						return text.ToString();
+				}
+
+				internal static string Traspose(string source, int semitones)
+				{
+						System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+						int offset = 0;
+
+						foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
+						{
+								System.Text.RegularExpressions.Group g = m.Groups[1];
+
+								string oldChord = g.Value;
+								string newChord = cTraspose(oldChord, semitones);
+
+								int position = g.Index + offset;
+								text.Remove(position, oldChord.Length);
+								text.Insert(position, newChord);
+
+								offset += newChord.Length - oldChord.Length;
+						}
+						return text.ToString();
+				}
+
+				internal static string ChangeNotation(string source, ChordNotation targetNotation)
+				{
+						System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+						int offset = 0;
+
+						foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
+						{
+								System.Text.RegularExpressions.Group g = m.Groups[1];
+
+								string oldChord = g.Value;
+								string newChord = cChangeNotation(oldChord, targetNotation);
+
+								int position = g.Index + offset;
+								text.Remove(position, oldChord.Length);
+								text.Insert(position, newChord);
+
+								offset += newChord.Length - oldChord.Length;
+						}
+						return text.ToString();
+				}
+
+				public static void WhatNotation(string text, ref ChordNotation notation, ref bool normalized)
+				{
+						int Unknown = 0;
+						int Italian = 0;
+						int American = 0;
+
+						//get matches with different notations
+						bool normal = true;
+						foreach (System.Text.RegularExpressions.Match m in Core.RegexList.Chords.ChordProNote.Matches(text))
+						{
+								Core.Chord c = cGetChord(m.Groups[1].Value);
+
+								if (c.Notation == Core.ChordNotation.Italian)
+										Italian++;
+								else if (c.Notation == Core.ChordNotation.American)
+										American++;
+								else
+										Unknown++;
+
+								if (m.Groups[1].Value != c.Normalized)
+										normal = false;
+						}
+
+						normalized = normal;
+
+						if (Italian > 0 && Italian >= American && Italian >= Unknown)
+								notation = Core.ChordNotation.Italian;
+						else if (American > 0 && American >= Italian && American >= Unknown)
+								notation = Core.ChordNotation.American;
+						else
+								notation = Core.ChordNotation.Unknown;
+				}
+
+
+				private static Chord cGetChord(string text)
+				{ return new Chord(text); }
+
+				private static string cChangeNotation(string text, ChordNotation notation)
+				{ return new Chord(text).ToNotation(notation); }
+
+				private static string cTraspose(string text, int semitones)
+				{ return new Chord(text).Traspose(semitones); }
+
+				private static string cNormalize(string text)
+				{ return new Chord(text).Normalized; }
+
+
+		}
 }

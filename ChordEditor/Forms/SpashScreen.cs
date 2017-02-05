@@ -10,16 +10,16 @@ using System.Windows.Forms;
 
 namespace ChordEditor.Forms
 {
-	public partial class SpashScreen : Form
-	{
-		public SpashScreen()
+		public partial class SpashScreen : Form
 		{
-			InitializeComponent();
-		}
+				public SpashScreen()
+				{
+						InitializeComponent();
+				}
 
-		private void CloseTimer_Tick(object sender, EventArgs e)
-		{
-			Close();
+				private void CloseTimer_Tick(object sender, EventArgs e)
+				{
+						Close();
+				}
 		}
-	}
 }
