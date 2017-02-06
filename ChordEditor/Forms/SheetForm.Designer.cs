@@ -55,6 +55,10 @@
 						this.ACM = new AutocompleteMenuNS.AutocompleteMenu();
 						this.IL = new System.Windows.Forms.ImageList(this.components);
 						this.MMS = new System.Windows.Forms.MenuStrip();
+						this.MMnFile = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMnClose = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMnSave = new System.Windows.Forms.ToolStripMenuItem();
+						this.MnPrint = new System.Windows.Forms.ToolStripMenuItem();
 						this.MMnEdit = new System.Windows.Forms.ToolStripMenuItem();
 						this.MMnChorus = new System.Windows.Forms.ToolStripMenuItem();
 						this.MMnComment = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,12 +72,18 @@
 						this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 						this.MMnSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 						this.MTS = new System.Windows.Forms.ToolStrip();
-						this.BtnSaveSheet = new System.Windows.Forms.ToolStripButton();
-						this.BtnPrintSheet = new System.Windows.Forms.ToolStripButton();
+						this.BtnSave = new System.Windows.Forms.ToolStripButton();
+						this.BtnPrint = new System.Windows.Forms.ToolStripButton();
 						this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 						this.BtnCut = new System.Windows.Forms.ToolStripButton();
 						this.BtnCopy = new System.Windows.Forms.ToolStripButton();
 						this.BtnPaste = new System.Windows.Forms.ToolStripButton();
+						this.toolStripButton1 = new System.Windows.Forms.ToolStripSeparator();
+						this.BtnUndo = new System.Windows.Forms.ToolStripButton();
+						this.BtnRedo = new System.Windows.Forms.ToolStripButton();
+						this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+						this.BtnChorus = new System.Windows.Forms.ToolStripButton();
+						this.BtnComment = new System.Windows.Forms.ToolStripButton();
 						((System.ComponentModel.ISupportInitialize)(this.CHP)).BeginInit();
 						this.CMS.SuspendLayout();
 						this.tableLayoutPanel1.SuspendLayout();
@@ -117,12 +127,14 @@
 						this.CHP.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
 						this.CHP.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("CHP.ServiceColors")));
 						this.CHP.ShowLineNumbers = false;
-						this.CHP.Size = new System.Drawing.Size(426, 432);
+						this.CHP.Size = new System.Drawing.Size(426, 471);
 						this.CHP.TabIndex = 0;
 						this.CHP.Zoom = 100;
 						this.CHP.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.CHPTextChanged);
 						this.CHP.Pasting += new System.EventHandler<FastColoredTextBoxNS.TextChangingEventArgs>(this.CHPPasting);
+						this.CHP.SelectionChanged += new System.EventHandler(this.CHP_SelectionChanged);
 						this.CHP.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.CHPTextChangedDelayed);
+						this.CHP.UndoRedoStateChanged += new System.EventHandler<System.EventArgs>(this.CHP_UndoRedoStateChanged);
 						this.CHP.ZoomChanged += new System.EventHandler(this.CHPZoomChanged);
 						this.CHP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CHP_MouseDown);
 						// 
@@ -141,14 +153,14 @@
             this.toolStripMenuItem2,
             this.CMnSelectAll});
 						this.CMS.Name = "CMS";
-						this.CMS.Size = new System.Drawing.Size(129, 198);
+						this.CMS.Size = new System.Drawing.Size(172, 198);
 						this.CMS.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Opening);
 						// 
 						// CMnChorus
 						// 
 						this.CMnChorus.Image = ((System.Drawing.Image)(resources.GetObject("CMnChorus.Image")));
 						this.CMnChorus.Name = "CMnChorus";
-						this.CMnChorus.Size = new System.Drawing.Size(128, 22);
+						this.CMnChorus.Size = new System.Drawing.Size(171, 22);
 						this.CMnChorus.Text = "Chorus";
 						this.CMnChorus.Click += new System.EventHandler(this.ActionChorus);
 						// 
@@ -156,20 +168,21 @@
 						// 
 						this.CMnComment.Image = ((System.Drawing.Image)(resources.GetObject("CMnComment.Image")));
 						this.CMnComment.Name = "CMnComment";
-						this.CMnComment.Size = new System.Drawing.Size(128, 22);
+						this.CMnComment.Size = new System.Drawing.Size(171, 22);
 						this.CMnComment.Text = "Comment";
 						this.CMnComment.Click += new System.EventHandler(this.ActionComment);
 						// 
 						// toolStripMenuItem3
 						// 
 						this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-						this.toolStripMenuItem3.Size = new System.Drawing.Size(125, 6);
+						this.toolStripMenuItem3.Size = new System.Drawing.Size(168, 6);
 						// 
 						// CMnUndo
 						// 
 						this.CMnUndo.Image = ((System.Drawing.Image)(resources.GetObject("CMnUndo.Image")));
 						this.CMnUndo.Name = "CMnUndo";
-						this.CMnUndo.Size = new System.Drawing.Size(128, 22);
+						this.CMnUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+						this.CMnUndo.Size = new System.Drawing.Size(171, 22);
 						this.CMnUndo.Text = "Undo";
 						this.CMnUndo.Click += new System.EventHandler(this.ActionUndo);
 						// 
@@ -177,20 +190,22 @@
 						// 
 						this.CMnRedo.Image = ((System.Drawing.Image)(resources.GetObject("CMnRedo.Image")));
 						this.CMnRedo.Name = "CMnRedo";
-						this.CMnRedo.Size = new System.Drawing.Size(128, 22);
+						this.CMnRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+						this.CMnRedo.Size = new System.Drawing.Size(171, 22);
 						this.CMnRedo.Text = "Redo";
 						this.CMnRedo.Click += new System.EventHandler(this.ActionRedo);
 						// 
 						// toolStripMenuItem1
 						// 
 						this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-						this.toolStripMenuItem1.Size = new System.Drawing.Size(125, 6);
+						this.toolStripMenuItem1.Size = new System.Drawing.Size(168, 6);
 						// 
 						// CMnCut
 						// 
 						this.CMnCut.Image = ((System.Drawing.Image)(resources.GetObject("CMnCut.Image")));
 						this.CMnCut.Name = "CMnCut";
-						this.CMnCut.Size = new System.Drawing.Size(128, 22);
+						this.CMnCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+						this.CMnCut.Size = new System.Drawing.Size(171, 22);
 						this.CMnCut.Text = "Cut";
 						this.CMnCut.Click += new System.EventHandler(this.SelectionCut);
 						// 
@@ -198,7 +213,8 @@
 						// 
 						this.CMnCopy.Image = ((System.Drawing.Image)(resources.GetObject("CMnCopy.Image")));
 						this.CMnCopy.Name = "CMnCopy";
-						this.CMnCopy.Size = new System.Drawing.Size(128, 22);
+						this.CMnCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+						this.CMnCopy.Size = new System.Drawing.Size(171, 22);
 						this.CMnCopy.Text = "Copy";
 						this.CMnCopy.Click += new System.EventHandler(this.SelectionCopy);
 						// 
@@ -206,20 +222,22 @@
 						// 
 						this.CMnPaste.Image = ((System.Drawing.Image)(resources.GetObject("CMnPaste.Image")));
 						this.CMnPaste.Name = "CMnPaste";
-						this.CMnPaste.Size = new System.Drawing.Size(128, 22);
+						this.CMnPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+						this.CMnPaste.Size = new System.Drawing.Size(171, 22);
 						this.CMnPaste.Text = "Paste";
 						this.CMnPaste.Click += new System.EventHandler(this.SelectionPaste);
 						// 
 						// toolStripMenuItem2
 						// 
 						this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-						this.toolStripMenuItem2.Size = new System.Drawing.Size(125, 6);
+						this.toolStripMenuItem2.Size = new System.Drawing.Size(168, 6);
 						// 
 						// CMnSelectAll
 						// 
 						this.CMnSelectAll.Image = ((System.Drawing.Image)(resources.GetObject("CMnSelectAll.Image")));
 						this.CMnSelectAll.Name = "CMnSelectAll";
-						this.CMnSelectAll.Size = new System.Drawing.Size(128, 22);
+						this.CMnSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+						this.CMnSelectAll.Size = new System.Drawing.Size(171, 22);
 						this.CMnSelectAll.Text = "Select all";
 						this.CMnSelectAll.Click += new System.EventHandler(this.ActionSelectAll);
 						// 
@@ -234,7 +252,7 @@
 						this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 						this.tableLayoutPanel1.Controls.Add(this.CbZoom, 1, 0);
 						this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 437);
+						this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 476);
 						this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 						this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 						this.tableLayoutPanel1.RowCount = 1;
@@ -271,13 +289,13 @@
 						this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel1, 0, 1);
 						this.tableLayoutPanel2.Controls.Add(this.SC, 0, 0);
 						this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 39);
+						this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 						this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 						this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 						this.tableLayoutPanel2.RowCount = 2;
 						this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 						this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-						this.tableLayoutPanel2.Size = new System.Drawing.Size(870, 464);
+						this.tableLayoutPanel2.Size = new System.Drawing.Size(870, 503);
 						this.tableLayoutPanel2.TabIndex = 2;
 						// 
 						// SC
@@ -297,7 +315,7 @@
 						// 
 						this.SC.Panel2.Controls.Add(this.COT);
 						this.SC.Panel2MinSize = 0;
-						this.SC.Size = new System.Drawing.Size(864, 434);
+						this.SC.Size = new System.Drawing.Size(864, 473);
 						this.SC.SplitterDistance = 428;
 						this.SC.TabIndex = 2;
 						// 
@@ -332,7 +350,7 @@
 						this.COT.SelectionColor = System.Drawing.Color.Transparent;
 						this.COT.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("COT.ServiceColors")));
 						this.COT.ShowLineNumbers = false;
-						this.COT.Size = new System.Drawing.Size(430, 432);
+						this.COT.Size = new System.Drawing.Size(430, 471);
 						this.COT.TabIndex = 1;
 						this.COT.Zoom = 100;
 						// 
@@ -375,6 +393,7 @@
 						// MMS
 						// 
 						this.MMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MMnFile,
             this.MMnEdit});
 						this.MMS.Location = new System.Drawing.Point(0, 0);
 						this.MMS.Name = "MMS";
@@ -382,6 +401,51 @@
 						this.MMS.TabIndex = 3;
 						this.MMS.Text = "menuStrip1";
 						this.MMS.Visible = false;
+						// 
+						// MMnFile
+						// 
+						this.MMnFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MMnClose,
+            this.MMnSave,
+            this.MnPrint});
+						this.MMnFile.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+						this.MMnFile.Name = "MMnFile";
+						this.MMnFile.Size = new System.Drawing.Size(37, 20);
+						this.MMnFile.Text = "&File";
+						// 
+						// MMnClose
+						// 
+						this.MMnClose.Image = ((System.Drawing.Image)(resources.GetObject("MMnClose.Image")));
+						this.MMnClose.MergeAction = System.Windows.Forms.MergeAction.Insert;
+						this.MMnClose.MergeIndex = 2;
+						this.MMnClose.Name = "MMnClose";
+						this.MMnClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+						this.MMnClose.Size = new System.Drawing.Size(157, 22);
+						this.MMnClose.Text = "&Close";
+						this.MMnClose.Click += new System.EventHandler(this.ActionClose);
+						// 
+						// MMnSave
+						// 
+						this.MMnSave.Enabled = false;
+						this.MMnSave.Image = ((System.Drawing.Image)(resources.GetObject("MMnSave.Image")));
+						this.MMnSave.MergeAction = System.Windows.Forms.MergeAction.Insert;
+						this.MMnSave.MergeIndex = 7;
+						this.MMnSave.Name = "MMnSave";
+						this.MMnSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+						this.MMnSave.Size = new System.Drawing.Size(157, 22);
+						this.MMnSave.Text = "&Save";
+						this.MMnSave.Click += new System.EventHandler(this.ActionSave);
+						// 
+						// MnPrint
+						// 
+						this.MnPrint.Image = ((System.Drawing.Image)(resources.GetObject("MnPrint.Image")));
+						this.MnPrint.MergeAction = System.Windows.Forms.MergeAction.Insert;
+						this.MnPrint.MergeIndex = 9;
+						this.MnPrint.Name = "MnPrint";
+						this.MnPrint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+						this.MnPrint.Size = new System.Drawing.Size(157, 22);
+						this.MnPrint.Text = "&Print";
+						this.MnPrint.Click += new System.EventHandler(this.ActionPrint);
 						// 
 						// MMnEdit
 						// 
@@ -485,12 +549,18 @@
 						// 
 						this.MTS.ImageScalingSize = new System.Drawing.Size(32, 32);
 						this.MTS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BtnSaveSheet,
-            this.BtnPrintSheet,
+            this.BtnSave,
+            this.BtnPrint,
             this.toolStripSeparator6,
             this.BtnCut,
             this.BtnCopy,
-            this.BtnPaste});
+            this.BtnPaste,
+            this.toolStripButton1,
+            this.BtnUndo,
+            this.BtnRedo,
+            this.toolStripSeparator1,
+            this.BtnChorus,
+            this.BtnComment});
 						this.MTS.Location = new System.Drawing.Point(0, 0);
 						this.MTS.Name = "MTS";
 						this.MTS.Size = new System.Drawing.Size(870, 39);
@@ -498,25 +568,26 @@
 						this.MTS.Text = "toolStrip1";
 						this.MTS.Visible = false;
 						// 
-						// BtnSaveSheet
+						// BtnSave
 						// 
-						this.BtnSaveSheet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-						this.BtnSaveSheet.Enabled = false;
-						this.BtnSaveSheet.Image = ((System.Drawing.Image)(resources.GetObject("BtnSaveSheet.Image")));
-						this.BtnSaveSheet.ImageTransparentColor = System.Drawing.Color.Magenta;
-						this.BtnSaveSheet.Name = "BtnSaveSheet";
-						this.BtnSaveSheet.Size = new System.Drawing.Size(36, 36);
-						this.BtnSaveSheet.Text = "&Save";
+						this.BtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnSave.Enabled = false;
+						this.BtnSave.Image = ((System.Drawing.Image)(resources.GetObject("BtnSave.Image")));
+						this.BtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnSave.Name = "BtnSave";
+						this.BtnSave.Size = new System.Drawing.Size(36, 36);
+						this.BtnSave.Text = "&Save";
+						this.BtnSave.Click += new System.EventHandler(this.ActionSave);
 						// 
-						// BtnPrintSheet
+						// BtnPrint
 						// 
-						this.BtnPrintSheet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-						this.BtnPrintSheet.Enabled = false;
-						this.BtnPrintSheet.Image = ((System.Drawing.Image)(resources.GetObject("BtnPrintSheet.Image")));
-						this.BtnPrintSheet.ImageTransparentColor = System.Drawing.Color.Magenta;
-						this.BtnPrintSheet.Name = "BtnPrintSheet";
-						this.BtnPrintSheet.Size = new System.Drawing.Size(36, 36);
-						this.BtnPrintSheet.Text = "&Print";
+						this.BtnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnPrint.Image = ((System.Drawing.Image)(resources.GetObject("BtnPrint.Image")));
+						this.BtnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnPrint.Name = "BtnPrint";
+						this.BtnPrint.Size = new System.Drawing.Size(36, 36);
+						this.BtnPrint.Text = "&Print";
+						this.BtnPrint.Click += new System.EventHandler(this.ActionPrint);
 						// 
 						// toolStripSeparator6
 						// 
@@ -532,6 +603,7 @@
 						this.BtnCut.Name = "BtnCut";
 						this.BtnCut.Size = new System.Drawing.Size(36, 36);
 						this.BtnCut.Text = "C&ut";
+						this.BtnCut.Click += new System.EventHandler(this.SelectionCut);
 						// 
 						// BtnCopy
 						// 
@@ -542,16 +614,69 @@
 						this.BtnCopy.Name = "BtnCopy";
 						this.BtnCopy.Size = new System.Drawing.Size(36, 36);
 						this.BtnCopy.Text = "&Copy";
+						this.BtnCopy.Click += new System.EventHandler(this.SelectionCopy);
 						// 
 						// BtnPaste
 						// 
 						this.BtnPaste.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-						this.BtnPaste.Enabled = false;
 						this.BtnPaste.Image = ((System.Drawing.Image)(resources.GetObject("BtnPaste.Image")));
 						this.BtnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
 						this.BtnPaste.Name = "BtnPaste";
 						this.BtnPaste.Size = new System.Drawing.Size(36, 36);
 						this.BtnPaste.Text = "&Paste";
+						this.BtnPaste.Click += new System.EventHandler(this.SelectionPaste);
+						// 
+						// toolStripButton1
+						// 
+						this.toolStripButton1.Name = "toolStripButton1";
+						this.toolStripButton1.Size = new System.Drawing.Size(6, 39);
+						// 
+						// BtnUndo
+						// 
+						this.BtnUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnUndo.Enabled = false;
+						this.BtnUndo.Image = ((System.Drawing.Image)(resources.GetObject("BtnUndo.Image")));
+						this.BtnUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnUndo.Name = "BtnUndo";
+						this.BtnUndo.Size = new System.Drawing.Size(36, 36);
+						this.BtnUndo.Text = "Undo";
+						this.BtnUndo.Click += new System.EventHandler(this.ActionUndo);
+						// 
+						// BtnRedo
+						// 
+						this.BtnRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnRedo.Enabled = false;
+						this.BtnRedo.Image = ((System.Drawing.Image)(resources.GetObject("BtnRedo.Image")));
+						this.BtnRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnRedo.Name = "BtnRedo";
+						this.BtnRedo.Size = new System.Drawing.Size(36, 36);
+						this.BtnRedo.Text = "Redo";
+						this.BtnRedo.Click += new System.EventHandler(this.ActionRedo);
+						// 
+						// toolStripSeparator1
+						// 
+						this.toolStripSeparator1.Name = "toolStripSeparator1";
+						this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
+						// 
+						// BtnChorus
+						// 
+						this.BtnChorus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnChorus.Image = ((System.Drawing.Image)(resources.GetObject("BtnChorus.Image")));
+						this.BtnChorus.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnChorus.Name = "BtnChorus";
+						this.BtnChorus.Size = new System.Drawing.Size(36, 36);
+						this.BtnChorus.Text = "Chorus";
+						this.BtnChorus.Click += new System.EventHandler(this.ActionChorus);
+						// 
+						// BtnComment
+						// 
+						this.BtnComment.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnComment.Image = ((System.Drawing.Image)(resources.GetObject("BtnComment.Image")));
+						this.BtnComment.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnComment.Name = "BtnComment";
+						this.BtnComment.Size = new System.Drawing.Size(36, 36);
+						this.BtnComment.Text = "Comment";
+						this.BtnComment.Click += new System.EventHandler(this.ActionComment);
 						// 
 						// SheetForm
 						// 
@@ -634,11 +759,21 @@
 				private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
 				private System.Windows.Forms.ToolStripMenuItem MMnSelectAll;
 				private System.Windows.Forms.ToolStrip MTS;
-				private System.Windows.Forms.ToolStripButton BtnSaveSheet;
-				private System.Windows.Forms.ToolStripButton BtnPrintSheet;
+				private System.Windows.Forms.ToolStripButton BtnSave;
+				private System.Windows.Forms.ToolStripButton BtnPrint;
 				private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 				private System.Windows.Forms.ToolStripButton BtnCut;
 				private System.Windows.Forms.ToolStripButton BtnCopy;
 				private System.Windows.Forms.ToolStripButton BtnPaste;
+				private System.Windows.Forms.ToolStripMenuItem MMnFile;
+				private System.Windows.Forms.ToolStripMenuItem MMnSave;
+				private System.Windows.Forms.ToolStripMenuItem MMnClose;
+				private System.Windows.Forms.ToolStripMenuItem MnPrint;
+				private System.Windows.Forms.ToolStripSeparator toolStripButton1;
+				private System.Windows.Forms.ToolStripButton BtnUndo;
+				private System.Windows.Forms.ToolStripButton BtnRedo;
+				private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+				private System.Windows.Forms.ToolStripButton BtnChorus;
+				private System.Windows.Forms.ToolStripButton BtnComment;
 	}
 }

@@ -122,6 +122,9 @@ namespace ChordEditor.Core
 
 				public static ImportedContent ImportClipbord(string text, bool ask)
 				{
+						if (string.IsNullOrWhiteSpace(text))
+								return null;
+
 						text = CleanUp(text);
 
 						if (IsChordPro(text))

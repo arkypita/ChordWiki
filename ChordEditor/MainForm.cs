@@ -200,11 +200,20 @@ namespace ChordEditor
 
 				#endregion
 
+				private ToolStrip oldmerge = null;
 				private void DP_ActiveDocumentChanged(object sender, EventArgs e)
 				{
-						MnCloseSheet.Enabled = ActiveSheet != null;
-						MnPrintSheetPreview.Enabled = ActiveSheet != null;
-						MnSaveAllSheet.Enabled = ActiveSheet != null;
+						if (oldmerge != null)
+						{
+								ToolStripManager.RevertMerge(MTS, oldmerge);
+								oldmerge = null;
+						}
+
+						if (ActiveSheet != null)
+						{
+								ToolStripManager.Merge(ActiveSheet.ToolStrip, MTS);
+								oldmerge = ActiveSheet.ToolStrip;
+						}
 				}
 
 				Forms.SheetForm ActiveSheet

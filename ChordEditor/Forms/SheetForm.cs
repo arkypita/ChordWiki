@@ -130,6 +130,7 @@ namespace ChordEditor.Forms
 								Text = "* " + Text;
 
 						CHP.ReadOnly = !(mSheet.Header.Progress < Core.SheetHeader.SheetProgress.Reviewed);
+						BtnSave.Enabled = MMnSave.Enabled = mSheet.HasMemoryChanges;
 				}
 
 				public static void CreateAndShow(Core.Sheet sheet, UserControls.DockingManager.DockPanel panel)
@@ -454,7 +455,7 @@ namespace ChordEditor.Forms
 				private void CMS_Opening(object sender, CancelEventArgs e)
 				{
 						CMnChorus.Enabled = !CHP.ReadOnly && HasChorusSelection;
-						CMnComment.Enabled = !CHP.ReadOnly;
+						CMnComment.Enabled = !CHP.ReadOnly && HasCommentSelection;
 						CMnUndo.Enabled = CHP.UndoEnabled && !CHP.ReadOnly;
 						CMnRedo.Enabled = CHP.RedoEnabled && !CHP.ReadOnly;
 						CMnCut.Enabled = !string.IsNullOrEmpty(CHP.SelectedText) && !CHP.ReadOnly;
@@ -624,7 +625,7 @@ namespace ChordEditor.Forms
 				private void MMnEdit_DropDownOpening(object sender, EventArgs e)
 				{
 						MMnChorus.Enabled = !CHP.ReadOnly && HasChorusSelection;
-						MMnComment.Enabled = !CHP.ReadOnly;
+						MMnComment.Enabled = !CHP.ReadOnly && HasCommentSelection;
 						MMnUndo.Enabled = CHP.UndoEnabled && !CHP.ReadOnly;
 						MMnRedo.Enabled = CHP.RedoEnabled && !CHP.ReadOnly;
 						MMnCut.Enabled = !string.IsNullOrEmpty(CHP.SelectedText) && !CHP.ReadOnly;
@@ -637,5 +638,34 @@ namespace ChordEditor.Forms
 
 				public bool HasChorusSelection
 				{ get { return CHP.Selection.FromLine != CHP.Selection.ToLine; } }
+
+				public bool HasCommentSelection
+				{ get { return CHP.Selection.FromLine == CHP.Selection.ToLine; } }
+
+				private void ActionClose(object sender, EventArgs e)
+				{Close();}
+
+				private void ActionSave(object sender, EventArgs e)
+				{Save(true);}
+
+				private void ActionPrint(object sender, EventArgs e)
+				{COT.Print(new PrintDialogSettings());}
+
+				public ToolStrip ToolStrip
+				{ get { return MTS; } }
+
+				private void CHP_SelectionChanged(object sender, EventArgs e)
+				{
+						BtnCopy.Enabled = BtnCut.Enabled = CHP.Selection.TextLength > 0;
+						BtnChorus.Enabled = HasChorusSelection;
+						BtnComment.Enabled = HasCommentSelection;
+				}
+
+				private void CHP_UndoRedoStateChanged(object sender, EventArgs e)
+				{
+						BtnUndo.Enabled = CHP.UndoEnabled;
+						BtnRedo.Enabled = CHP.RedoEnabled;
+				}
+
 		}
 }
