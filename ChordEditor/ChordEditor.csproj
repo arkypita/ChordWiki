@@ -28,7 +28,7 @@
     <ProductName>Bergamo3 ChordPro Editor</ProductName>
     <PublisherName>Diego Settimi</PublisherName>
     <SuiteName>Chord Wiki</SuiteName>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>0.9.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -79,7 +79,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp">
@@ -292,7 +292,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="ChordEditor_ChiaveTemporanea.pfx" />
     <None Include="Transpose.py" />
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />
     <None Include="UserControls\DockingManager\license.txt" />

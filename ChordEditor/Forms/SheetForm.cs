@@ -570,7 +570,7 @@ namespace ChordEditor.Forms
 								if (c == ']')
 										break;
 
-								if (c == ' ')//end of a word
+								if (c == ' ' || c == '[') //end of a word or other chord
 										break;
 						}
 
@@ -582,7 +582,7 @@ namespace ChordEditor.Forms
 								if (c == '[')
 										break;
 
-								if (c == ' ')//end of a word
+								if (c == ' ' || c == ']')//end of a word
 										break;
 						}
 
@@ -667,5 +667,87 @@ namespace ChordEditor.Forms
 						BtnRedo.Enabled = CHP.RedoEnabled;
 				}
 
+				private Range mChordClipboard = null;
+				private void ActionCopyChords(object sender, EventArgs e)
+				{
+						if (HasChordSelection)
+						{
+								mChordClipboard = CHP.Selection.Clone();
+								mChordClipboard.Expand();
+								mChordClipboard.Normalize();
+						}
+				}
+
+				
+				private void ActionPasteChords(object sender, EventArgs e)
+				{
+						if (CHP.ReadOnly)
+								return;
+
+						if (!CanPasteChord)
+								return;
+
+						CHP.Selection.Expand();
+
+						string text = CHP.Selection.Text;
+
+						//remove old chords (like trashchord do)
+						text = RegexList.Chords.ChordProNote.Replace(text, "");
+						text = RegexList.Cleanup.WhiteSpacesAtEndOfLine.Replace(text, "");
+
+						text = Importer.MergeChordFromClip(text, mChordClipboard.Text);
+
+						CHP.InsertText(text);
+				}
+
+				private void CHP_SelectionChangedDelayed(object sender, EventArgs e)
+				{
+						BtnTrashChord.Enabled = HasChordSelection;
+						BtnCopyChord.Enabled = HasChordSelection;
+						BtnPasteChord.Enabled = CanPasteChord;
+				}
+
+				private void ActionTrashChords(object sender, EventArgs e)
+				{
+						if (CHP.ReadOnly) return;
+
+						CHP.Selection.Expand();
+
+						string text = CHP.Selection.Text;
+						text = RegexList.Chords.ChordProNote.Replace(text, "");
+						text = RegexList.Cleanup.WhiteSpacesAtEndOfLine.Replace(text, "");
+
+						CHP.InsertText(text);
+				}
+
+				public bool HasChordSelection
+				{
+						get
+						{
+								if (CHP.ReadOnly)
+										return false;
+
+								Range source = CHP.Selection.Clone();
+								source.Expand();
+								return RegexList.Chords.ChordProNote.IsMatch(source.Text);
+						}
+				}
+
+				public bool CanPasteChord
+				{
+						get
+						{
+								if (CHP.ReadOnly)
+										return false;
+								if (mChordClipboard == null)
+										return false;
+
+
+								Range target = CHP.Selection.Clone();
+								target.Expand();
+
+								return (target.LineCount == mChordClipboard.LineCount && target.LineCount > 0);
+						}
+				}
 		}
 }

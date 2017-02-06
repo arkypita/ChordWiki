@@ -407,6 +407,11 @@ namespace FastColoredTextBoxNS
             get { return Math.Max(Start.iLine, End.iLine); }
         }
 
+				public int LineCount
+				{
+						get { return ToLine - FromLine +1; }
+				}
+
         /// <summary>
         /// Move range right
         /// </summary>

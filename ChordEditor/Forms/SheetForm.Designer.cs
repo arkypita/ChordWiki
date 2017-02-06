@@ -84,6 +84,10 @@
 						this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 						this.BtnChorus = new System.Windows.Forms.ToolStripButton();
 						this.BtnComment = new System.Windows.Forms.ToolStripButton();
+						this.BtnCopyChord = new System.Windows.Forms.ToolStripButton();
+						this.BtnPasteChord = new System.Windows.Forms.ToolStripButton();
+						this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
+						this.BtnTrashChord = new System.Windows.Forms.ToolStripButton();
 						((System.ComponentModel.ISupportInitialize)(this.CHP)).BeginInit();
 						this.CMS.SuspendLayout();
 						this.tableLayoutPanel1.SuspendLayout();
@@ -118,6 +122,7 @@
 						this.CHP.Cursor = System.Windows.Forms.Cursors.IBeam;
 						this.CHP.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.CHP.Dock = System.Windows.Forms.DockStyle.Fill;
+						this.CHP.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.CHP.Hotkeys = resources.GetString("CHP.Hotkeys");
 						this.CHP.IsReplaceMode = false;
 						this.CHP.Location = new System.Drawing.Point(0, 0);
@@ -134,6 +139,7 @@
 						this.CHP.Pasting += new System.EventHandler<FastColoredTextBoxNS.TextChangingEventArgs>(this.CHPPasting);
 						this.CHP.SelectionChanged += new System.EventHandler(this.CHP_SelectionChanged);
 						this.CHP.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.CHPTextChangedDelayed);
+						this.CHP.SelectionChangedDelayed += new System.EventHandler(this.CHP_SelectionChangedDelayed);
 						this.CHP.UndoRedoStateChanged += new System.EventHandler<System.EventArgs>(this.CHP_UndoRedoStateChanged);
 						this.CHP.ZoomChanged += new System.EventHandler(this.CHPZoomChanged);
 						this.CHP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CHP_MouseDown);
@@ -339,7 +345,6 @@
 						this.COT.Cursor = System.Windows.Forms.Cursors.Arrow;
 						this.COT.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.COT.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.COT.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.COT.Hotkeys = resources.GetString("COT.Hotkeys");
 						this.COT.IsReplaceMode = false;
 						this.COT.Location = new System.Drawing.Point(0, 0);
@@ -560,7 +565,11 @@
             this.BtnRedo,
             this.toolStripSeparator1,
             this.BtnChorus,
-            this.BtnComment});
+            this.BtnComment,
+            this.BtnCopyChord,
+            this.BtnPasteChord,
+            this.toolStripButton2,
+            this.BtnTrashChord});
 						this.MTS.Location = new System.Drawing.Point(0, 0);
 						this.MTS.Name = "MTS";
 						this.MTS.Size = new System.Drawing.Size(870, 39);
@@ -678,6 +687,41 @@
 						this.BtnComment.Text = "Comment";
 						this.BtnComment.Click += new System.EventHandler(this.ActionComment);
 						// 
+						// BtnCopyChord
+						// 
+						this.BtnCopyChord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnCopyChord.Image = ((System.Drawing.Image)(resources.GetObject("BtnCopyChord.Image")));
+						this.BtnCopyChord.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnCopyChord.Name = "BtnCopyChord";
+						this.BtnCopyChord.Size = new System.Drawing.Size(36, 36);
+						this.BtnCopyChord.Text = "Copy Chords from selected line/s";
+						this.BtnCopyChord.Click += new System.EventHandler(this.ActionCopyChords);
+						// 
+						// BtnPasteChord
+						// 
+						this.BtnPasteChord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnPasteChord.Image = ((System.Drawing.Image)(resources.GetObject("BtnPasteChord.Image")));
+						this.BtnPasteChord.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnPasteChord.Name = "BtnPasteChord";
+						this.BtnPasteChord.Size = new System.Drawing.Size(36, 36);
+						this.BtnPasteChord.Text = "Paste Chords over selected line/s";
+						this.BtnPasteChord.Click += new System.EventHandler(this.ActionPasteChords);
+						// 
+						// toolStripButton2
+						// 
+						this.toolStripButton2.Name = "toolStripButton2";
+						this.toolStripButton2.Size = new System.Drawing.Size(6, 39);
+						// 
+						// BtnTrashChord
+						// 
+						this.BtnTrashChord.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+						this.BtnTrashChord.Image = ((System.Drawing.Image)(resources.GetObject("BtnTrashChord.Image")));
+						this.BtnTrashChord.ImageTransparentColor = System.Drawing.Color.Magenta;
+						this.BtnTrashChord.Name = "BtnTrashChord";
+						this.BtnTrashChord.Size = new System.Drawing.Size(36, 36);
+						this.BtnTrashChord.Text = "Delete chords in selected line/s";
+						this.BtnTrashChord.Click += new System.EventHandler(this.ActionTrashChords);
+						// 
 						// SheetForm
 						// 
 						this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -775,5 +819,9 @@
 				private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 				private System.Windows.Forms.ToolStripButton BtnChorus;
 				private System.Windows.Forms.ToolStripButton BtnComment;
+				private System.Windows.Forms.ToolStripButton BtnCopyChord;
+				private System.Windows.Forms.ToolStripButton BtnPasteChord;
+				private System.Windows.Forms.ToolStripButton BtnTrashChord;
+				private System.Windows.Forms.ToolStripSeparator toolStripButton2;
 	}
 }

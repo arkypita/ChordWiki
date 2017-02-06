@@ -29,6 +29,7 @@ namespace ChordEditor.Core
 						public static Regex AnyWhitespacesLine = new Regex(@"\r\n[ \t]+\r\n", RegexOptions.Compiled);
 						public static Regex MultipleSpacedLine = new Regex(@"(\r\n){2,}", RegexOptions.Compiled);
 						public static Regex AnyTrash = new Regex(@"\x0E", RegexOptions.Compiled);
+						public static Regex WhiteSpacesAtEndOfLine = new Regex(@"(?<=\S)( +)(?=\r\n|$)", RegexOptions.Compiled);
 				}
 		}
 }

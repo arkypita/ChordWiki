@@ -143,6 +143,7 @@ namespace ChordEditor.Core
 						text = RegexList.Cleanup.AnyNewLine.Replace(text, "\r\n"); //normalize newline
 						text = RegexList.Cleanup.AnyWhitespacesLine.Replace(text, "\r\n\r\n"); //remove empty line filled of spaces
 						text = RegexList.Cleanup.MultipleSpacedLine.Replace(text, "\r\n\r\n"); //remove multiple white lines, keep paragraph (2 line)
+						text = RegexList.Cleanup.WhiteSpacesAtEndOfLine.Replace(text, "");
 						return text;
 				}
 
@@ -506,6 +507,45 @@ namespace ChordEditor.Core
 								OnBlock(sb.ToString()); //estraggo il gruppo
 								sb.Clear();//svuoto il buffer
 						}
+				}
+
+				internal static string MergeChordFromClip(string target, string clip)
+				{
+						string[] tlines = target.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+						string[] clines = clip.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+
+						if (clines.Length != tlines.Length)
+								return target;
+
+						StringBuilder sb = new StringBuilder();
+
+						for (int i = 0; i < tlines.Length; i++)
+						{
+								string tline = tlines[i];
+								string cline = clines[i];
+
+								MatchCollection matches = RegexList.Chords.ChordProNote.Matches(cline);
+
+								int offset = 0;
+								int prev_ipos = 0;
+								foreach (Match m in matches)
+								{
+										int ipos = m.Index - offset; //position of original string where to insert chord
+
+										sb.Append(SubstringOrSpaces(tline, prev_ipos, ipos)); //aggiungo la parte precedente della linea
+										sb.AppendFormat(m.Value); //aggiungo l'accordo
+
+										offset += m.Length;
+										prev_ipos = ipos;
+								}
+
+								sb.Append(SubstringOrSpaces(tline, prev_ipos, Math.Max(tline.Length, prev_ipos))); //aggiungi quello che rimane
+
+								if (i != tlines.Length-1)
+										sb.AppendLine();
+						}
+
+						return sb.ToString();
 				}
 		}
 }
