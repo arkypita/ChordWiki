@@ -702,9 +702,9 @@ namespace ChordEditor.Forms
 
 				private void CHP_SelectionChangedDelayed(object sender, EventArgs e)
 				{
-						BtnTrashChord.Enabled = HasChordSelection;
-						BtnCopyChord.Enabled = HasChordSelection;
-						BtnPasteChord.Enabled = CanPasteChord;
+						MMnTrashChords.Enabled = CMnTrashChords.Enabled = BtnTrashChord.Enabled = HasChordSelection;
+						MMnCopyChords.Enabled = CMnCopyChords.Enabled = BtnCopyChord.Enabled = HasChordSelection;
+						MMnPasteChords.Enabled = CMnPasteChords.Enabled = BtnPasteChord.Enabled = CanPasteChord;
 				}
 
 				private void ActionTrashChords(object sender, EventArgs e)

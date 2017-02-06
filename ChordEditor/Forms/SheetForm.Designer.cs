@@ -41,6 +41,10 @@
 						this.CMnCut = new System.Windows.Forms.ToolStripMenuItem();
 						this.CMnCopy = new System.Windows.Forms.ToolStripMenuItem();
 						this.CMnPaste = new System.Windows.Forms.ToolStripMenuItem();
+						this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+						this.CMnCopyChords = new System.Windows.Forms.ToolStripMenuItem();
+						this.CMnPasteChords = new System.Windows.Forms.ToolStripMenuItem();
+						this.CMnTrashChords = new System.Windows.Forms.ToolStripMenuItem();
 						this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 						this.CMnSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 						this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -88,6 +92,10 @@
 						this.BtnPasteChord = new System.Windows.Forms.ToolStripButton();
 						this.toolStripButton2 = new System.Windows.Forms.ToolStripSeparator();
 						this.BtnTrashChord = new System.Windows.Forms.ToolStripButton();
+						this.MMnCopyChords = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMnPasteChords = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMnTrashChords = new System.Windows.Forms.ToolStripMenuItem();
+						this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 						((System.ComponentModel.ISupportInitialize)(this.CHP)).BeginInit();
 						this.CMS.SuspendLayout();
 						this.tableLayoutPanel1.SuspendLayout();
@@ -156,10 +164,14 @@
             this.CMnCut,
             this.CMnCopy,
             this.CMnPaste,
+            this.toolStripMenuItem4,
+            this.CMnCopyChords,
+            this.CMnPasteChords,
+            this.CMnTrashChords,
             this.toolStripMenuItem2,
             this.CMnSelectAll});
 						this.CMS.Name = "CMS";
-						this.CMS.Size = new System.Drawing.Size(172, 198);
+						this.CMS.Size = new System.Drawing.Size(172, 270);
 						this.CMS.Opening += new System.ComponentModel.CancelEventHandler(this.CMS_Opening);
 						// 
 						// CMnChorus
@@ -232,6 +244,35 @@
 						this.CMnPaste.Size = new System.Drawing.Size(171, 22);
 						this.CMnPaste.Text = "Paste";
 						this.CMnPaste.Click += new System.EventHandler(this.SelectionPaste);
+						// 
+						// toolStripMenuItem4
+						// 
+						this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+						this.toolStripMenuItem4.Size = new System.Drawing.Size(168, 6);
+						// 
+						// CMnCopyChords
+						// 
+						this.CMnCopyChords.Image = ((System.Drawing.Image)(resources.GetObject("CMnCopyChords.Image")));
+						this.CMnCopyChords.Name = "CMnCopyChords";
+						this.CMnCopyChords.Size = new System.Drawing.Size(171, 22);
+						this.CMnCopyChords.Text = "Copy Chords";
+						this.CMnCopyChords.Click += new System.EventHandler(this.ActionCopyChords);
+						// 
+						// CMnPasteChords
+						// 
+						this.CMnPasteChords.Image = ((System.Drawing.Image)(resources.GetObject("CMnPasteChords.Image")));
+						this.CMnPasteChords.Name = "CMnPasteChords";
+						this.CMnPasteChords.Size = new System.Drawing.Size(171, 22);
+						this.CMnPasteChords.Text = "Paste Chords";
+						this.CMnPasteChords.Click += new System.EventHandler(this.ActionPasteChords);
+						// 
+						// CMnTrashChords
+						// 
+						this.CMnTrashChords.Image = ((System.Drawing.Image)(resources.GetObject("CMnTrashChords.Image")));
+						this.CMnTrashChords.Name = "CMnTrashChords";
+						this.CMnTrashChords.Size = new System.Drawing.Size(171, 22);
+						this.CMnTrashChords.Text = "Delete Chords";
+						this.CMnTrashChords.Click += new System.EventHandler(this.ActionTrashChords);
 						// 
 						// toolStripMenuItem2
 						// 
@@ -465,6 +506,10 @@
             this.MMnCopy,
             this.MMnPaste,
             this.toolStripMenuItem6,
+            this.MMnCopyChords,
+            this.MMnPasteChords,
+            this.MMnTrashChords,
+            this.toolStripMenuItem10,
             this.MMnSelectAll});
 						this.MMnEdit.Name = "MMnEdit";
 						this.MMnEdit.Size = new System.Drawing.Size(39, 20);
@@ -475,7 +520,7 @@
 						// 
 						this.MMnChorus.Image = ((System.Drawing.Image)(resources.GetObject("MMnChorus.Image")));
 						this.MMnChorus.Name = "MMnChorus";
-						this.MMnChorus.Size = new System.Drawing.Size(128, 22);
+						this.MMnChorus.Size = new System.Drawing.Size(152, 22);
 						this.MMnChorus.Text = "Chorus";
 						this.MMnChorus.Click += new System.EventHandler(this.ActionChorus);
 						// 
@@ -483,20 +528,20 @@
 						// 
 						this.MMnComment.Image = ((System.Drawing.Image)(resources.GetObject("MMnComment.Image")));
 						this.MMnComment.Name = "MMnComment";
-						this.MMnComment.Size = new System.Drawing.Size(128, 22);
+						this.MMnComment.Size = new System.Drawing.Size(152, 22);
 						this.MMnComment.Text = "Comment";
 						this.MMnComment.Click += new System.EventHandler(this.ActionComment);
 						// 
 						// toolStripMenuItem13
 						// 
 						this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-						this.toolStripMenuItem13.Size = new System.Drawing.Size(125, 6);
+						this.toolStripMenuItem13.Size = new System.Drawing.Size(149, 6);
 						// 
 						// MMnUndo
 						// 
 						this.MMnUndo.Image = ((System.Drawing.Image)(resources.GetObject("MMnUndo.Image")));
 						this.MMnUndo.Name = "MMnUndo";
-						this.MMnUndo.Size = new System.Drawing.Size(128, 22);
+						this.MMnUndo.Size = new System.Drawing.Size(152, 22);
 						this.MMnUndo.Text = "Undo";
 						this.MMnUndo.Click += new System.EventHandler(this.ActionUndo);
 						// 
@@ -504,20 +549,20 @@
 						// 
 						this.MMnRedo.Image = ((System.Drawing.Image)(resources.GetObject("MMnRedo.Image")));
 						this.MMnRedo.Name = "MMnRedo";
-						this.MMnRedo.Size = new System.Drawing.Size(128, 22);
+						this.MMnRedo.Size = new System.Drawing.Size(152, 22);
 						this.MMnRedo.Text = "Redo";
 						this.MMnRedo.Click += new System.EventHandler(this.ActionRedo);
 						// 
 						// toolStripMenuItem9
 						// 
 						this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-						this.toolStripMenuItem9.Size = new System.Drawing.Size(125, 6);
+						this.toolStripMenuItem9.Size = new System.Drawing.Size(149, 6);
 						// 
 						// MMnCut
 						// 
 						this.MMnCut.Image = ((System.Drawing.Image)(resources.GetObject("MMnCut.Image")));
 						this.MMnCut.Name = "MMnCut";
-						this.MMnCut.Size = new System.Drawing.Size(128, 22);
+						this.MMnCut.Size = new System.Drawing.Size(152, 22);
 						this.MMnCut.Text = "Cut";
 						this.MMnCut.Click += new System.EventHandler(this.SelectionCut);
 						// 
@@ -525,7 +570,7 @@
 						// 
 						this.MMnCopy.Image = ((System.Drawing.Image)(resources.GetObject("MMnCopy.Image")));
 						this.MMnCopy.Name = "MMnCopy";
-						this.MMnCopy.Size = new System.Drawing.Size(128, 22);
+						this.MMnCopy.Size = new System.Drawing.Size(152, 22);
 						this.MMnCopy.Text = "Copy";
 						this.MMnCopy.Click += new System.EventHandler(this.SelectionCopy);
 						// 
@@ -533,20 +578,20 @@
 						// 
 						this.MMnPaste.Image = ((System.Drawing.Image)(resources.GetObject("MMnPaste.Image")));
 						this.MMnPaste.Name = "MMnPaste";
-						this.MMnPaste.Size = new System.Drawing.Size(128, 22);
+						this.MMnPaste.Size = new System.Drawing.Size(152, 22);
 						this.MMnPaste.Text = "Paste";
 						this.MMnPaste.Click += new System.EventHandler(this.SelectionPaste);
 						// 
 						// toolStripMenuItem6
 						// 
 						this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-						this.toolStripMenuItem6.Size = new System.Drawing.Size(125, 6);
+						this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
 						// 
 						// MMnSelectAll
 						// 
 						this.MMnSelectAll.Image = ((System.Drawing.Image)(resources.GetObject("MMnSelectAll.Image")));
 						this.MMnSelectAll.Name = "MMnSelectAll";
-						this.MMnSelectAll.Size = new System.Drawing.Size(128, 22);
+						this.MMnSelectAll.Size = new System.Drawing.Size(152, 22);
 						this.MMnSelectAll.Text = "Select all";
 						this.MMnSelectAll.Click += new System.EventHandler(this.ActionSelectAll);
 						// 
@@ -722,6 +767,32 @@
 						this.BtnTrashChord.Text = "Delete chords in selected line/s";
 						this.BtnTrashChord.Click += new System.EventHandler(this.ActionTrashChords);
 						// 
+						// MMnCopyChords
+						// 
+						this.MMnCopyChords.Image = ((System.Drawing.Image)(resources.GetObject("MMnCopyChords.Image")));
+						this.MMnCopyChords.Name = "MMnCopyChords";
+						this.MMnCopyChords.Size = new System.Drawing.Size(152, 22);
+						this.MMnCopyChords.Text = "Copy Chords";
+						// 
+						// MMnPasteChords
+						// 
+						this.MMnPasteChords.Image = ((System.Drawing.Image)(resources.GetObject("MMnPasteChords.Image")));
+						this.MMnPasteChords.Name = "MMnPasteChords";
+						this.MMnPasteChords.Size = new System.Drawing.Size(152, 22);
+						this.MMnPasteChords.Text = "Paste Chords";
+						// 
+						// MMnDeleteChords
+						// 
+						this.MMnTrashChords.Image = ((System.Drawing.Image)(resources.GetObject("MMnDeleteChords.Image")));
+						this.MMnTrashChords.Name = "MMnDeleteChords";
+						this.MMnTrashChords.Size = new System.Drawing.Size(152, 22);
+						this.MMnTrashChords.Text = "Delete Chords";
+						// 
+						// toolStripMenuItem10
+						// 
+						this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+						this.toolStripMenuItem10.Size = new System.Drawing.Size(149, 6);
+						// 
 						// SheetForm
 						// 
 						this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -823,5 +894,13 @@
 				private System.Windows.Forms.ToolStripButton BtnPasteChord;
 				private System.Windows.Forms.ToolStripButton BtnTrashChord;
 				private System.Windows.Forms.ToolStripSeparator toolStripButton2;
+				private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+				private System.Windows.Forms.ToolStripMenuItem CMnCopyChords;
+				private System.Windows.Forms.ToolStripMenuItem CMnPasteChords;
+				private System.Windows.Forms.ToolStripMenuItem CMnTrashChords;
+				private System.Windows.Forms.ToolStripMenuItem MMnCopyChords;
+				private System.Windows.Forms.ToolStripMenuItem MMnPasteChords;
+				private System.Windows.Forms.ToolStripMenuItem MMnTrashChords;
+				private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
 	}
 }
