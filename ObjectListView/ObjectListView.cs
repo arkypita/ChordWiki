@@ -5713,20 +5713,23 @@ namespace BrightIdeasSoftware
             if (this.ProcessKeyEventArgs(ref m))
                 return true;
 
-            const int MILLISECONDS_BETWEEN_KEYPRESSES = 1000;
+            const int MILLISECONDS_BETWEEN_KEYPRESSES = 3000;
 
             // What character did the user type and was it part of a longer string?
             char character = (char)m.WParam.ToInt32(); //TODO: Will this work on 64 bit or MBCS?
-            if (character == (char)Keys.Back) {
-                // Backspace forces the next key to be considered the start of a new search
-                this.timeLastCharEvent = 0;
-                return true;
-            }
 
-            if (System.Environment.TickCount < (this.timeLastCharEvent + MILLISECONDS_BETWEEN_KEYPRESSES))
-                this.lastSearchString += character;
-            else
-                this.lastSearchString = character.ToString(CultureInfo.InvariantCulture);
+
+						if (character == (char)Keys.Back)
+						{
+								if (lastSearchString.Length > 0)
+										this.lastSearchString = this.lastSearchString.Remove(this.lastSearchString.Length - 1, 1);
+						}
+						else if (character == (char)Keys.Escape)
+								this.lastSearchString = "";
+						else if (System.Environment.TickCount < (this.timeLastCharEvent + MILLISECONDS_BETWEEN_KEYPRESSES))
+								this.lastSearchString += character;
+						else
+								this.lastSearchString = character.ToString(CultureInfo.InvariantCulture);
 
             // If this control is showing checkboxes, we want to ignore single space presses,
             // since they are used to toggle the selected checkboxes.
@@ -5750,6 +5753,9 @@ namespace BrightIdeasSoftware
                 }
             }
 
+						// When did this event occur?
+						//this.timeLastCharEvent = System.Environment.TickCount;
+
             // Give the world a chance to fiddle with or completely avoid the searching process
             BeforeSearchingEventArgs args = new BeforeSearchingEventArgs(this.lastSearchString, start);
             this.OnBeforeSearching(args);
@@ -5761,7 +5767,7 @@ namespace BrightIdeasSoftware
             start = args.StartSearchFrom;
 
             // Do the actual search
-            int found = this.FindMatchingRow(searchString, start, SearchDirectionHint.Down);
+						int found = this.FindMatchingRow(searchString, start, SearchDirectionHint.Down);
             if (found >= 0) {
                 // Select and focus on the found item
                 this.BeginUpdate();
@@ -5787,8 +5793,6 @@ namespace BrightIdeasSoftware
                     System.Media.SystemSounds.Beep.Play();
             }
 
-            // When did this event occur?
-            this.timeLastCharEvent = System.Environment.TickCount;
             return true;
         }
         private int timeLastCharEvent;

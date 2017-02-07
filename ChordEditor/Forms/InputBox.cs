@@ -17,7 +17,7 @@ namespace ChordEditor.Forms
 						InitializeComponent();
 				}
 
-				private InputBox(string p1, string p2, string p3, bool e)
+				private InputBox(string p1, string p2, string p3, bool e, bool a)
 				{
 						InitializeComponent();
 
@@ -25,6 +25,7 @@ namespace ChordEditor.Forms
 						LblQuestion.Text = p2;
 						TbInput.Text = p3;
 						TbInput.ReadOnly = !e;
+						TbInput.UseSystemPasswordChar = a;
 				}
 
 				private void BtnOk_Click(object sender, EventArgs e)
@@ -33,9 +34,9 @@ namespace ChordEditor.Forms
 						Close();
 				}
 
-				internal static string Show(string title, string question, string suggestion = "", bool editable = true)
+				internal static string Show(string title, string question, string suggestion = "", bool editable = true, bool password = false)
 				{
-						using (InputBox ib = new InputBox(title, question, suggestion, editable))
+						using (InputBox ib = new InputBox(title, question, suggestion, editable, password))
 						{
 								if (ib.ShowDialog() == DialogResult.OK)
 										return ib.TbInput.Text.Trim().Length > 0 ? ib.TbInput.Text.Trim() : null;

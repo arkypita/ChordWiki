@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ChordEditor.Core;
+using BrightIdeasSoftware;
 
 namespace ChordEditor.Forms
 {
@@ -153,5 +154,73 @@ namespace ChordEditor.Forms
             if (e.KeyCode == Keys.Delete)
                 BtnDelete_Click(sender, e);
         }
+
+				public void TimedFilter(ObjectListView olv, string txt)
+				{
+						TimedFilter(olv, txt, 0);
+				}
+
+				public void TimedFilter(ObjectListView olv, string txt, int matchKind)
+				{
+						TextMatchFilter filter = null;
+						if (!String.IsNullOrEmpty(txt))
+						{
+								switch (matchKind)
+								{
+										case 0:
+										default:
+												filter = TextMatchFilter.Contains(olv, txt);
+												break;
+										case 1:
+												filter = TextMatchFilter.Prefix(olv, txt);
+												break;
+										case 2:
+												filter = TextMatchFilter.Regex(olv, txt);
+												break;
+								}
+						}
+
+						// Text highlighting requires at least a default renderer
+						if (olv.DefaultRenderer == null)
+								olv.DefaultRenderer = new HighlightTextRenderer(filter);
+
+						//Stopwatch stopWatch = new Stopwatch();
+						//stopWatch.Start();
+						olv.AdditionalFilter = filter;
+						olv.Invalidate();
+						//stopWatch.Stop();
+
+						/*
+						IList objects = olv.Objects as IList;
+						if (objects == null)
+								this.ToolStripStatus1 = prefixForNextSelectionMessage =
+										String.Format("Filtered in {0}ms", stopWatch.ElapsedMilliseconds);
+						else
+								this.ToolStripStatus1 = prefixForNextSelectionMessage =
+										String.Format("Filtered {0} items down to {1} items in {2}ms",
+																	objects.Count,
+																	olv.Items.Count,
+																	stopWatch.ElapsedMilliseconds);
+						 */
+				}
+
+				private void LV_BeforeSearching(object sender, BeforeSearchingEventArgs e)
+				{
+						if (string.IsNullOrEmpty(e.StringToFind))
+						{
+								LV.AdditionalFilter = null;
+								LV.Invalidate();
+								LV.EmptyListMsg = "";
+						}
+						else
+						{
+								TimedFilter(LV, e.StringToFind);
+								LV.EmptyListMsg = "No match. Press \"Esc\" to clear search filter!";
+						}
+
+						e.Canceled = true;
+				}
+
+
     }
 }
