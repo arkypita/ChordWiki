@@ -5751,7 +5751,7 @@ namespace BrightIdeasSoftware
 
                 // If the user presses a single key, we search from after the focused item,
                 // being careful not to march past the end of the list
-                if (this.lastSearchString.Length == 1) {
+                if (this.lastSearchString != null && this.lastSearchString.Length == 1) {
                     start += 1;
                     if (start == this.GetItemCount())
                         start = 0;
