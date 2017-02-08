@@ -5725,11 +5725,16 @@ namespace BrightIdeasSoftware
 										this.lastSearchString = this.lastSearchString.Remove(this.lastSearchString.Length - 1, 1);
 						}
 						else if (character == (char)Keys.Escape)
-								this.lastSearchString = "";
-						else if (System.Environment.TickCount < (this.timeLastCharEvent + MILLISECONDS_BETWEEN_KEYPRESSES))
+						{
+							this.lastSearchString = "";
+						}
+						else if (char.IsLetterOrDigit(character) || char.IsPunctuation(character) || char.IsSeparator(character))
+						{
+							if (System.Environment.TickCount < (this.timeLastCharEvent + MILLISECONDS_BETWEEN_KEYPRESSES))
 								this.lastSearchString += character;
-						else
+							else
 								this.lastSearchString = character.ToString(CultureInfo.InvariantCulture);
+						}
 
             // If this control is showing checkboxes, we want to ignore single space presses,
             // since they are used to toggle the selected checkboxes.
@@ -5753,8 +5758,8 @@ namespace BrightIdeasSoftware
                 }
             }
 
-						// When did this event occur?
-						//this.timeLastCharEvent = System.Environment.TickCount;
+			// When did this event occur?
+			this.timeLastCharEvent = System.Environment.TickCount;
 
             // Give the world a chance to fiddle with or completely avoid the searching process
             BeforeSearchingEventArgs args = new BeforeSearchingEventArgs(this.lastSearchString, start);
