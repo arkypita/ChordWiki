@@ -763,8 +763,7 @@ namespace AutocompleteMenuNS
 
             if (!args.Handled)
             {
-                Range fragment = Fragment;
-                ApplyAutocomplete(item, fragment);
+                ApplyAutocomplete(item);
             }
 
             Close();
@@ -778,12 +777,13 @@ namespace AutocompleteMenuNS
             OnSelected(args2);
         }
 
-        private void ApplyAutocomplete(AutocompleteItem item, Range fragment)
+        private void ApplyAutocomplete(AutocompleteItem item)
         {
-            string newText = item.GetTextForReplace();
+						Range oldText = Fragment;
+						string newText = item.GetTextForReplace(oldText);
             //replace text of fragment
-            fragment.Text = newText;
-            fragment.TargetWrapper.TargetControl.Focus();
+            oldText.Text = newText;
+            oldText.TargetWrapper.TargetControl.Focus();
         }
 
         internal void OnSelecting(SelectingEventArgs args)

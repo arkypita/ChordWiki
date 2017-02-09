@@ -92,7 +92,7 @@ namespace AutocompleteMenuNS
         /// <summary>
         /// Returns text for inserting into Textbox
         /// </summary>
-        public virtual string GetTextForReplace()
+        public virtual string GetTextForReplace(Range fragment)
         {
             return Text;
         }

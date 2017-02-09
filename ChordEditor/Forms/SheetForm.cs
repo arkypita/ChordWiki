@@ -504,21 +504,49 @@ namespace ChordEditor.Forms
 				{
 						public ChordSnippet(string note, string chord) : base(string.Format("[{0}]", chord), 0, chord)
 						{
-								mNote = note.ToLower().Trim(new char[] {'#'}) ;
+								mLCNote = note.ToLower().Trim(new char[] {'#'}) ;
+								mLCText = Text.ToLower();
 						}
 
-						private string mNote ;
+						private string mLCNote ;
+						private string mLCText ;
 
 						public override AutocompleteMenuNS.CompareResult Compare(string fragmentText)
 						{
-								string digit = fragmentText.Trim("[]".ToCharArray()).ToLower(); //testo digitato, ripulito dalle parentesi
-								string match = Text.Trim("[]".ToCharArray()).ToLower(); //testo del campione, ripulito dalle parentesi
+								string LCdigit = fragmentText.Trim("[]".ToCharArray()).ToLower(); //testo digitato, ripulito dalle parentesi
+								string LCmatch = Text.Trim("[]".ToCharArray()).ToLower(); //testo del campione, ripulito dalle parentesi
 
-								if (digit.StartsWith(match)) //se inizia con il match vero e proprio
+								if (LCdigit.StartsWith(LCmatch)) //se inizia con il match vero e proprio
 										return AutocompleteMenuNS.CompareResult.VisibleAndSelected;
-								if (mNote.StartsWith(digit) || digit.StartsWith(mNote)) //se inizia con la nota
+								if (mLCNote.StartsWith(LCdigit) || LCdigit.StartsWith(mLCNote)) //se inizia con la nota
 										return AutocompleteMenuNS.CompareResult.Visible;
 								return AutocompleteMenuNS.CompareResult.Hidden;
+						}
+
+						public override string GetTextForReplace(AutocompleteMenuNS.Range oldRange)
+						{
+								
+
+								//if (oldtext.Length <= Text.Length)	//se ciò che rimpiazzo è più corto... vuol dire che non c'è altro che l'accordo o una parte di esso, e lo spazio
+								//		return Text;										//inserisco l'accordo così come è
+
+								string oldtext = oldRange.Text;
+								if (oldtext.Length > Text.Length) //devo togliere dal range la parte che sborda
+								{
+										int matchingchars = 0;
+										for (int i = 0; i < mLCText.Length; i++)
+										{
+												if (mLCText[i] == oldtext[i])
+														matchingchars++;
+												else
+														break;
+										}
+
+										oldRange.End = oldRange.Start + matchingchars;
+								}
+
+
+								return Text;
 						}
 				}
 

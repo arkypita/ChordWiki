@@ -37,7 +37,7 @@ namespace AutocompleteMenuNS
             return CompareResult.Hidden;
         }
 
-        public override string GetTextForReplace()
+        public override string GetTextForReplace(Range toreplace)
         {
             return firstPart + "." + Text;
         }
@@ -61,7 +61,7 @@ namespace AutocompleteMenuNS
             return MenuText ?? Text.Replace("\n", " ").Replace("^", "");
         }
 
-        public override string GetTextForReplace()
+				public override string GetTextForReplace(Range toreplace)
         {
             return Text;
         }
