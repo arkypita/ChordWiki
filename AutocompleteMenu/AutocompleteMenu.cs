@@ -644,7 +644,7 @@ namespace AutocompleteMenuNS
                     CompareResult res = item.Compare(text);
                     if (res != CompareResult.Hidden)
                         visibleItems.Add(item);
-                    if (res == CompareResult.VisibleAndSelected && !foundSelected)
+                    if (res == CompareResult.VisibleAndSelected /*&& !foundSelected*/)
                     {
                         foundSelected = true;
                         selectedIndex = visibleItems.Count - 1;

@@ -472,25 +472,25 @@ namespace ChordEditor.Forms
 
 						if (target != mAcNotation)
 						{
-								List<NoteSnippet> notes = new List<NoteSnippet>();
+								List<ChordSnippet> notes = new List<ChordSnippet>();
 
 								foreach (string note in Core.Chord.noteDictionary[target])
-										notes.Add(new NoteSnippet(note));
+										notes.Add(new ChordSnippet(note, note));
 
 								foreach (string note in Core.Chord.noteDictionary[target])
-										notes.Add(new NoteSnippet(note + "-"));
+										notes.Add(new ChordSnippet(note, note + "-"));
 
 								foreach (string note in Core.Chord.noteDictionary[target])
-										notes.Add(new NoteSnippet(note + "7"));
+										notes.Add(new ChordSnippet(note, note + "7"));
 
 								foreach (string note in Core.Chord.noteDictionary[target])
-										notes.Add(new NoteSnippet(note + "-7"));
+										notes.Add(new ChordSnippet(note, note + "-7"));
 
 								foreach (string note in Core.Chord.noteDictionary[target])
-										notes.Add(new NoteSnippet(note + "9"));
+										notes.Add(new ChordSnippet(note, note + "9"));
 
 								foreach (string note in Core.Chord.noteDictionary[target])
-										notes.Add(new NoteSnippet(note + "-9"));
+										notes.Add(new ChordSnippet(note, note + "-9"));
 
 								ACM.SetAutocompleteItems(notes);
 						}
@@ -500,23 +500,23 @@ namespace ChordEditor.Forms
 						mAcNotation = target;
 				}
 
-
-
-
-				internal class NoteSnippet : AutocompleteMenuNS.AutocompleteItem
+				internal class ChordSnippet : AutocompleteMenuNS.AutocompleteItem
 				{
-						public NoteSnippet(string note)
-								: base(string.Format("[{0}]", note), 0, note)
-						{ }
+						public ChordSnippet(string note, string chord) : base(string.Format("[{0}]", chord), 0, chord)
+						{
+								mNote = note.ToLower().Trim(new char[] {'#'}) ;
+						}
+
+						private string mNote ;
 
 						public override AutocompleteMenuNS.CompareResult Compare(string fragmentText)
 						{
-								string digittext = fragmentText.Trim("[]".ToCharArray()).ToLower(); //testo digitato, ripulito dalle parentesi
-								string matchtext = Text.Trim("[]".ToCharArray()).ToLower(); //testo del campione, ripulito dalle parentesi
+								string digit = fragmentText.Trim("[]".ToCharArray()).ToLower(); //testo digitato, ripulito dalle parentesi
+								string match = Text.Trim("[]".ToCharArray()).ToLower(); //testo del campione, ripulito dalle parentesi
 
-								if (digittext == matchtext)
+								if (digit.StartsWith(match)) //se inizia con il match vero e proprio
 										return AutocompleteMenuNS.CompareResult.VisibleAndSelected;
-								if (matchtext.StartsWith(digittext) || digittext.StartsWith(matchtext))
+								if (mNote.StartsWith(digit) || digit.StartsWith(mNote)) //se inizia con la nota
 										return AutocompleteMenuNS.CompareResult.Visible;
 								return AutocompleteMenuNS.CompareResult.Hidden;
 						}
@@ -643,13 +643,13 @@ namespace ChordEditor.Forms
 				{ get { return CHP.Selection.FromLine == CHP.Selection.ToLine; } }
 
 				private void ActionClose(object sender, EventArgs e)
-				{Close();}
+				{ Close(); }
 
 				private void ActionSave(object sender, EventArgs e)
-				{Save(true);}
+				{ Save(true); }
 
 				private void ActionPrint(object sender, EventArgs e)
-				{COT.Print(new PrintDialogSettings());}
+				{ COT.Print(new PrintDialogSettings()); }
 
 				public ToolStrip ToolStrip
 				{ get { return MTS; } }
@@ -678,7 +678,7 @@ namespace ChordEditor.Forms
 						}
 				}
 
-				
+
 				private void ActionPasteChords(object sender, EventArgs e)
 				{
 						if (CHP.ReadOnly)
