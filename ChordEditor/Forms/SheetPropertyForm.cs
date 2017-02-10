@@ -14,6 +14,7 @@ namespace ChordEditor.Forms
 		public partial class SheetPropertyForm : ChordEditor.UserControls.DockingManager.DockContent
 		{
 				private const string NEW_CAT = "--- new category ---";
+				private bool suspendCatEvent = false;
 
 				class TrasposeCbItem
 				{
@@ -47,6 +48,15 @@ namespace ChordEditor.Forms
 						DockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
 						SheetForm.DelayedTextChanged += SheetForm_DelayedTextChanged;
 						SheetForm.HeaderChanged += SheetForm_HeaderChanged;
+						Core.SheetDB.ListChanged += SheetDB_ListChanged;
+				}
+
+				void SheetDB_ListChanged()
+				{
+						if (InvokeRequired)
+								Invoke(new SheetDB.ListChangedDelegate(SheetDB_ListChanged));
+						else
+								RefreshCategoryList();
 				}
 
 				void SheetForm_HeaderChanged(SheetForm sf)
@@ -81,6 +91,7 @@ namespace ChordEditor.Forms
 
 				void RefreshCategoryList()
 				{
+						suspendCatEvent = true;
 						CbCategory.BeginUpdate();
 						CbCategory.Items.Clear();
 						CbCategory.Items.AddRange(SheetDB.Categories.ToArray());
@@ -92,6 +103,7 @@ namespace ChordEditor.Forms
 								CbCategory.SelectedIndex = -1;
 
 						CbCategory.EndUpdate();
+						suspendCatEvent = false;
 				}
 
 				void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
@@ -175,6 +187,9 @@ namespace ChordEditor.Forms
 
 				private void CbCategory_SelectedIndexChanged(object sender, EventArgs e)
 				{
+						if (suspendCatEvent)
+								return;
+
 						if ((string)CbCategory.SelectedItem == NEW_CAT)
 						{
 								string cat = InputBox.Show("New category", "Category?");

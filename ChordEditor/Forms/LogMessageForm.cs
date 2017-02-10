@@ -61,6 +61,7 @@ namespace ChordEditor.Forms
 								return;
 
 						SheetHeader sh = SheetDB.GetByFileNameWithDeleted(filename);
+
 						if (sh != null && sh.Title != null)
 								Log(String.Format("{0}\t{1}", action, String.Format("{0}{1}{2}", sh.Title, sh.Artist != null ? " - " : "", sh.Artist)), messStyle);
 						else

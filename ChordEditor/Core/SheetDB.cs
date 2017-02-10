@@ -142,7 +142,36 @@ namespace ChordEditor.Core
 				public static List<SheetHeader> List
 				{ get { return mList; } }
 
+
 				public static SheetHeader GetByFileNameWithDeleted(string p)
+				{
+						SheetHeader rv = GetByFileNameWithDeleted1(p);
+						if (rv == null && System.IO.File.Exists(p))
+						{
+								TryFastLoad(p);
+								rv = GetByFileNameWithDeleted1(p);
+						}
+						return rv;
+				}
+
+				private static void TryFastLoad(string p)
+				{
+						try
+						{
+								SheetHeader sh = new SheetHeader(p);
+								if (!mList.Contains(sh))
+								{
+										sh.ReloadHeader();
+										mList.Add(sh);
+								}
+						}
+						catch (Exception ex)
+						{
+ 
+						}
+				}
+
+				private static SheetHeader GetByFileNameWithDeleted1(string p)
 				{
 						if (p != null && p.Length > 0)
 						{
