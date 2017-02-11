@@ -130,7 +130,6 @@
 						this.CHP.Cursor = System.Windows.Forms.Cursors.IBeam;
 						this.CHP.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.CHP.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.CHP.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.CHP.Hotkeys = resources.GetString("CHP.Hotkeys");
 						this.CHP.IsReplaceMode = false;
 						this.CHP.Location = new System.Drawing.Point(0, 0);
@@ -386,6 +385,7 @@
 						this.COT.Cursor = System.Windows.Forms.Cursors.Arrow;
 						this.COT.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.COT.Dock = System.Windows.Forms.DockStyle.Fill;
+						this.COT.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.COT.Hotkeys = resources.GetString("COT.Hotkeys");
 						this.COT.IsReplaceMode = false;
 						this.COT.Location = new System.Drawing.Point(0, 0);

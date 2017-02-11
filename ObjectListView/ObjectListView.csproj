@@ -16,9 +16,8 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ChordWiki.pfx</AssemblyOriginatorKeyFile>
     <TargetFrameworkProfile />
     <SccProjectName>%24/ObjectListView/trunk/ObjectListView</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
@@ -168,6 +167,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ChordWiki.pfx" />
     <None Include="CustomDictionary.xml" />
     <None Include="FullClassDiagram.cd" />
     <None Include="Resources\sort-descending.png" />

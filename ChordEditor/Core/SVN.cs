@@ -352,7 +352,12 @@ namespace ChordEditor.Core
 
 				private static void OnConflict(object sender, SharpSvn.SvnConflictEventArgs e)
 				{
-						e.Choice = SharpSvn.SvnAccept.Mine; //assume mine is better, i don't want to lose my job!
+						SheetHeader sh = SheetDB.GetByFileNameWithDeleted(System.IO.Path.GetFileName(e.Path));
+
+						if (sh != null && sh.Progress >= SheetHeader.SheetProgress.Reviewed)
+								e.Choice = SharpSvn.SvnAccept.Mine; //assume mine is better, i don't want to lose my job!
+						else
+								e.Choice = SharpSvn.SvnAccept.Theirs; //assume theris is better
 				}
 
 				private static void SendOperationBegin(string message)
