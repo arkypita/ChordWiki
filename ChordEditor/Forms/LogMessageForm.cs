@@ -49,10 +49,10 @@ namespace ChordEditor.Forms
 
 				void Program_SvnOperationMessage(string filename, SharpSvn.SvnNotifyAction action)
 				{
-						if (action == SharpSvn.SvnNotifyAction.Add) //skip message
-								return;
-						if (action == SharpSvn.SvnNotifyAction.CommitSendData) //skip message
-								return;
+						//if (action == SharpSvn.SvnNotifyAction.Add) //skip message
+						//		return;
+						//if (action == SharpSvn.SvnNotifyAction.CommitSendData) //skip message
+						//		return;
 						if (action == SharpSvn.SvnNotifyAction.UpdateStarted) //skip message
 								return;
 						if (action == SharpSvn.SvnNotifyAction.UpdateCompleted) //skip message
