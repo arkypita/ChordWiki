@@ -80,12 +80,6 @@ namespace ChordEditor.Core
 						set { SetMeta("subtitle", value); }
 				}
 
-				public string Key
-				{
-						get { return GetMeta("key"); }
-						set { SetMeta("key", value); }
-				}
-
 				public string SheetCategory
 				{
 						get { return GetMeta("sheetcategory"); }
@@ -97,6 +91,9 @@ namespace ChordEditor.Core
 						get { return GetMeta("sheetauthor"); }
 						set { SetMeta("sheetauthor", value); }
 				}
+
+				public string SheetRVName
+				{ get { return Progress >= SheetProgress.Reviewed ? SheetRevisor : VerifiedBy; } }
 
 				public string SheetRevisor
 				{
@@ -114,6 +111,12 @@ namespace ChordEditor.Core
 				{
 						get { return GetMeta("verifiedby"); }
 						set { SetMeta("verifiedby", value); }
+				}
+
+				public string Index
+				{
+						get { return GetMeta("index"); }
+						set { SetMeta("index", value); }
 				}
 
 				public SheetProgress Progress
@@ -190,12 +193,12 @@ namespace ChordEditor.Core
 				{
 						WriteNoNull(sw, "title");
 						WriteNoNull(sw, "subtitle");
-						WriteNoNull(sw, "key");
-						WriteNoNull(sw, "tags");
 						WriteNoNull(sw, "sheetcategory");
+						WriteNoNull(sw, "index");
+						WriteNoNull(sw, "tags");
+						WriteNoNull(sw, "sheetprogress");
 						WriteNoNull(sw, "sheetauthor");
 						WriteNoNull(sw, "sheetrevisor");
-						WriteNoNull(sw, "sheetprogress");
 						WriteNoNull(sw, "lockedby");
 						WriteNoNull(sw, "verifiedby");
 				}

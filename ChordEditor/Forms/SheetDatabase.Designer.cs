@@ -31,6 +31,7 @@
 						this.components = new System.ComponentModel.Container();
 						System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SheetDatabase));
 						this.LV = new BrightIdeasSoftware.ObjectListView();
+						this.ChProgress = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChTitle = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChArtist = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -50,6 +51,7 @@
 						// 
 						// LV
 						// 
+						this.LV.AllColumns.Add(this.ChProgress);
 						this.LV.AllColumns.Add(this.ChTitle);
 						this.LV.AllColumns.Add(this.ChArtist);
 						this.LV.AllColumns.Add(this.ChCategory);
@@ -58,6 +60,7 @@
 						this.LV.AllColumns.Add(this.ChStatus);
 						this.LV.CellEditUseWholeCell = false;
 						this.LV.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ChProgress,
             this.ChTitle,
             this.ChArtist,
             this.ChCategory,
@@ -91,6 +94,13 @@
 						this.LV.ItemActivate += new System.EventHandler(this.LV_ItemActivate);
 						this.LV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_KeyDown);
 						// 
+						// ChProgress
+						// 
+						this.ChProgress.AspectName = "Progress";
+						this.ChProgress.AspectToStringFormat = "";
+						this.ChProgress.Text = "Prog";
+						this.ChProgress.Width = 40;
+						// 
 						// ChTitle
 						// 
 						this.ChTitle.AspectName = "Title";
@@ -113,13 +123,13 @@
 						// ChAuthor
 						// 
 						this.ChAuthor.AspectName = "SheetAuthor";
-						this.ChAuthor.Text = "Author";
+						this.ChAuthor.Text = "Added by";
 						this.ChAuthor.Width = 160;
 						// 
 						// ChRevisor
 						// 
-						this.ChRevisor.AspectName = "SheetRevisor";
-						this.ChRevisor.Text = "Revisor";
+						this.ChRevisor.AspectName = "SheetRVName";
+						this.ChRevisor.Text = "Revisor or Verifier";
 						this.ChRevisor.Width = 160;
 						// 
 						// ChStatus
@@ -244,5 +254,6 @@
         private System.Windows.Forms.Button BtnNew;
         private System.Windows.Forms.Button BtnDelete;
 		private BrightIdeasSoftware.OLVColumn ChStatus;
+		private BrightIdeasSoftware.OLVColumn ChProgress;
     }
 }

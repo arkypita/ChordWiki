@@ -37,7 +37,7 @@ namespace ChordEditor
 						// TODO: Add constructor code after the InitializeComponent() call.
 						//
 						using (Forms.SpashScreen ss = new Forms.SpashScreen())
-								ss.ShowDialog();
+								ss.ShowDialog(2000, false);
 
 						LogMessages = new Forms.LogMessageForm();
 						LogMessages.Show(DP);
@@ -299,6 +299,17 @@ namespace ChordEditor
 								sf.Save(false);
 
 						SheetDB.ReloadDataBase();
+				}
+
+				private void MnAbout_Click(object sender, EventArgs e)
+				{
+						using (Forms.SpashScreen ss = new Forms.SpashScreen())
+								ss.ShowDialog(6000, true);			
+				}
+
+				private void MnHelp_Click(object sender, EventArgs e)
+				{
+						System.Diagnostics.Process.Start("http://bergamo3.it/chord-wiki-support/");
 				}
 
 
