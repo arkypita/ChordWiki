@@ -53,8 +53,6 @@ namespace ChordEditor
 						SVN.SvnBegin += Program_SvnOperationBegin;
 						SVN.SvnEnd += Program_SvnOperationEnd;
 						SVN.SvnError += Program_SvnOperationError;
-
-						SheetDB.ReloadDataBase();
 				}
 
 				void Program_SvnOperationError(Exception ex)
@@ -111,7 +109,7 @@ namespace ChordEditor
 						}
 						else
 						{
-								errorRecorded = true;
+								errorRecorded = false;
 								completedWithoutError = true;
 								Cursor = Cursors.WaitCursor;
 								MnSyncronize.Enabled = BtnSyncronize.Enabled = false;
@@ -266,6 +264,8 @@ namespace ChordEditor
 				{
 						if (!SVN.LocalOrInvalid)
 								SVN.DatabaseDownload();
+						else
+								SheetDB.ReloadDataBase();
 				}
 
 				private void MnImport_Click(object sender, EventArgs e)
