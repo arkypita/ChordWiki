@@ -72,7 +72,8 @@
     <ManifestCertificateThumbprint>C8D41197A29B17028FEAC3C0AD6D0257724A3DD0</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ChordWiki.pfx</ManifestKeyFile>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>

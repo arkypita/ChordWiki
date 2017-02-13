@@ -18,6 +18,12 @@ namespace ChordEditor.Forms
 						InitializeComponent();
 						TbUsername.Text = Settings.Username;
 						TbURL.Text = Settings.CurrentRepo;
+
+						using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
+						{
+								cln.Authentication.ClearAuthenticationCache(); //del prev auth
+								cln.Authentication.Clear(); //del prev auth
+						}
 				}
 
 
@@ -26,9 +32,6 @@ namespace ChordEditor.Forms
 				{
 						using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
 						{
-								cln.Authentication.ClearAuthenticationCache(); //del prev auth
-								cln.Authentication.Clear(); //del prev auth
-
 								cln.Configuration.SetOption("servers", "global", "http-auth-types", "basic;digest");
 								cln.Authentication.UserNamePasswordHandlers += DialogUserNamePasswordHandler;
 								cln.Authentication.SslServerTrustHandlers += DialogSslServerTrustHandler;
