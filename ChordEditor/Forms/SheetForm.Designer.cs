@@ -135,7 +135,6 @@
 						this.CHP.Location = new System.Drawing.Point(0, 0);
 						this.CHP.Name = "CHP";
 						this.CHP.Paddings = new System.Windows.Forms.Padding(8);
-						this.CHP.PreferredLineWidth = 60;
 						this.CHP.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(191)))), ((int)(((byte)(255)))));
 						this.CHP.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("CHP.ServiceColors")));
 						this.CHP.ShowLineNumbers = false;
@@ -395,6 +394,7 @@
 						this.COT.ReadOnly = true;
 						this.COT.SelectionColor = System.Drawing.Color.Transparent;
 						this.COT.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("COT.ServiceColors")));
+						this.COT.ServiceLinesColor = System.Drawing.Color.DarkRed;
 						this.COT.ShowLineNumbers = false;
 						this.COT.Size = new System.Drawing.Size(430, 471);
 						this.COT.TabIndex = 1;
