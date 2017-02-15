@@ -130,6 +130,7 @@
 						this.CHP.Cursor = System.Windows.Forms.Cursors.IBeam;
 						this.CHP.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.CHP.Dock = System.Windows.Forms.DockStyle.Fill;
+						this.CHP.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.CHP.Hotkeys = resources.GetString("CHP.Hotkeys");
 						this.CHP.IsReplaceMode = false;
 						this.CHP.Location = new System.Drawing.Point(0, 0);
@@ -384,7 +385,6 @@
 						this.COT.Cursor = System.Windows.Forms.Cursors.Arrow;
 						this.COT.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.COT.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.COT.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.COT.Hotkeys = resources.GetString("COT.Hotkeys");
 						this.COT.IsReplaceMode = false;
 						this.COT.Location = new System.Drawing.Point(0, 0);
@@ -455,6 +455,7 @@
             this.MMnSave,
             this.MnPrint});
 						this.MMnFile.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+						this.MMnFile.MergeIndex = 0;
 						this.MMnFile.Name = "MMnFile";
 						this.MMnFile.Size = new System.Drawing.Size(37, 20);
 						this.MMnFile.Text = "&File";
@@ -511,6 +512,8 @@
             this.MMnTrashChords,
             this.toolStripMenuItem10,
             this.MMnSelectAll});
+						this.MMnEdit.MergeAction = System.Windows.Forms.MergeAction.Insert;
+						this.MMnEdit.MergeIndex = 1;
 						this.MMnEdit.Name = "MMnEdit";
 						this.MMnEdit.Size = new System.Drawing.Size(39, 20);
 						this.MMnEdit.Text = "&Edit";

@@ -29,8 +29,8 @@
     <ProductName>Bergamo3 ChordPro Editor</ProductName>
     <PublisherName>Diego Settimi</PublisherName>
     <SuiteName>Chord Wiki</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
