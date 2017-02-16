@@ -43,7 +43,6 @@ namespace ChordEditor.Forms
 																				Core.SheetHeader.SheetProgress.Deleted, IL.Images["deleted"]
 																				});
 
-
 						LV.AboutToCreateGroups += (s, args) =>
 						{
 								foreach (var group in args.Groups)
@@ -65,13 +64,44 @@ namespace ChordEditor.Forms
 								}
 						};
 
+						LV.BeforeCreatingGroups += LV_BeforeCreatingGroups;
+
 						SheetDB.ListChanged += SheetDB_ListChanged;
 				}
 
-				//void SheetHeader_HeaderChange(Core.SheetHeader sh)
-				//{
-				//    LV.UpdateObject(sh);
-				//}
+				void LV_BeforeCreatingGroups(object sender, CreateGroupsEventArgs e)
+				{
+						//GroupComparer property on the event argument block. This comparer controls the ordering of the groups.
+
+						if (e.Parameters.GroupByColumn == ChProgress)
+								e.Parameters.GroupComparer = new ProgressComparer(e.Parameters.GroupByOrder);
+				}
+
+				private class ProgressComparer : System.Collections.Generic.IComparer<BrightIdeasSoftware.OLVGroup>
+				{
+						private SortOrder sortOrder;
+
+						public ProgressComparer(SortOrder sortOrder)
+						{
+								// TODO: Complete member initialization
+								this.sortOrder = sortOrder;
+						}
+
+						public int Compare(OLVGroup x, OLVGroup y)
+						{
+								SheetHeader.SheetProgress px = (SheetHeader.SheetProgress)x.Key;
+								SheetHeader.SheetProgress py = (SheetHeader.SheetProgress)y.Key;
+
+								if (px == py)
+										return 0;
+								else if (px == SheetHeader.SheetProgress.Deleted)
+										return 1;
+								else if (py == SheetHeader.SheetProgress.Deleted)
+										return -1;
+								else
+										return sortOrder == SortOrder.Ascending ? px.CompareTo(py) : py.CompareTo(px);
+						}
+				}
 
 				void SheetDB_ListChanged()
 				{
@@ -88,8 +118,9 @@ namespace ChordEditor.Forms
 
 				private void SheetDatabase_Load(object sender, EventArgs e)
 				{
+						LV.PrimarySortColumn = ChTitle;
+						LV.PrimarySortOrder = SortOrder.Ascending;
 						LV.SetObjects(SheetDB.List);
-						LV.Sort(ChTitle, SortOrder.Ascending);
 				}
 
 				private void LV_SelectionChanged(object sender, EventArgs e)

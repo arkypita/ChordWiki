@@ -51,8 +51,8 @@
 						// 
 						// LV
 						// 
-						this.LV.AllColumns.Add(this.ChProgress);
 						this.LV.AllColumns.Add(this.ChTitle);
+						this.LV.AllColumns.Add(this.ChProgress);
 						this.LV.AllColumns.Add(this.ChArtist);
 						this.LV.AllColumns.Add(this.ChCategory);
 						this.LV.AllColumns.Add(this.ChAuthor);
@@ -60,8 +60,8 @@
 						this.LV.AllColumns.Add(this.ChStatus);
 						this.LV.CellEditUseWholeCell = false;
 						this.LV.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.ChProgress,
             this.ChTitle,
+            this.ChProgress,
             this.ChArtist,
             this.ChCategory,
             this.ChAuthor,
@@ -99,12 +99,14 @@
 						// 
 						this.ChProgress.AspectName = "Progress";
 						this.ChProgress.AspectToStringFormat = "";
+						this.ChProgress.DisplayIndex = 0;
 						this.ChProgress.Text = "Prog";
 						this.ChProgress.Width = 40;
 						// 
 						// ChTitle
 						// 
 						this.ChTitle.AspectName = "Title";
+						this.ChTitle.DisplayIndex = 1;
 						this.ChTitle.Text = "Title";
 						this.ChTitle.UseInitialLetterForGroup = true;
 						this.ChTitle.Width = 200;
