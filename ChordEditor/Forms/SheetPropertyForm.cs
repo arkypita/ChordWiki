@@ -97,7 +97,7 @@ namespace ChordEditor.Forms
 						CbCategory.Items.AddRange(SheetDB.Categories.ToArray());
 						CbCategory.Items.Add(NEW_CAT);
 
-						if (ActiveSheet != null && CbCategory.Items.Contains(ActiveSheet.Header.SheetCategory))
+						if (ActiveSheet != null && ActiveSheet.Header.SheetCategory != null && CbCategory.Items.Contains(ActiveSheet.Header.SheetCategory))
 								CbCategory.SelectedItem = ActiveSheet.Header.SheetCategory;
 						else
 								CbCategory.SelectedIndex = -1;
