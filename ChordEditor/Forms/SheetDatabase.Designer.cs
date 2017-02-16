@@ -90,6 +90,7 @@
 						this.LV.UseTranslucentHotItem = true;
 						this.LV.View = System.Windows.Forms.View.Details;
 						this.LV.BeforeSearching += new System.EventHandler<BrightIdeasSoftware.BeforeSearchingEventArgs>(this.LV_BeforeSearching);
+						this.LV.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.LV_FormatRow);
 						this.LV.SelectionChanged += new System.EventHandler(this.LV_SelectionChanged);
 						this.LV.ItemActivate += new System.EventHandler(this.LV_ItemActivate);
 						this.LV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_KeyDown);
@@ -146,6 +147,7 @@
 						this.IL.Images.SetKeyName(1, "suspended");
 						this.IL.Images.SetKeyName(2, "verified");
 						this.IL.Images.SetKeyName(3, "locked");
+						this.IL.Images.SetKeyName(4, "deleted");
 						// 
 						// tableLayoutPanel1
 						// 

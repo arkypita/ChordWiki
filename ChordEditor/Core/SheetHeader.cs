@@ -13,7 +13,7 @@ namespace ChordEditor.Core
 		public class SheetHeader
 		{
 				public enum SheetProgress
-				{ Added, Verified, Reviewed, Locked }
+				{Deleted, Added, Verified, Reviewed, Locked}
 
 				public delegate void SheetHeaderDelegate(SheetHeader sh);
 				public static event SheetHeaderDelegate HeaderChanged;
@@ -27,6 +27,8 @@ namespace ChordEditor.Core
 				private Dictionary<string, string> mOMetaData;
 				[NonSerialized()]
 				private SharpSvn.SvnStatus mSvnStatus;
+				[NonSerialized()]
+				private bool mSvnDeletable;
 
 				public SheetHeader()
 						: this(Guid.NewGuid().ToString() + ".cpw")
@@ -121,7 +123,13 @@ namespace ChordEditor.Core
 
 				public SheetProgress Progress
 				{
-						get { return GetMeta("sheetprogress") == null ? SheetProgress.Added : (SheetProgress)Enum.Parse(typeof(SheetProgress), GetMeta("sheetprogress")); }
+						get 
+						{
+								if (Deletable)
+										return SheetProgress.Deleted;
+								else
+										return GetMeta("sheetprogress") == null ? SheetProgress.Added : (SheetProgress)Enum.Parse(typeof(SheetProgress), GetMeta("sheetprogress")); 
+						}
 						set { SetMeta("sheetprogress", value.ToString()); }
 				}
 
@@ -307,6 +315,12 @@ namespace ChordEditor.Core
 				{
 						get { return mSvnStatus; }
 						set { mSvnStatus = value; }
+				}
+
+				public bool Deletable
+				{
+						get { return mSvnDeletable; }
+						set { mSvnDeletable = value; }
 				}
 		}
 }

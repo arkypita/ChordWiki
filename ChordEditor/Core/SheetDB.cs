@@ -88,11 +88,17 @@ namespace ChordEditor.Core
 								SaveIndex();
 
 								Dictionary<string, SharpSvn.SvnStatus> statuses = SVN.GetAllFileStatus(CurrentFolder);
+								Dictionary<string, SharpSvn.SvnPropertyCollection> props = SVN.GetAllFileProperty(CurrentFolder);
 
 								foreach (SheetHeader sh in mList)
 								{
 										if (statuses.ContainsKey(sh.FileName.ToLower()))
 												sh.SVNStatus = statuses[sh.FileName.ToLower()];
+
+										if (props.ContainsKey(sh.FileName.ToLower()))
+												sh.Deletable = props[sh.FileName.ToLower()]["deletable"].StringValue == "true";
+										else
+												sh.Deletable = false;
 								}
 
 								if (ListChanged != null)

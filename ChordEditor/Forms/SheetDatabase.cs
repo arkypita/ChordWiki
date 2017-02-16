@@ -39,7 +39,8 @@ namespace ChordEditor.Forms
 																				Core.SheetHeader.SheetProgress.Added, IL.Images["incomplete"], 
 																				Core.SheetHeader.SheetProgress.Verified, IL.Images["suspended"], 
 																				Core.SheetHeader.SheetProgress.Reviewed, IL.Images["verified"], 
-																				Core.SheetHeader.SheetProgress.Locked, IL.Images["locked"]
+																				Core.SheetHeader.SheetProgress.Locked, IL.Images["locked"],
+																				Core.SheetHeader.SheetProgress.Deleted, IL.Images["deleted"]
 																				});
 
 
@@ -94,14 +95,7 @@ namespace ChordEditor.Forms
 				private void LV_SelectionChanged(object sender, EventArgs e)
 				{
 						BtnOpen.Enabled = LV.SelectedObjects.Count > 0;
-
-
-						bool enab = LV.SelectedObjects.Count > 0;
-						foreach (Core.SheetHeader sh in LV.SelectedObjects)
-								if (sh.Progress >= Core.SheetHeader.SheetProgress.Reviewed)
-										enab = false;
-
-						BtnDelete.Enabled = enab;
+						BtnDelete.Enabled = LV.SelectedObjects.Count > 0;
 				}
 
 				private void BtnOpen_Click(object sender, EventArgs e)
@@ -143,19 +137,12 @@ namespace ChordEditor.Forms
 				{
 						foreach (Core.SheetHeader sh in LV.SelectedObjects)
 						{
-								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < Core.SheetHeader.SheetProgress.Reviewed)
+								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed)
 								{
 										if (SVN.LocalOrInvalid)
 												System.IO.File.Delete(sh.FilePath); //delete file from filesystem
-										else
-										{
-												try
-												{
-														using (SharpSvn.SvnClient cln = new SharpSvn.SvnClient())
-																cln.Delete(sh.FilePath, new SharpSvn.SvnDeleteArgs() { Force = true }); //mark for svn deletion
-												}
-												catch (Exception ex) { }
-										}
+										else if (!sh.Deletable)
+												SVN.MarkForDeletion(sh.FilePath); //mark for deletion
 								}
 						}
 
@@ -232,6 +219,17 @@ namespace ChordEditor.Forms
 						}
 
 						e.Canceled = true;
+				}
+
+				private void LV_FormatRow(object sender, FormatRowEventArgs e)
+				{
+						SheetHeader sh = (SheetHeader)e.Model;
+						if (sh.Deletable)
+						{
+								e.Item.ForeColor = Color.Red;
+								e.Item.Font = new Font(e.Item.Font, FontStyle.Strikeout);
+						}
+
 				}
 
 

@@ -180,6 +180,47 @@ namespace ChordEditor.Core
 						catch (Exception ex) { }
 				}
 
+
+				public static void MarkForDeletion(string p)
+				{
+						try
+						{
+								if (!UseLocalRepo)
+								{
+										lock (cln)
+												cln.SetProperty(p, "deletable", "true");
+								}
+						}
+						catch (Exception ex) { }
+				}
+
+				public static void UnMarkForDeletion(string p)
+				{
+						try
+						{
+								if (!UseLocalRepo)
+								{
+										lock (cln)
+												cln.DeleteProperty(p, "deletable");
+								}
+						}
+						catch (Exception ex) { }
+				}
+
+				private static void TrueDelete(string p)
+				{
+						try
+						{
+								if (!UseLocalRepo)
+								{
+										lock (cln)
+												cln.Delete(p, new SharpSvn.SvnDeleteArgs() { Force = true });
+								}
+						}
+						catch (Exception ex) { }
+				}
+
+
 				private static Exception VerifyRepo()
 				{
 						if (Core.Settings.CurrentRepo == "")
@@ -238,6 +279,17 @@ namespace ChordEditor.Core
 								return new Dictionary<string, SharpSvn.SvnStatus>();
 				}
 
+				public static System.Collections.Generic.Dictionary<string, SharpSvn.SvnPropertyCollection> GetAllFileProperty(string directory)
+				{
+						if (!UseLocalRepo)
+						{
+								lock (cln)
+										return GetProps(directory);
+						}
+						else
+								return new Dictionary<string, SharpSvn.SvnPropertyCollection>();
+				}
+
 				#region Property private
 
 				private static bool UseLocalRepo
@@ -261,6 +313,23 @@ namespace ChordEditor.Core
 				#endregion
 
 				#region Funzioni private
+
+				private static System.Collections.Generic.Dictionary<string, SharpSvn.SvnPropertyCollection> GetProps(string directory)
+				{
+						System.Collections.Generic.Dictionary<string, SharpSvn.SvnPropertyCollection> rv = new System.Collections.Generic.Dictionary<string, SharpSvn.SvnPropertyCollection>();
+
+						try
+						{
+								System.Collections.ObjectModel.Collection<SharpSvn.SvnPropertyListEventArgs> props;
+								cln.GetPropertyList(directory, new SharpSvn.SvnPropertyListArgs { Depth = SharpSvn.SvnDepth.Files}, out props);
+
+								foreach (SharpSvn.SvnPropertyListEventArgs ea in props)
+										rv.Add(System.IO.Path.GetFileName(ea.Path).ToLower(), ea.Properties);
+						}
+						catch (Exception ex) { }
+
+						return rv;
+				}
 
 
 				private static System.Collections.Generic.Dictionary<string, SharpSvn.SvnStatus> GetStatus(string directory)
@@ -413,6 +482,8 @@ namespace ChordEditor.Core
 				{ return string.Format("Committed @ {0} by user {1}", DateTime.Now, Username); }
 
 				#endregion
+
+
 
 		}
 }
