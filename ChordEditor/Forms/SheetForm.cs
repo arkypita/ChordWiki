@@ -784,12 +784,12 @@ namespace ChordEditor.Forms
 
 				private void MMnLog_Click(object sender, EventArgs e)
 				{
-						Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:log /path:\"{0}\"", Sheet.Header.FilePath)));
+						SVN.ShowFileHistory(Sheet.Header.FilePath);
 				}
 
 				private void MMnBlame_Click(object sender, EventArgs e)
 				{
-						Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:blame /path:\"{0}\"", Sheet.Header.FilePath)));
+						SVN.BlameFile(Sheet.Header.FilePath);
 				}
 
 				private void SheetForm_Shown(object sender, EventArgs e)

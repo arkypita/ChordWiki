@@ -36,20 +36,28 @@ namespace ChordEditor
 						//
 						// TODO: Add constructor code after the InitializeComponent() call.
 						//
-						LogMessages = new Forms.LogMessageForm();
-						LogMessages.Show(DP);
 
 						VerifyTotalCleanup();
 
+						LogMessages = new Forms.LogMessageForm();
 						SheetProperty = new Forms.SheetPropertyForm();
-						SheetProperty.Show(DP);
-
 						SheetDataBase = new Forms.SheetDatabase();
-						SheetDataBase.Show(DP);
 
 						SVN.SvnBegin += Program_SvnOperationBegin;
 						SVN.SvnEnd += Program_SvnOperationEnd;
 						SVN.SvnError += Program_SvnOperationError;
+				}
+
+				private UserControls.DockingManager.IDockContent LoadDP(string persistString)
+				{
+						if (persistString.IndexOf("LogMessageForm") >= 0)
+								return LogMessages;
+						else if (persistString.IndexOf("SheetPropertyForm") >= 0)
+								return SheetProperty;
+						else if (persistString.IndexOf("SheetDatabase") >= 0)
+								return SheetDataBase;
+						else 
+								return null;
 				}
 
 				void Program_SvnOperationError(Exception ex)
@@ -238,6 +246,15 @@ namespace ChordEditor
 										e.Cancel = true;
 								}
 						}
+
+						if (!e.Cancel)
+						{
+								using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+								{
+										DP.SaveAsXml(ms, System.Text.Encoding.Unicode);
+										Settings.DPState = ms.ToArray();
+								}
+						}
 				}
 
 				private void VerifyClosingAct() //chiamata dalla end operation
@@ -259,6 +276,14 @@ namespace ChordEditor
 
 				private void MainForm_Load(object sender, EventArgs e)
 				{
+						byte[] state = Settings.DPState;
+						if (state != null)
+								DP.LoadFromXml(new System.IO.MemoryStream(state), new UserControls.DockingManager.DeserializeDockContent(LoadDP), true);
+						LogMessages.Show(DP);
+						SheetProperty.Show(DP);
+						SheetDataBase.Show(DP);
+
+
 						if (!SVN.LocalOrInvalid)
 								SVN.DatabaseDownload();
 						else

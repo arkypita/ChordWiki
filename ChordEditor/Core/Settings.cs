@@ -90,5 +90,11 @@ namespace ChordEditor.Core
 						get { return (byte[])GetObject("LVState", null); }
 						set { SetObject("LVState", value); }
 				}
+
+				public static byte[] DPState
+				{
+						get { return (byte[])GetObject("DPState", null); }
+						set { SetObject("DPState", value); }
+				}
 		}
 }

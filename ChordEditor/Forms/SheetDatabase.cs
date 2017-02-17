@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ChordEditor.Core;
 using BrightIdeasSoftware;
+using System.Diagnostics;
 
 namespace ChordEditor.Forms
 {
@@ -294,6 +295,15 @@ namespace ChordEditor.Forms
 				private void SheetDatabase_FormClosing(object sender, FormClosingEventArgs e)
 				{
 						Settings.LVState = LV.SaveState();
+				}
+
+				private void MMNShowHistory_Click(object sender, EventArgs e)
+				{
+						ParentForm.Enabled = false;
+						SVN.ShowFolderHistory();
+						ParentForm.Enabled = true;
+
+						SheetDB.ReloadDataBase();
 				}
 
 		}

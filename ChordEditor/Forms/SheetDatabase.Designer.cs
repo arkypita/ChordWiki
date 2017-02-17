@@ -46,9 +46,13 @@
 						this.BtnOpen = new System.Windows.Forms.Button();
 						this.BtnNew = new System.Windows.Forms.Button();
 						this.BtnErase = new System.Windows.Forms.Button();
+						this.MMS = new System.Windows.Forms.MenuStrip();
+						this.MMnAdmin = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMNShowHistory = new System.Windows.Forms.ToolStripMenuItem();
 						((System.ComponentModel.ISupportInitialize)(this.LV)).BeginInit();
 						this.tableLayoutPanel1.SuspendLayout();
 						this.tableLayoutPanel2.SuspendLayout();
+						this.MMS.SuspendLayout();
 						this.SuspendLayout();
 						// 
 						// LV
@@ -266,6 +270,34 @@
 						this.BtnErase.Visible = false;
 						this.BtnErase.Click += new System.EventHandler(this.BtnErase_Click);
 						// 
+						// MMS
+						// 
+						this.MMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MMnAdmin});
+						this.MMS.Location = new System.Drawing.Point(0, 0);
+						this.MMS.Name = "MMS";
+						this.MMS.Size = new System.Drawing.Size(783, 24);
+						this.MMS.TabIndex = 4;
+						this.MMS.Text = "menuStrip1";
+						this.MMS.Visible = false;
+						// 
+						// MMnAdmin
+						// 
+						this.MMnAdmin.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MMNShowHistory});
+						this.MMnAdmin.MergeAction = System.Windows.Forms.MergeAction.Insert;
+						this.MMnAdmin.MergeIndex = 1;
+						this.MMnAdmin.Name = "MMnAdmin";
+						this.MMnAdmin.Size = new System.Drawing.Size(80, 20);
+						this.MMnAdmin.Text = "&SVN Admin";
+						// 
+						// MMNShowHistory
+						// 
+						this.MMNShowHistory.Name = "MMNShowHistory";
+						this.MMNShowHistory.Size = new System.Drawing.Size(152, 22);
+						this.MMNShowHistory.Text = "SVN History";
+						this.MMNShowHistory.Click += new System.EventHandler(this.MMNShowHistory_Click);
+						// 
 						// SheetDatabase
 						// 
 						this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -273,6 +305,7 @@
 						this.ClientSize = new System.Drawing.Size(783, 480);
 						this.CloseButton = false;
 						this.CloseButtonVisible = false;
+						this.Controls.Add(this.MMS);
 						this.Controls.Add(this.tableLayoutPanel1);
 						this.DockAreas = ChordEditor.UserControls.DockingManager.DockAreas.Document;
 						this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -289,7 +322,10 @@
 						this.tableLayoutPanel1.ResumeLayout(false);
 						this.tableLayoutPanel1.PerformLayout();
 						this.tableLayoutPanel2.ResumeLayout(false);
+						this.MMS.ResumeLayout(false);
+						this.MMS.PerformLayout();
 						this.ResumeLayout(false);
+						this.PerformLayout();
 
         }
 
@@ -311,5 +347,8 @@
 		private BrightIdeasSoftware.OLVColumn ChProgress;
 		private System.Windows.Forms.Button BtnUndelete;
 		private System.Windows.Forms.Button BtnErase;
+		private System.Windows.Forms.MenuStrip MMS;
+		private System.Windows.Forms.ToolStripMenuItem MMnAdmin;
+		private System.Windows.Forms.ToolStripMenuItem MMNShowHistory;
     }
 }

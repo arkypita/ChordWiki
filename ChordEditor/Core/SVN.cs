@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChordEditor.Core;
+using System.Diagnostics;
 
 namespace ChordEditor.Core
 {
@@ -201,6 +202,7 @@ namespace ChordEditor.Core
 								}
 						}
 						catch (Exception ex) { }
+						SendOperationEnd();
 				}
 
 				public static void UnMarkForDeletion(List<string> lp)
@@ -503,6 +505,51 @@ namespace ChordEditor.Core
 				#endregion
 
 
+				internal static void ShowFolderHistory()
+				{
+						try 
+						{
+								Process p = Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:log /path:\"{0}\"", CurrentFolder)));
+								p.WaitForExit();
+						}
+						catch { }
+				}
+
+				internal static void ShowFileHistory(string p)
+				{
+						try { Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:log /path:\"{0}\"", p))); }
+						catch { }
+				}
+
+				internal static void BlameFile(string p)
+				{
+						try { Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:blame /path:\"{0}\"", p))); }
+						catch { }
+				}
 
 		}
+}
+
+
+public static class WindowHelper
+{
+		public static void BringProcessToFront(Process process)
+		{
+				IntPtr handle = process.MainWindowHandle;
+				if (IsIconic(handle))
+				{
+						ShowWindow(handle, SW_RESTORE);
+				}
+
+				SetForegroundWindow(handle);
+		}
+
+		const int SW_RESTORE = 9;
+
+		[System.Runtime.InteropServices.DllImport("User32.dll")]
+		private static extern bool SetForegroundWindow(IntPtr handle);
+		[System.Runtime.InteropServices.DllImport("User32.dll")]
+		private static extern bool ShowWindow(IntPtr handle, int nCmdShow);
+		[System.Runtime.InteropServices.DllImport("User32.dll")]
+		private static extern bool IsIconic(IntPtr handle);
 }
