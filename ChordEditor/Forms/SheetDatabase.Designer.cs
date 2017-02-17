@@ -76,6 +76,7 @@
 						this.LV.GridLines = true;
 						this.LV.GroupWithItemCountFormat = "";
 						this.LV.GroupWithItemCountSingularFormat = "";
+						this.LV.HideSelection = false;
 						this.LV.Location = new System.Drawing.Point(3, 3);
 						this.LV.Name = "LV";
 						this.LV.RowHeight = 26;
