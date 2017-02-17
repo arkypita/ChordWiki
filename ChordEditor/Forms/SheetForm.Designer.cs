@@ -79,6 +79,9 @@
 						this.MMnTrashChords = new System.Windows.Forms.ToolStripMenuItem();
 						this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 						this.MMnSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMnAdmin = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMNShowLog = new System.Windows.Forms.ToolStripMenuItem();
+						this.MMnBlame = new System.Windows.Forms.ToolStripMenuItem();
 						this.MTS = new System.Windows.Forms.ToolStrip();
 						this.BtnSave = new System.Windows.Forms.ToolStripButton();
 						this.BtnPrint = new System.Windows.Forms.ToolStripButton();
@@ -130,6 +133,7 @@
 						this.CHP.Cursor = System.Windows.Forms.Cursors.IBeam;
 						this.CHP.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.CHP.Dock = System.Windows.Forms.DockStyle.Fill;
+						this.CHP.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.CHP.Hotkeys = resources.GetString("CHP.Hotkeys");
 						this.CHP.IsReplaceMode = false;
 						this.CHP.Location = new System.Drawing.Point(0, 0);
@@ -384,7 +388,6 @@
 						this.COT.Cursor = System.Windows.Forms.Cursors.Arrow;
 						this.COT.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.COT.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.COT.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.COT.Hotkeys = resources.GetString("COT.Hotkeys");
 						this.COT.IsReplaceMode = false;
 						this.COT.Location = new System.Drawing.Point(0, 0);
@@ -440,7 +443,8 @@
 						// 
 						this.MMS.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MMnFile,
-            this.MMnEdit});
+            this.MMnEdit,
+            this.MMnAdmin});
 						this.MMS.Location = new System.Drawing.Point(0, 0);
 						this.MMS.Name = "MMS";
 						this.MMS.Size = new System.Drawing.Size(870, 24);
@@ -623,6 +627,31 @@
 						this.MMnSelectAll.Size = new System.Drawing.Size(148, 22);
 						this.MMnSelectAll.Text = "Select all";
 						this.MMnSelectAll.Click += new System.EventHandler(this.ActionSelectAll);
+						// 
+						// adminToolStripMenuItem
+						// 
+						this.MMnAdmin.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MMNShowLog,
+            this.MMnBlame});
+						this.MMnAdmin.MergeAction = System.Windows.Forms.MergeAction.Insert;
+						this.MMnAdmin.MergeIndex = 2;
+						this.MMnAdmin.Name = "adminToolStripMenuItem";
+						this.MMnAdmin.Size = new System.Drawing.Size(80, 20);
+						this.MMnAdmin.Text = "&SVN Admin";
+						// 
+						// MMNShowLog
+						// 
+						this.MMNShowLog.Name = "MMNShowLog";
+						this.MMNShowLog.Size = new System.Drawing.Size(152, 22);
+						this.MMNShowLog.Text = "SVN Log";
+						this.MMNShowLog.Click += new System.EventHandler(this.MMnLog_Click);
+						// 
+						// MMnBlame
+						// 
+						this.MMnBlame.Name = "MMnBlame";
+						this.MMnBlame.Size = new System.Drawing.Size(152, 22);
+						this.MMnBlame.Text = "SVN Blame";
+						this.MMnBlame.Click += new System.EventHandler(this.MMnBlame_Click);
 						// 
 						// MTS
 						// 
@@ -816,6 +845,7 @@
 						this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SheetForm_FormClosing);
 						this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SheetForm_FormClosed);
 						this.Load += new System.EventHandler(this.SheetForm_Load);
+						this.Shown += new System.EventHandler(this.SheetForm_Shown);
 						((System.ComponentModel.ISupportInitialize)(this.CHP)).EndInit();
 						this.CMS.ResumeLayout(false);
 						this.tableLayoutPanel1.ResumeLayout(false);
@@ -905,5 +935,8 @@
 				private System.Windows.Forms.ToolStripMenuItem MMnPasteChords;
 				private System.Windows.Forms.ToolStripMenuItem MMnTrashChords;
 				private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
+				private System.Windows.Forms.ToolStripMenuItem MMnAdmin;
+				private System.Windows.Forms.ToolStripMenuItem MMNShowLog;
+				private System.Windows.Forms.ToolStripMenuItem MMnBlame;
 	}
 }

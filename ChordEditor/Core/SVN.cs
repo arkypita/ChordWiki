@@ -181,7 +181,7 @@ namespace ChordEditor.Core
 				}
 
 
-				public static void MarkForDeletion(string p)
+				public static void MarkForDeletion(List<string> lp)
 				{
 						try
 						{
@@ -189,14 +189,21 @@ namespace ChordEditor.Core
 								if (!UseLocalRepo)
 								{
 										lock (cln)
-												cln.SetProperty(p, "deletable", "true");
+										{
+												foreach (string p in lp)
+														cln.SetProperty(p, "deletable", "true");
+										}
+								}
+								else
+								{
+										foreach (string p in lp)
+												System.IO.File.Delete(p);
 								}
 						}
 						catch (Exception ex) { }
-						SendOperationEnd();
 				}
 
-				public static void UnMarkForDeletion(string p)
+				public static void UnMarkForDeletion(List<string> lp)
 				{
 						try
 						{
@@ -204,14 +211,17 @@ namespace ChordEditor.Core
 								if (!UseLocalRepo)
 								{
 										lock (cln)
-												cln.DeleteProperty(p, "deletable");
+										{
+												foreach (string p in lp)
+														cln.DeleteProperty(p, "deletable");
+										}
 								}
 						}
 						catch (Exception ex) { }
 						SendOperationEnd();
 				}
 
-				public static void TrueDelete(string p)
+				public static void TrueDelete(List<string> lp)
 				{
 						try
 						{
@@ -219,7 +229,10 @@ namespace ChordEditor.Core
 								if (!UseLocalRepo)
 								{
 										lock (cln)
-												cln.Delete(p, new SharpSvn.SvnDeleteArgs() { Force = true });
+										{
+												foreach (string p in lp)
+														cln.Delete(p, new SharpSvn.SvnDeleteArgs() { Force = true });
+										}
 								}
 						}
 						catch (Exception ex) { }

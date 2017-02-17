@@ -171,17 +171,12 @@ namespace ChordEditor.Forms
 
 				private void BtnDelete_Click(object sender, EventArgs e)
 				{
+						List<string> paths = new List<string>();
 						foreach (Core.SheetHeader sh in LV.SelectedObjects)
-						{
-								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed)
-								{
-										if (SVN.LocalOrInvalid)
-												System.IO.File.Delete(sh.FilePath); //delete file from filesystem
-										else if (!sh.Deletable)
-												SVN.MarkForDeletion(sh.FilePath); //mark for deletion
-								}
-						}
+								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed && !sh.Deletable)
+										paths.Add(sh.FilePath);
 
+						SVN.MarkForDeletion(paths); //mark for deletion
 						SheetDB.ReloadDataBase();
 				}
 
@@ -270,35 +265,30 @@ namespace ChordEditor.Forms
 
 				private void BtnUndelete_Click(object sender, EventArgs e)
 				{
+						List<string> paths = new List<string>();
 						foreach (Core.SheetHeader sh in LV.SelectedObjects)
-						{
-								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed)
-								{
-										if (sh.Deletable)
-												SVN.UnMarkForDeletion(sh.FilePath); //unmark for deletion
-								}
-						}
+								if (System.IO.File.Exists(sh.FilePath) && sh.Deletable)
+										paths.Add(sh.FilePath);
 
+						SVN.UnMarkForDeletion(paths); //unmark for deletion
 						SheetDB.ReloadDataBase();
 				}
 
 				private void BtnErase_Click(object sender, EventArgs e)
 				{
+						List<string> paths = new List<string>();
 						foreach (Core.SheetHeader sh in LV.SelectedObjects)
-						{
 								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed)
-								{
-										if (sh.Deletable)
-												SVN.TrueDelete(sh.FilePath); //erase
-								}
-						}
-
+										paths.Add(sh.FilePath);
+						
+						SVN.TrueDelete(paths); //erase
 						SheetDB.ReloadDataBase();
 				}
 
 				private void SheetDatabase_Shown(object sender, EventArgs e)
 				{
-						BtnErase.Visible = Settings.SuperUser;
+						BtnErase.Visible = Settings.SuperUser && !SVN.LocalOrInvalid;
+						BtnUndelete.Visible = !SVN.LocalOrInvalid;
 				}
 
 				private void SheetDatabase_FormClosing(object sender, FormClosingEventArgs e)

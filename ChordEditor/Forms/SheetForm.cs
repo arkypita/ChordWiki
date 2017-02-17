@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using ChordEditor.Core;
+using System.Diagnostics;
 
 namespace ChordEditor.Forms
 {
@@ -779,6 +780,21 @@ namespace ChordEditor.Forms
 
 								return (target.LineCount == mChordClipboard.LineCount && target.LineCount > 0);
 						}
+				}
+
+				private void MMnLog_Click(object sender, EventArgs e)
+				{
+						Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:log /path:\"{0}\"", Sheet.Header.FilePath)));
+				}
+
+				private void MMnBlame_Click(object sender, EventArgs e)
+				{
+						Process.Start(new ProcessStartInfo("TortoiseProc", String.Format("/command:blame /path:\"{0}\"", Sheet.Header.FilePath)));
+				}
+
+				private void SheetForm_Shown(object sender, EventArgs e)
+				{
+						MMnAdmin.Visible = Settings.SuperUser;
 				}
 		}
 }
