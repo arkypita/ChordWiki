@@ -129,6 +129,9 @@ namespace ChordEditor.Forms
 						if (mSheet.HasMemoryChanges)
 								Text = "* " + Text;
 
+						if (Settings.SuperUser)
+								ToolTipText = mSheet.Header.FileName;
+
 						CHP.ReadOnly = !(mSheet.Header.Progress < Core.SheetHeader.SheetProgress.Reviewed);
 						BtnSave.Enabled = MMnSave.Enabled = mSheet.HasMemoryChanges;
 				}

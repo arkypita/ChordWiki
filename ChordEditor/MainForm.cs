@@ -36,9 +36,6 @@ namespace ChordEditor
 						//
 						// TODO: Add constructor code after the InitializeComponent() call.
 						//
-						using (Forms.SpashScreen ss = new Forms.SpashScreen())
-								ss.ShowDialog(2000, false);
-
 						LogMessages = new Forms.LogMessageForm();
 						LogMessages.Show(DP);
 
@@ -303,8 +300,7 @@ namespace ChordEditor
 
 				private void MnAbout_Click(object sender, EventArgs e)
 				{
-						using (Forms.SpashScreen ss = new Forms.SpashScreen())
-								ss.ShowDialog(6000, true);			
+						Forms.SpashScreen.ShowDialog(6000, true);			
 				}
 
 				private void MnHelp_Click(object sender, EventArgs e)

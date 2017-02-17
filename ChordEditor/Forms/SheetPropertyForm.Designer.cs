@@ -108,7 +108,7 @@
 						this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-						this.TlpMain.Size = new System.Drawing.Size(268, 452);
+						this.TlpMain.Size = new System.Drawing.Size(225, 452);
 						this.TlpMain.TabIndex = 0;
 						// 
 						// GbTools
@@ -120,7 +120,7 @@
 						this.GbTools.Dock = System.Windows.Forms.DockStyle.Fill;
 						this.GbTools.Location = new System.Drawing.Point(3, 133);
 						this.GbTools.Name = "GbTools";
-						this.GbTools.Size = new System.Drawing.Size(262, 76);
+						this.GbTools.Size = new System.Drawing.Size(219, 76);
 						this.GbTools.TabIndex = 4;
 						this.GbTools.TabStop = false;
 						this.GbTools.Text = "Tools";
@@ -146,7 +146,7 @@
 						this.tableLayoutPanel3.RowCount = 2;
 						this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-						this.tableLayoutPanel3.Size = new System.Drawing.Size(256, 57);
+						this.tableLayoutPanel3.Size = new System.Drawing.Size(213, 57);
 						this.tableLayoutPanel3.TabIndex = 2;
 						// 
 						// tableLayoutPanel4
@@ -166,7 +166,7 @@
 						this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 						this.tableLayoutPanel4.RowCount = 1;
 						this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-						this.tableLayoutPanel4.Size = new System.Drawing.Size(130, 27);
+						this.tableLayoutPanel4.Size = new System.Drawing.Size(122, 27);
 						this.tableLayoutPanel4.TabIndex = 3;
 						// 
 						// PbTrasposeUp
@@ -176,7 +176,7 @@
 						this.PbTrasposeUp.Coloration = System.Drawing.Color.Empty;
 						this.PbTrasposeUp.Cursor = System.Windows.Forms.Cursors.Hand;
 						this.PbTrasposeUp.Image = ((System.Drawing.Image)(resources.GetObject("PbTrasposeUp.Image")));
-						this.PbTrasposeUp.Location = new System.Drawing.Point(108, 3);
+						this.PbTrasposeUp.Location = new System.Drawing.Point(100, 3);
 						this.PbTrasposeUp.Margin = new System.Windows.Forms.Padding(1);
 						this.PbTrasposeUp.Name = "PbTrasposeUp";
 						this.PbTrasposeUp.Size = new System.Drawing.Size(21, 21);
@@ -194,7 +194,7 @@
 						this.CbSemitoni.Location = new System.Drawing.Point(26, 3);
 						this.CbSemitoni.MinimumSize = new System.Drawing.Size(70, 0);
 						this.CbSemitoni.Name = "CbSemitoni";
-						this.CbSemitoni.Size = new System.Drawing.Size(78, 21);
+						this.CbSemitoni.Size = new System.Drawing.Size(70, 21);
 						this.CbSemitoni.TabIndex = 15;
 						this.TT.SetToolTip(this.CbSemitoni, "Traspose tonality");
 						this.CbSemitoni.SelectedIndexChanged += new System.EventHandler(this.CbSemitoni_SelectedIndexChanged);
@@ -308,7 +308,7 @@
 						this.GbSheetInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 						this.GbSheetInfo.Location = new System.Drawing.Point(3, 215);
 						this.GbSheetInfo.Name = "GbSheetInfo";
-						this.GbSheetInfo.Size = new System.Drawing.Size(262, 139);
+						this.GbSheetInfo.Size = new System.Drawing.Size(219, 139);
 						this.GbSheetInfo.TabIndex = 2;
 						this.GbSheetInfo.TabStop = false;
 						this.GbSheetInfo.Text = "Progress Info";
@@ -347,7 +347,7 @@
 						this.TlpProgress.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.TlpProgress.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.TlpProgress.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-						this.TlpProgress.Size = new System.Drawing.Size(256, 120);
+						this.TlpProgress.Size = new System.Drawing.Size(213, 120);
 						this.TlpProgress.TabIndex = 1;
 						// 
 						// pictureBox2
@@ -366,7 +366,7 @@
 						this.TbSheetAuthor.Enabled = false;
 						this.TbSheetAuthor.Location = new System.Drawing.Point(96, 5);
 						this.TbSheetAuthor.Name = "TbSheetAuthor";
-						this.TbSheetAuthor.Size = new System.Drawing.Size(133, 20);
+						this.TbSheetAuthor.Size = new System.Drawing.Size(90, 20);
 						this.TbSheetAuthor.TabIndex = 5;
 						// 
 						// TbSheetRevisor
@@ -375,7 +375,7 @@
 						this.TbSheetRevisor.Enabled = false;
 						this.TbSheetRevisor.Location = new System.Drawing.Point(96, 65);
 						this.TbSheetRevisor.Name = "TbSheetRevisor";
-						this.TbSheetRevisor.Size = new System.Drawing.Size(133, 20);
+						this.TbSheetRevisor.Size = new System.Drawing.Size(90, 20);
 						this.TbSheetRevisor.TabIndex = 6;
 						// 
 						// PbSheetAuthor
@@ -455,7 +455,7 @@
 						this.TbVerified.Enabled = false;
 						this.TbVerified.Location = new System.Drawing.Point(96, 35);
 						this.TbVerified.Name = "TbVerified";
-						this.TbVerified.Size = new System.Drawing.Size(133, 20);
+						this.TbVerified.Size = new System.Drawing.Size(90, 20);
 						this.TbVerified.TabIndex = 25;
 						// 
 						// TbLocked
@@ -464,7 +464,7 @@
 						this.TbLocked.Enabled = false;
 						this.TbLocked.Location = new System.Drawing.Point(96, 95);
 						this.TbLocked.Name = "TbLocked";
-						this.TbLocked.Size = new System.Drawing.Size(133, 20);
+						this.TbLocked.Size = new System.Drawing.Size(90, 20);
 						this.TbLocked.TabIndex = 26;
 						// 
 						// PbAdd
@@ -475,7 +475,7 @@
 						this.PbAdd.Cursor = System.Windows.Forms.Cursors.Hand;
 						this.PbAdd.Enabled = false;
 						this.PbAdd.Image = null;
-						this.PbAdd.Location = new System.Drawing.Point(233, 4);
+						this.PbAdd.Location = new System.Drawing.Point(190, 4);
 						this.PbAdd.Margin = new System.Windows.Forms.Padding(1);
 						this.PbAdd.Name = "PbAdd";
 						this.PbAdd.Size = new System.Drawing.Size(22, 22);
@@ -492,7 +492,7 @@
 						this.PbVerify.Cursor = System.Windows.Forms.Cursors.Hand;
 						this.PbVerify.Enabled = false;
 						this.PbVerify.Image = null;
-						this.PbVerify.Location = new System.Drawing.Point(233, 34);
+						this.PbVerify.Location = new System.Drawing.Point(190, 34);
 						this.PbVerify.Margin = new System.Windows.Forms.Padding(1);
 						this.PbVerify.Name = "PbVerify";
 						this.PbVerify.Size = new System.Drawing.Size(22, 22);
@@ -509,7 +509,7 @@
 						this.PbReview.Cursor = System.Windows.Forms.Cursors.Hand;
 						this.PbReview.Enabled = false;
 						this.PbReview.Image = null;
-						this.PbReview.Location = new System.Drawing.Point(233, 64);
+						this.PbReview.Location = new System.Drawing.Point(190, 64);
 						this.PbReview.Margin = new System.Windows.Forms.Padding(1);
 						this.PbReview.Name = "PbReview";
 						this.PbReview.Size = new System.Drawing.Size(22, 22);
@@ -526,7 +526,7 @@
 						this.PbLock.Cursor = System.Windows.Forms.Cursors.Hand;
 						this.PbLock.Enabled = false;
 						this.PbLock.Image = null;
-						this.PbLock.Location = new System.Drawing.Point(233, 94);
+						this.PbLock.Location = new System.Drawing.Point(190, 94);
 						this.PbLock.Margin = new System.Windows.Forms.Padding(1);
 						this.PbLock.Name = "PbLock";
 						this.PbLock.Size = new System.Drawing.Size(22, 22);
@@ -543,7 +543,7 @@
 						this.GbSongInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 						this.GbSongInfo.Location = new System.Drawing.Point(3, 3);
 						this.GbSongInfo.Name = "GbSongInfo";
-						this.GbSongInfo.Size = new System.Drawing.Size(262, 124);
+						this.GbSongInfo.Size = new System.Drawing.Size(219, 124);
 						this.GbSongInfo.TabIndex = 3;
 						this.GbSongInfo.TabStop = false;
 						this.GbSongInfo.Text = "Song Property";
@@ -571,7 +571,7 @@
 						this.TlpHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.TlpHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
 						this.TlpHeader.RowStyles.Add(new System.Windows.Forms.RowStyle());
-						this.TlpHeader.Size = new System.Drawing.Size(256, 105);
+						this.TlpHeader.Size = new System.Drawing.Size(213, 105);
 						this.TlpHeader.TabIndex = 0;
 						// 
 						// TbTitle
@@ -580,7 +580,7 @@
 						this.TbTitle.Location = new System.Drawing.Point(29, 3);
 						this.TbTitle.Name = "TbTitle";
 						this.TbTitle.NullString = "<Song Title>";
-						this.TbTitle.Size = new System.Drawing.Size(224, 20);
+						this.TbTitle.Size = new System.Drawing.Size(181, 20);
 						this.TbTitle.TabIndex = 0;
 						this.TbTitle.TextChanged += new System.EventHandler(this.TbTitle_TextChanged);
 						this.TbTitle.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
@@ -591,7 +591,7 @@
 						this.TbArtist.Location = new System.Drawing.Point(29, 29);
 						this.TbArtist.Name = "TbArtist";
 						this.TbArtist.NullString = "<Artist>";
-						this.TbArtist.Size = new System.Drawing.Size(224, 20);
+						this.TbArtist.Size = new System.Drawing.Size(181, 20);
 						this.TbArtist.TabIndex = 1;
 						this.TbArtist.TextChanged += new System.EventHandler(this.TbArtist_TextChanged);
 						this.TbArtist.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
@@ -603,7 +603,7 @@
 						this.CbCategory.FormattingEnabled = true;
 						this.CbCategory.Location = new System.Drawing.Point(29, 55);
 						this.CbCategory.Name = "CbCategory";
-						this.CbCategory.Size = new System.Drawing.Size(224, 21);
+						this.CbCategory.Size = new System.Drawing.Size(181, 21);
 						this.CbCategory.TabIndex = 2;
 						this.CbCategory.SelectedIndexChanged += new System.EventHandler(this.CbCategory_SelectedIndexChanged);
 						// 
@@ -613,7 +613,7 @@
 						this.TbTags.Location = new System.Drawing.Point(29, 82);
 						this.TbTags.Name = "TbTags";
 						this.TbTags.NullString = "<Tags>";
-						this.TbTags.Size = new System.Drawing.Size(224, 20);
+						this.TbTags.Size = new System.Drawing.Size(181, 20);
 						this.TbTags.TabIndex = 3;
 						this.TbTags.Validating += new System.ComponentModel.CancelEventHandler(this.ValidateTextBox);
 						// 
@@ -685,7 +685,7 @@
 						// 
 						this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 						this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-						this.ClientSize = new System.Drawing.Size(268, 452);
+						this.ClientSize = new System.Drawing.Size(225, 452);
 						this.CloseButton = false;
 						this.CloseButtonVisible = false;
 						this.Controls.Add(this.TlpMain);

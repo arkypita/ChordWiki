@@ -272,7 +272,7 @@ namespace ChordEditor.Forms
 				{
 						if (ActiveSheet != null)
 						{
-								if (VerifyMd5Hash(InputBox.Show("Privileged option", "Revisor Password?", "", true, true), "5e32071dfea812699c2582eb6ac00eb9"))
+								if (Settings.SuperUser || VerifyMd5Hash(InputBox.Show("Privileged option", "Revisor Password?", "", true, true), "5e32071dfea812699c2582eb6ac00eb9"))
 								{
 										if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
 										{
@@ -343,7 +343,7 @@ namespace ChordEditor.Forms
 				{
 						if (ActiveSheet != null)
 						{
-								if (VerifyMd5Hash(InputBox.Show("Privileged option", "Lock Password?", "", true, true), "8af0c15085845360b61b67ea41a87cfb"))
+								if (Settings.SuperUser || VerifyMd5Hash(InputBox.Show("Privileged option", "Lock Password?", "", true, true), "8af0c15085845360b61b67ea41a87cfb"))
 								{
 										if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked)
 										{

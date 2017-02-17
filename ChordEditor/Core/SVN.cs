@@ -185,6 +185,7 @@ namespace ChordEditor.Core
 				{
 						try
 						{
+								SendOperationBegin("------ DELETE ------");
 								if (!UseLocalRepo)
 								{
 										lock (cln)
@@ -192,12 +193,14 @@ namespace ChordEditor.Core
 								}
 						}
 						catch (Exception ex) { }
+						SendOperationEnd();
 				}
 
 				public static void UnMarkForDeletion(string p)
 				{
 						try
 						{
+								SendOperationBegin("------ UNDELETE ------");
 								if (!UseLocalRepo)
 								{
 										lock (cln)
@@ -205,12 +208,14 @@ namespace ChordEditor.Core
 								}
 						}
 						catch (Exception ex) { }
+						SendOperationEnd();
 				}
 
-				private static void TrueDelete(string p)
+				public static void TrueDelete(string p)
 				{
 						try
 						{
+								SendOperationBegin("------ DELETE FROM DB ------");
 								if (!UseLocalRepo)
 								{
 										lock (cln)
@@ -218,6 +223,7 @@ namespace ChordEditor.Core
 								}
 						}
 						catch (Exception ex) { }
+						SendOperationEnd();
 				}
 
 

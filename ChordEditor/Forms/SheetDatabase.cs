@@ -65,7 +65,6 @@ namespace ChordEditor.Forms
 						};
 
 						LV.BeforeCreatingGroups += LV_BeforeCreatingGroups;
-
 						SheetDB.ListChanged += SheetDB_ListChanged;
 				}
 
@@ -111,6 +110,7 @@ namespace ChordEditor.Forms
 						}
 						else
 						{
+								
 								LV.BuildList();
 								LV_SelectionChanged(null, null);
 						}
@@ -118,15 +118,20 @@ namespace ChordEditor.Forms
 
 				private void SheetDatabase_Load(object sender, EventArgs e)
 				{
-						LV.PrimarySortColumn = ChTitle;
-						LV.PrimarySortOrder = SortOrder.Ascending;
 						LV.SetObjects(SheetDB.List);
+
+						byte[] state = Settings.LVState;
+						if (state != null)
+								LV.RestoreState(state);
 				}
 
 				private void LV_SelectionChanged(object sender, EventArgs e)
 				{
 						BtnOpen.Enabled = LV.SelectedObjects.Count > 0;
 						BtnDelete.Enabled = LV.SelectedObjects.Count > 0;
+						BtnUndelete.Enabled = LV.SelectedObjects.Count > 0;
+
+						BtnErase.Enabled = LV.SelectedObjects.Count > 0;
 				}
 
 				private void BtnOpen_Click(object sender, EventArgs e)
@@ -263,6 +268,43 @@ namespace ChordEditor.Forms
 
 				}
 
+				private void BtnUndelete_Click(object sender, EventArgs e)
+				{
+						foreach (Core.SheetHeader sh in LV.SelectedObjects)
+						{
+								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed)
+								{
+										if (sh.Deletable)
+												SVN.UnMarkForDeletion(sh.FilePath); //unmark for deletion
+								}
+						}
+
+						SheetDB.ReloadDataBase();
+				}
+
+				private void BtnErase_Click(object sender, EventArgs e)
+				{
+						foreach (Core.SheetHeader sh in LV.SelectedObjects)
+						{
+								if (System.IO.File.Exists(sh.FilePath) && sh.Progress < SheetHeader.SheetProgress.Reviewed)
+								{
+										if (sh.Deletable)
+												SVN.TrueDelete(sh.FilePath); //erase
+								}
+						}
+
+						SheetDB.ReloadDataBase();
+				}
+
+				private void SheetDatabase_Shown(object sender, EventArgs e)
+				{
+						BtnErase.Visible = Settings.SuperUser;
+				}
+
+				private void SheetDatabase_FormClosing(object sender, FormClosingEventArgs e)
+				{
+						Settings.LVState = LV.SaveState();
+				}
 
 		}
 }

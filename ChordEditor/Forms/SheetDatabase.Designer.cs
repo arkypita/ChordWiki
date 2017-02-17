@@ -31,8 +31,8 @@
 						this.components = new System.ComponentModel.Container();
 						System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SheetDatabase));
 						this.LV = new BrightIdeasSoftware.ObjectListView();
-						this.ChProgress = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChTitle = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+						this.ChProgress = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChArtist = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 						this.ChAuthor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -41,9 +41,11 @@
 						this.IL = new System.Windows.Forms.ImageList(this.components);
 						this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 						this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+						this.BtnUndelete = new System.Windows.Forms.Button();
 						this.BtnDelete = new System.Windows.Forms.Button();
 						this.BtnOpen = new System.Windows.Forms.Button();
 						this.BtnNew = new System.Windows.Forms.Button();
+						this.BtnErase = new System.Windows.Forms.Button();
 						((System.ComponentModel.ISupportInitialize)(this.LV)).BeginInit();
 						this.tableLayoutPanel1.SuspendLayout();
 						this.tableLayoutPanel2.SuspendLayout();
@@ -81,7 +83,7 @@
 						this.LV.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.None;
 						this.LV.SelectedBackColor = System.Drawing.Color.Gainsboro;
 						this.LV.SelectedForeColor = System.Drawing.Color.Black;
-						this.LV.Size = new System.Drawing.Size(777, 425);
+						this.LV.Size = new System.Drawing.Size(777, 422);
 						this.LV.SmallImageList = this.IL;
 						this.LV.TabIndex = 1;
 						this.LV.UseCompatibleStateImageBehavior = false;
@@ -95,14 +97,6 @@
 						this.LV.ItemActivate += new System.EventHandler(this.LV_ItemActivate);
 						this.LV.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LV_KeyDown);
 						// 
-						// ChProgress
-						// 
-						this.ChProgress.AspectName = "Progress";
-						this.ChProgress.AspectToStringFormat = "";
-						this.ChProgress.DisplayIndex = 0;
-						this.ChProgress.Text = "Prog";
-						this.ChProgress.Width = 40;
-						// 
 						// ChTitle
 						// 
 						this.ChTitle.AspectName = "Title";
@@ -110,6 +104,14 @@
 						this.ChTitle.Text = "Title";
 						this.ChTitle.UseInitialLetterForGroup = true;
 						this.ChTitle.Width = 200;
+						// 
+						// ChProgress
+						// 
+						this.ChProgress.AspectName = "Progress";
+						this.ChProgress.AspectToStringFormat = "";
+						this.ChProgress.DisplayIndex = 0;
+						this.ChProgress.Text = "Prog";
+						this.ChProgress.Width = 40;
 						// 
 						// ChArtist
 						// 
@@ -144,7 +146,7 @@
 						// IL
 						// 
 						this.IL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("IL.ImageStream")));
-						this.IL.TransparentColor = System.Drawing.Color.Transparent;
+						this.IL.TransparentColor = System.Drawing.Color.White;
 						this.IL.Images.SetKeyName(0, "incomplete");
 						this.IL.Images.SetKeyName(1, "suspended");
 						this.IL.Images.SetKeyName(2, "verified");
@@ -170,53 +172,98 @@
 						// 
 						this.tableLayoutPanel2.AutoSize = true;
 						this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-						this.tableLayoutPanel2.ColumnCount = 4;
-						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+						this.tableLayoutPanel2.ColumnCount = 7;
 						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+						this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+						this.tableLayoutPanel2.Controls.Add(this.BtnUndelete, 0, 0);
 						this.tableLayoutPanel2.Controls.Add(this.BtnDelete, 0, 0);
-						this.tableLayoutPanel2.Controls.Add(this.BtnOpen, 3, 0);
-						this.tableLayoutPanel2.Controls.Add(this.BtnNew, 2, 0);
+						this.tableLayoutPanel2.Controls.Add(this.BtnOpen, 6, 0);
+						this.tableLayoutPanel2.Controls.Add(this.BtnNew, 5, 0);
+						this.tableLayoutPanel2.Controls.Add(this.BtnErase, 3, 0);
 						this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 434);
+						this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 431);
 						this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 						this.tableLayoutPanel2.RowCount = 1;
 						this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-						this.tableLayoutPanel2.Size = new System.Drawing.Size(777, 43);
+						this.tableLayoutPanel2.Size = new System.Drawing.Size(777, 46);
 						this.tableLayoutPanel2.TabIndex = 2;
+						// 
+						// BtnUndelete
+						// 
+						this.BtnUndelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+						this.BtnUndelete.Enabled = false;
+						this.BtnUndelete.Image = ((System.Drawing.Image)(resources.GetObject("BtnUndelete.Image")));
+						this.BtnUndelete.Location = new System.Drawing.Point(98, 3);
+						this.BtnUndelete.Name = "BtnUndelete";
+						this.BtnUndelete.Size = new System.Drawing.Size(109, 40);
+						this.BtnUndelete.TabIndex = 3;
+						this.BtnUndelete.Text = "UnDelete";
+						this.BtnUndelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+						this.BtnUndelete.UseVisualStyleBackColor = true;
+						this.BtnUndelete.Click += new System.EventHandler(this.BtnUndelete_Click);
 						// 
 						// BtnDelete
 						// 
+						this.BtnDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 						this.BtnDelete.Enabled = false;
+						this.BtnDelete.Image = ((System.Drawing.Image)(resources.GetObject("BtnDelete.Image")));
+						this.BtnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 						this.BtnDelete.Location = new System.Drawing.Point(3, 3);
 						this.BtnDelete.Name = "BtnDelete";
-						this.BtnDelete.Size = new System.Drawing.Size(89, 37);
+						this.BtnDelete.Size = new System.Drawing.Size(89, 40);
 						this.BtnDelete.TabIndex = 2;
 						this.BtnDelete.Text = "Delete";
+						this.BtnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 						this.BtnDelete.UseVisualStyleBackColor = true;
 						this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
 						// 
 						// BtnOpen
 						// 
+						this.BtnOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 						this.BtnOpen.Enabled = false;
+						this.BtnOpen.Image = ((System.Drawing.Image)(resources.GetObject("BtnOpen.Image")));
 						this.BtnOpen.Location = new System.Drawing.Point(685, 3);
 						this.BtnOpen.Name = "BtnOpen";
-						this.BtnOpen.Size = new System.Drawing.Size(89, 37);
+						this.BtnOpen.Size = new System.Drawing.Size(89, 40);
 						this.BtnOpen.TabIndex = 0;
 						this.BtnOpen.Text = "Open";
+						this.BtnOpen.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 						this.BtnOpen.UseVisualStyleBackColor = true;
 						this.BtnOpen.Click += new System.EventHandler(this.BtnOpen_Click);
 						// 
 						// BtnNew
 						// 
+						this.BtnNew.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+						this.BtnNew.Image = ((System.Drawing.Image)(resources.GetObject("BtnNew.Image")));
+						this.BtnNew.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 						this.BtnNew.Location = new System.Drawing.Point(590, 3);
 						this.BtnNew.Name = "BtnNew";
-						this.BtnNew.Size = new System.Drawing.Size(89, 37);
+						this.BtnNew.Size = new System.Drawing.Size(89, 40);
 						this.BtnNew.TabIndex = 1;
 						this.BtnNew.Text = "New";
+						this.BtnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 						this.BtnNew.UseVisualStyleBackColor = true;
 						this.BtnNew.Click += new System.EventHandler(this.BtnNew_Click);
+						// 
+						// BtnErase
+						// 
+						this.BtnErase.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+						this.BtnErase.Enabled = false;
+						this.BtnErase.Image = ((System.Drawing.Image)(resources.GetObject("BtnErase.Image")));
+						this.BtnErase.Location = new System.Drawing.Point(233, 3);
+						this.BtnErase.Name = "BtnErase";
+						this.BtnErase.Size = new System.Drawing.Size(89, 40);
+						this.BtnErase.TabIndex = 4;
+						this.BtnErase.Text = "Erase";
+						this.BtnErase.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+						this.BtnErase.UseVisualStyleBackColor = true;
+						this.BtnErase.Visible = false;
+						this.BtnErase.Click += new System.EventHandler(this.BtnErase_Click);
 						// 
 						// SheetDatabase
 						// 
@@ -234,7 +281,9 @@
 						this.TabText = "Sheet Database";
 						this.Text = "Sheet Database";
 						this.ToolTipText = "Sheet Database";
+						this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SheetDatabase_FormClosing);
 						this.Load += new System.EventHandler(this.SheetDatabase_Load);
+						this.Shown += new System.EventHandler(this.SheetDatabase_Shown);
 						((System.ComponentModel.ISupportInitialize)(this.LV)).EndInit();
 						this.tableLayoutPanel1.ResumeLayout(false);
 						this.tableLayoutPanel1.PerformLayout();
@@ -259,5 +308,7 @@
         private System.Windows.Forms.Button BtnDelete;
 		private BrightIdeasSoftware.OLVColumn ChStatus;
 		private BrightIdeasSoftware.OLVColumn ChProgress;
+		private System.Windows.Forms.Button BtnUndelete;
+		private System.Windows.Forms.Button BtnErase;
     }
 }

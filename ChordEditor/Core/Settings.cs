@@ -79,5 +79,16 @@ namespace ChordEditor.Core
 						get { return (bool)GetObject("UseLocalRepo", true); }
 						set { SetObject("UseLocalRepo", value); }
 				}
+
+				public static bool SuperUser
+				{
+						get { return Username == "diego"; }
+				}
+
+				public static byte[] LVState
+				{
+						get { return (byte[])GetObject("LVState", null); }
+						set { SetObject("LVState", value); }
+				}
 		}
 }

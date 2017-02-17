@@ -464,7 +464,7 @@
 						// 
 						this.MMnClose.Image = ((System.Drawing.Image)(resources.GetObject("MMnClose.Image")));
 						this.MMnClose.MergeAction = System.Windows.Forms.MergeAction.Insert;
-						this.MMnClose.MergeIndex = 2;
+						this.MMnClose.MergeIndex = 3;
 						this.MMnClose.Name = "MMnClose";
 						this.MMnClose.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
 						this.MMnClose.Size = new System.Drawing.Size(157, 22);

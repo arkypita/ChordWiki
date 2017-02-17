@@ -12,7 +12,7 @@ namespace ChordEditor.Forms
 {
 		public partial class SpashScreen : Form
 		{
-				public SpashScreen()
+				private SpashScreen()
 				{
 						InitializeComponent();
 
@@ -28,12 +28,25 @@ namespace ChordEditor.Forms
 						Close();
 				}
 
-				internal void ShowDialog(int p, bool cc)
+				public static void Show(int p, bool cc)
 				{
-						mCC = cc;
-						CloseTimer.Interval = p;
-						CloseTimer.Start();
-						ShowDialog();
+						SpashScreen f = new SpashScreen();
+						
+						f.mCC = cc;
+						f.CloseTimer.Interval = p;
+						f.CloseTimer.Start();
+						f.Show();
+				}
+
+				public static void ShowDialog(int p, bool cc)
+				{
+						using (SpashScreen f = new SpashScreen())
+						{
+								f.mCC = cc;
+								f.CloseTimer.Interval = p;
+								f.CloseTimer.Start();
+								f.ShowDialog();
+						}
 				}
 
 				private bool mCC = false;
