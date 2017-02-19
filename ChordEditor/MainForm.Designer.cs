@@ -51,21 +51,21 @@ namespace ChordEditor
 				{
 						this.components = new System.ComponentModel.Container();
 						System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-						ChordEditor.UserControls.DockingManager.DockPanelSkin dockPanelSkin1 = new ChordEditor.UserControls.DockingManager.DockPanelSkin();
-						ChordEditor.UserControls.DockingManager.AutoHideStripSkin autoHideStripSkin1 = new ChordEditor.UserControls.DockingManager.AutoHideStripSkin();
-						ChordEditor.UserControls.DockingManager.DockPanelGradient dockPanelGradient1 = new ChordEditor.UserControls.DockingManager.DockPanelGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient1 = new ChordEditor.UserControls.DockingManager.TabGradient();
-						ChordEditor.UserControls.DockingManager.DockPaneStripSkin dockPaneStripSkin1 = new ChordEditor.UserControls.DockingManager.DockPaneStripSkin();
-						ChordEditor.UserControls.DockingManager.DockPaneStripGradient dockPaneStripGradient1 = new ChordEditor.UserControls.DockingManager.DockPaneStripGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient2 = new ChordEditor.UserControls.DockingManager.TabGradient();
-						ChordEditor.UserControls.DockingManager.DockPanelGradient dockPanelGradient2 = new ChordEditor.UserControls.DockingManager.DockPanelGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient3 = new ChordEditor.UserControls.DockingManager.TabGradient();
-						ChordEditor.UserControls.DockingManager.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new ChordEditor.UserControls.DockingManager.DockPaneStripToolWindowGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient4 = new ChordEditor.UserControls.DockingManager.TabGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient5 = new ChordEditor.UserControls.DockingManager.TabGradient();
-						ChordEditor.UserControls.DockingManager.DockPanelGradient dockPanelGradient3 = new ChordEditor.UserControls.DockingManager.DockPanelGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient6 = new ChordEditor.UserControls.DockingManager.TabGradient();
-						ChordEditor.UserControls.DockingManager.TabGradient tabGradient7 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.DockPanelSkin dockPanelSkin2 = new ChordEditor.UserControls.DockingManager.DockPanelSkin();
+						ChordEditor.UserControls.DockingManager.AutoHideStripSkin autoHideStripSkin2 = new ChordEditor.UserControls.DockingManager.AutoHideStripSkin();
+						ChordEditor.UserControls.DockingManager.DockPanelGradient dockPanelGradient4 = new ChordEditor.UserControls.DockingManager.DockPanelGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient8 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.DockPaneStripSkin dockPaneStripSkin2 = new ChordEditor.UserControls.DockingManager.DockPaneStripSkin();
+						ChordEditor.UserControls.DockingManager.DockPaneStripGradient dockPaneStripGradient2 = new ChordEditor.UserControls.DockingManager.DockPaneStripGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient9 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.DockPanelGradient dockPanelGradient5 = new ChordEditor.UserControls.DockingManager.DockPanelGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient10 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient2 = new ChordEditor.UserControls.DockingManager.DockPaneStripToolWindowGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient11 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient12 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.DockPanelGradient dockPanelGradient6 = new ChordEditor.UserControls.DockingManager.DockPanelGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient13 = new ChordEditor.UserControls.DockingManager.TabGradient();
+						ChordEditor.UserControls.DockingManager.TabGradient tabGradient14 = new ChordEditor.UserControls.DockingManager.TabGradient();
 						this.MSS = new System.Windows.Forms.StatusStrip();
 						this.MMS = new System.Windows.Forms.MenuStrip();
 						this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -109,6 +109,7 @@ namespace ChordEditor
 						this.ET = new System.Windows.Forms.Timer(this.components);
 						this.VCAT = new System.Windows.Forms.Timer(this.components);
 						this.DP = new ChordEditor.UserControls.DockingManager.DockPanel();
+						this.MnGenerate = new System.Windows.Forms.ToolStripMenuItem();
 						this.MMS.SuspendLayout();
 						this.MTS.SuspendLayout();
 						this.SuspendLayout();
@@ -140,6 +141,7 @@ namespace ChordEditor
             this.MnCloseAll,
             this.toolStripMenuItem8,
             this.MnImport,
+            this.MnGenerate,
             this.toolStripSeparator,
             this.MnSaveAll,
             this.toolStripSeparator2,
@@ -156,7 +158,7 @@ namespace ChordEditor
 						this.MnNewSheet.ImageTransparentColor = System.Drawing.Color.Magenta;
 						this.MnNewSheet.Name = "MnNewSheet";
 						this.MnNewSheet.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-						this.MnNewSheet.Size = new System.Drawing.Size(156, 22);
+						this.MnNewSheet.Size = new System.Drawing.Size(178, 22);
 						this.MnNewSheet.Text = "&New";
 						this.MnNewSheet.ToolTipText = "New sheet";
 						this.MnNewSheet.Click += new System.EventHandler(this.DocumentCreate);
@@ -167,7 +169,7 @@ namespace ChordEditor
 						this.MnOpenSheet.ImageTransparentColor = System.Drawing.Color.Magenta;
 						this.MnOpenSheet.Name = "MnOpenSheet";
 						this.MnOpenSheet.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-						this.MnOpenSheet.Size = new System.Drawing.Size(156, 22);
+						this.MnOpenSheet.Size = new System.Drawing.Size(178, 22);
 						this.MnOpenSheet.Text = "&Open";
 						this.MnOpenSheet.ToolTipText = "Open from database";
 						this.MnOpenSheet.Click += new System.EventHandler(this.DocumentOpen);
@@ -176,7 +178,7 @@ namespace ChordEditor
 						// 
 						this.MnCloseAll.Image = ((System.Drawing.Image)(resources.GetObject("MnCloseAll.Image")));
 						this.MnCloseAll.Name = "MnCloseAll";
-						this.MnCloseAll.Size = new System.Drawing.Size(156, 22);
+						this.MnCloseAll.Size = new System.Drawing.Size(178, 22);
 						this.MnCloseAll.Text = "Close All";
 						this.MnCloseAll.ToolTipText = "Close all opened sheet";
 						this.MnCloseAll.Click += new System.EventHandler(this.MnCloseAll_Click);
@@ -184,14 +186,14 @@ namespace ChordEditor
 						// toolStripMenuItem8
 						// 
 						this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-						this.toolStripMenuItem8.Size = new System.Drawing.Size(153, 6);
+						this.toolStripMenuItem8.Size = new System.Drawing.Size(175, 6);
 						// 
 						// MnImport
 						// 
 						this.MnImport.Image = ((System.Drawing.Image)(resources.GetObject("MnImport.Image")));
 						this.MnImport.Name = "MnImport";
 						this.MnImport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-						this.MnImport.Size = new System.Drawing.Size(156, 22);
+						this.MnImport.Size = new System.Drawing.Size(178, 22);
 						this.MnImport.Text = "Import";
 						this.MnImport.ToolTipText = "Import from word document";
 						this.MnImport.Click += new System.EventHandler(this.MnImport_Click);
@@ -199,13 +201,13 @@ namespace ChordEditor
 						// toolStripSeparator
 						// 
 						this.toolStripSeparator.Name = "toolStripSeparator";
-						this.toolStripSeparator.Size = new System.Drawing.Size(153, 6);
+						this.toolStripSeparator.Size = new System.Drawing.Size(175, 6);
 						// 
 						// MnSaveAll
 						// 
 						this.MnSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("MnSaveAll.Image")));
 						this.MnSaveAll.Name = "MnSaveAll";
-						this.MnSaveAll.Size = new System.Drawing.Size(156, 22);
+						this.MnSaveAll.Size = new System.Drawing.Size(178, 22);
 						this.MnSaveAll.Text = "Save All";
 						this.MnSaveAll.ToolTipText = "Save all opened sheet";
 						this.MnSaveAll.Click += new System.EventHandler(this.MnSaveAll_Click);
@@ -213,7 +215,7 @@ namespace ChordEditor
 						// toolStripSeparator2
 						// 
 						this.toolStripSeparator2.Name = "toolStripSeparator2";
-						this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
+						this.toolStripSeparator2.Size = new System.Drawing.Size(175, 6);
 						// 
 						// MnSyncronize
 						// 
@@ -228,7 +230,7 @@ namespace ChordEditor
             this.MMnCleanup});
 						this.MnSyncronize.Image = ((System.Drawing.Image)(resources.GetObject("MnSyncronize.Image")));
 						this.MnSyncronize.Name = "MnSyncronize";
-						this.MnSyncronize.Size = new System.Drawing.Size(156, 22);
+						this.MnSyncronize.Size = new System.Drawing.Size(178, 22);
 						this.MnSyncronize.Text = "Syncroni&ze";
 						// 
 						// MMnFullSync
@@ -294,7 +296,7 @@ namespace ChordEditor
 						// toolStripMenuItem1
 						// 
 						this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-						this.toolStripMenuItem1.Size = new System.Drawing.Size(153, 6);
+						this.toolStripMenuItem1.Size = new System.Drawing.Size(175, 6);
 						// 
 						// MnExit
 						// 
@@ -302,7 +304,7 @@ namespace ChordEditor
 						this.MnExit.Name = "MnExit";
 						this.MnExit.ShortcutKeyDisplayString = "";
 						this.MnExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-						this.MnExit.Size = new System.Drawing.Size(156, 22);
+						this.MnExit.Size = new System.Drawing.Size(178, 22);
 						this.MnExit.Text = "E&xit";
 						this.MnExit.ToolTipText = "Exit from ChordPro Editor";
 						this.MnExit.Click += new System.EventHandler(this.MainFormClose);
@@ -479,54 +481,62 @@ namespace ChordEditor
 						this.DP.Location = new System.Drawing.Point(0, 63);
 						this.DP.Name = "DP";
 						this.DP.Size = new System.Drawing.Size(789, 426);
-						dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
-						dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
-						autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
-						tabGradient1.EndColor = System.Drawing.SystemColors.Control;
-						tabGradient1.StartColor = System.Drawing.SystemColors.Control;
-						tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-						autoHideStripSkin1.TabGradient = tabGradient1;
-						autoHideStripSkin1.TextFont = new System.Drawing.Font("Segoe UI", 9F);
-						dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
-						tabGradient2.EndColor = System.Drawing.SystemColors.ControlLightLight;
-						tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
-						tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
-						dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
-						dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
-						dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
-						dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
-						tabGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
-						tabGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
-						tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
-						dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
-						dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-						dockPaneStripSkin1.TextFont = new System.Drawing.Font("Segoe UI", 9F);
-						tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
-						tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-						tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
-						tabGradient4.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
-						dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
-						tabGradient5.EndColor = System.Drawing.SystemColors.Control;
-						tabGradient5.StartColor = System.Drawing.SystemColors.Control;
-						tabGradient5.TextColor = System.Drawing.SystemColors.ControlText;
-						dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
-						dockPanelGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
-						dockPanelGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
-						dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
-						tabGradient6.EndColor = System.Drawing.SystemColors.InactiveCaption;
-						tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
-						tabGradient6.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
-						tabGradient6.TextColor = System.Drawing.SystemColors.InactiveCaptionText;
-						dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
-						tabGradient7.EndColor = System.Drawing.Color.Transparent;
-						tabGradient7.StartColor = System.Drawing.Color.Transparent;
-						tabGradient7.TextColor = System.Drawing.SystemColors.ControlDarkDark;
-						dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
-						dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
-						dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
-						this.DP.Skin = dockPanelSkin1;
+						dockPanelGradient4.EndColor = System.Drawing.SystemColors.ControlLight;
+						dockPanelGradient4.StartColor = System.Drawing.SystemColors.ControlLight;
+						autoHideStripSkin2.DockStripGradient = dockPanelGradient4;
+						tabGradient8.EndColor = System.Drawing.SystemColors.Control;
+						tabGradient8.StartColor = System.Drawing.SystemColors.Control;
+						tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+						autoHideStripSkin2.TabGradient = tabGradient8;
+						autoHideStripSkin2.TextFont = new System.Drawing.Font("Segoe UI", 9F);
+						dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
+						tabGradient9.EndColor = System.Drawing.SystemColors.ControlLightLight;
+						tabGradient9.StartColor = System.Drawing.SystemColors.ControlLightLight;
+						tabGradient9.TextColor = System.Drawing.SystemColors.ControlText;
+						dockPaneStripGradient2.ActiveTabGradient = tabGradient9;
+						dockPanelGradient5.EndColor = System.Drawing.SystemColors.Control;
+						dockPanelGradient5.StartColor = System.Drawing.SystemColors.Control;
+						dockPaneStripGradient2.DockStripGradient = dockPanelGradient5;
+						tabGradient10.EndColor = System.Drawing.SystemColors.ControlLight;
+						tabGradient10.StartColor = System.Drawing.SystemColors.ControlLight;
+						tabGradient10.TextColor = System.Drawing.SystemColors.ControlText;
+						dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
+						dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
+						dockPaneStripSkin2.TextFont = new System.Drawing.Font("Segoe UI", 9F);
+						tabGradient11.EndColor = System.Drawing.SystemColors.ActiveCaption;
+						tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+						tabGradient11.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
+						tabGradient11.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
+						dockPaneStripToolWindowGradient2.ActiveCaptionGradient = tabGradient11;
+						tabGradient12.EndColor = System.Drawing.SystemColors.Control;
+						tabGradient12.StartColor = System.Drawing.SystemColors.Control;
+						tabGradient12.TextColor = System.Drawing.SystemColors.ControlText;
+						dockPaneStripToolWindowGradient2.ActiveTabGradient = tabGradient12;
+						dockPanelGradient6.EndColor = System.Drawing.SystemColors.ControlLight;
+						dockPanelGradient6.StartColor = System.Drawing.SystemColors.ControlLight;
+						dockPaneStripToolWindowGradient2.DockStripGradient = dockPanelGradient6;
+						tabGradient13.EndColor = System.Drawing.SystemColors.InactiveCaption;
+						tabGradient13.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+						tabGradient13.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
+						tabGradient13.TextColor = System.Drawing.SystemColors.InactiveCaptionText;
+						dockPaneStripToolWindowGradient2.InactiveCaptionGradient = tabGradient13;
+						tabGradient14.EndColor = System.Drawing.Color.Transparent;
+						tabGradient14.StartColor = System.Drawing.Color.Transparent;
+						tabGradient14.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+						dockPaneStripToolWindowGradient2.InactiveTabGradient = tabGradient14;
+						dockPaneStripSkin2.ToolWindowGradient = dockPaneStripToolWindowGradient2;
+						dockPanelSkin2.DockPaneStripSkin = dockPaneStripSkin2;
+						this.DP.Skin = dockPanelSkin2;
 						this.DP.TabIndex = 4;
 						this.DP.ActiveDocumentChanged += new System.EventHandler(this.DP_ActiveDocumentChanged);
+						// 
+						// MnGenerate
+						// 
+						this.MnGenerate.Image = ((System.Drawing.Image)(resources.GetObject("MnGenerate.Image")));
+						this.MnGenerate.Name = "MnGenerate";
+						this.MnGenerate.Size = new System.Drawing.Size(178, 22);
+						this.MnGenerate.Text = "Generate SongBook";
+						this.MnGenerate.Click += new System.EventHandler(this.MnGenerate_Click);
 						// 
 						// MainForm
 						// 
@@ -586,5 +596,6 @@ namespace ChordEditor
 				private System.Windows.Forms.ToolStripMenuItem MnHelp;
 				private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
 				private System.Windows.Forms.ToolStripMenuItem MnAbout;
+				private System.Windows.Forms.ToolStripMenuItem MnGenerate;
 		}
 }

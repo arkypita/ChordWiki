@@ -115,10 +115,14 @@ namespace ChordEditor.Core
 						set { SetMeta("verifiedby", value); }
 				}
 
-				public string Index
+				public int Index
 				{
-						get { return GetMeta("index"); }
-						set { SetMeta("index", value); }
+						get 
+						{
+								string idx = GetMeta("index");
+								return idx == null ? -1 : int.Parse(idx);
+						}
+						set { SetMeta("index", value.ToString()); }
 				}
 
 				public SheetProgress Progress

@@ -333,6 +333,11 @@ namespace ChordEditor
 						System.Diagnostics.Process.Start("http://bergamo3.it/chord-wiki-support/");
 				}
 
+				private void MnGenerate_Click(object sender, EventArgs e)
+				{
+						SongBook.Generate();
+				}
+
 
 
 

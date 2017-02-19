@@ -130,9 +130,16 @@
     <Compile Include="Core\SheetDB.cs" />
     <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
+    <Compile Include="Core\SongBook.cs" />
     <Compile Include="Core\SVN.cs" />
     <Compile Include="Core\TokenFile.cs" />
     <Compile Include="Core\Pagliaro.cs" />
+    <Compile Include="Forms\BookGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BookGenerator.Designer.cs">
+      <DependentUpon>BookGenerator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\RegistrationBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -307,6 +314,12 @@
     </None>
     <None Include="ChordWiki.pfx" />
     <None Include="Properties\app.manifest" />
+    <None Include="Template\chordbook.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Template\songbook.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Transpose.py" />
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />
     <None Include="UserControls\DockingManager\license.txt" />
@@ -335,6 +348,9 @@
     <None Include="UserControls\DockingManager\Resources\DockPane_OptionOverflow.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\BookGenerator.resx">
+      <DependentUpon>BookGenerator.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\RegistrationBox.resx">
       <DependentUpon>RegistrationBox.cs</DependentUpon>
     </EmbeddedResource>

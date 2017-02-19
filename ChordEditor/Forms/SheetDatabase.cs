@@ -37,9 +37,9 @@ namespace ChordEditor.Forms
 
 
 						this.ChProgress.Renderer = new MappedImageRenderer(new Object[] { 
-																				Core.SheetHeader.SheetProgress.Added, IL.Images["incomplete"], 
-																				Core.SheetHeader.SheetProgress.Verified, IL.Images["suspended"], 
-																				Core.SheetHeader.SheetProgress.Reviewed, IL.Images["verified"], 
+																				Core.SheetHeader.SheetProgress.Added, IL.Images["added"], 
+																				Core.SheetHeader.SheetProgress.Verified, IL.Images["verified"], 
+																				Core.SheetHeader.SheetProgress.Reviewed, IL.Images["reviewed"], 
 																				Core.SheetHeader.SheetProgress.Locked, IL.Images["locked"],
 																				Core.SheetHeader.SheetProgress.Deleted, IL.Images["deleted"]
 																				});

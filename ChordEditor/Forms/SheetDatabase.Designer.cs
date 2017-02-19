@@ -152,11 +152,11 @@
 						// 
 						this.IL.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("IL.ImageStream")));
 						this.IL.TransparentColor = System.Drawing.Color.White;
-						this.IL.Images.SetKeyName(0, "incomplete");
-						this.IL.Images.SetKeyName(1, "suspended");
+						this.IL.Images.SetKeyName(0, "deleted");
+						this.IL.Images.SetKeyName(1, "added");
 						this.IL.Images.SetKeyName(2, "verified");
-						this.IL.Images.SetKeyName(3, "locked");
-						this.IL.Images.SetKeyName(4, "deleted");
+						this.IL.Images.SetKeyName(3, "reviewed");
+						this.IL.Images.SetKeyName(4, "locked");
 						// 
 						// tableLayoutPanel1
 						// 
@@ -294,7 +294,7 @@
 						// MMNShowHistory
 						// 
 						this.MMNShowHistory.Name = "MMNShowHistory";
-						this.MMNShowHistory.Size = new System.Drawing.Size(152, 22);
+						this.MMNShowHistory.Size = new System.Drawing.Size(137, 22);
 						this.MMNShowHistory.Text = "SVN History";
 						this.MMNShowHistory.Click += new System.EventHandler(this.MMNShowHistory_Click);
 						// 

@@ -133,7 +133,6 @@
 						this.CHP.Cursor = System.Windows.Forms.Cursors.IBeam;
 						this.CHP.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.CHP.Dock = System.Windows.Forms.DockStyle.Fill;
-						this.CHP.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.CHP.Hotkeys = resources.GetString("CHP.Hotkeys");
 						this.CHP.IsReplaceMode = false;
 						this.CHP.Location = new System.Drawing.Point(0, 0);
@@ -388,6 +387,7 @@
 						this.COT.Cursor = System.Windows.Forms.Cursors.Arrow;
 						this.COT.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 						this.COT.Dock = System.Windows.Forms.DockStyle.Fill;
+						this.COT.Font = new System.Drawing.Font("Courier New", 9.75F);
 						this.COT.Hotkeys = resources.GetString("COT.Hotkeys");
 						this.COT.IsReplaceMode = false;
 						this.COT.Location = new System.Drawing.Point(0, 0);
@@ -480,7 +480,7 @@
 						this.MMnSave.Enabled = false;
 						this.MMnSave.Image = ((System.Drawing.Image)(resources.GetObject("MMnSave.Image")));
 						this.MMnSave.MergeAction = System.Windows.Forms.MergeAction.Insert;
-						this.MMnSave.MergeIndex = 7;
+						this.MMnSave.MergeIndex = 8;
 						this.MMnSave.Name = "MMnSave";
 						this.MMnSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 						this.MMnSave.Size = new System.Drawing.Size(157, 22);
@@ -491,7 +491,7 @@
 						// 
 						this.MnPrint.Image = ((System.Drawing.Image)(resources.GetObject("MnPrint.Image")));
 						this.MnPrint.MergeAction = System.Windows.Forms.MergeAction.Insert;
-						this.MnPrint.MergeIndex = 9;
+						this.MnPrint.MergeIndex = 10;
 						this.MnPrint.Name = "MnPrint";
 						this.MnPrint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 						this.MnPrint.Size = new System.Drawing.Size(157, 22);
@@ -628,28 +628,28 @@
 						this.MMnSelectAll.Text = "Select all";
 						this.MMnSelectAll.Click += new System.EventHandler(this.ActionSelectAll);
 						// 
-						// adminToolStripMenuItem
+						// MMnAdmin
 						// 
 						this.MMnAdmin.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MMNShowLog,
             this.MMnBlame});
 						this.MMnAdmin.MergeAction = System.Windows.Forms.MergeAction.Insert;
 						this.MMnAdmin.MergeIndex = 2;
-						this.MMnAdmin.Name = "adminToolStripMenuItem";
+						this.MMnAdmin.Name = "MMnAdmin";
 						this.MMnAdmin.Size = new System.Drawing.Size(80, 20);
 						this.MMnAdmin.Text = "&SVN Admin";
 						// 
 						// MMNShowLog
 						// 
 						this.MMNShowLog.Name = "MMNShowLog";
-						this.MMNShowLog.Size = new System.Drawing.Size(152, 22);
+						this.MMNShowLog.Size = new System.Drawing.Size(132, 22);
 						this.MMNShowLog.Text = "SVN Log";
 						this.MMNShowLog.Click += new System.EventHandler(this.MMnLog_Click);
 						// 
 						// MMnBlame
 						// 
 						this.MMnBlame.Name = "MMnBlame";
-						this.MMnBlame.Size = new System.Drawing.Size(152, 22);
+						this.MMnBlame.Size = new System.Drawing.Size(132, 22);
 						this.MMnBlame.Text = "SVN Blame";
 						this.MMnBlame.Click += new System.EventHandler(this.MMnBlame_Click);
 						// 
