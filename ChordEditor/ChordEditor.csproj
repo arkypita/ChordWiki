@@ -101,6 +101,9 @@
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="SharpSvn">
       <HintPath>external\SharpSvn.dll</HintPath>
     </Reference>
@@ -314,7 +317,7 @@
     </None>
     <None Include="ChordWiki.pfx" />
     <None Include="Properties\app.manifest" />
-    <None Include="Template\chordbook.docx">
+    <None Include="Template\chordbook.dotx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Template\demo.docx" />
