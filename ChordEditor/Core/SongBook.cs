@@ -47,13 +47,13 @@ namespace ChordEditor.Core
 
 						internal void Execute(JobBegin begin, JobProgress progress, JobEnd end)
 						{
-								if (begin != null) begin(unsorted+indexed);
+								if (begin != null) begin(unsorted + indexed);
 
 								Application app = new Application();
 								Document doc = app.Documents.Open(System.IO.Path.GetFullPath("./Template/chordbook.docx"));
 								Template tpl = new Template(doc);
 
-								
+
 								PreProcess(progress, doc, tpl);
 								//todo: implement sorting
 								Write(doc);
@@ -127,21 +127,21 @@ namespace ChordEditor.Core
 
 						private class Template
 						{
-								public Style TitleStyle;
-								public Style ArtistStyle;
+								public Style SongTitle;
+								public Style SongArtist;
 								public Style ChordStyle;
-								public Style ChorusStyle;
-								public Style StropheStyle;
+								public Style ChorusWC;
+								public Style StorpheWC;
 
 								public PageSetup Page;
 
 								public Template(Document doc)
 								{
-										TitleStyle = doc.Styles["SongTitle"];
-										ArtistStyle = doc.Styles["SongArtist"];
-										ChordStyle = doc.Styles["Chords"];
-										ChorusStyle = doc.Styles["Chorus"];
-										StropheStyle = doc.Styles["Strophe"];
+										SongTitle = doc.Styles["SongTitle"];
+										SongArtist = doc.Styles["SongArtist"];
+										
+										ChorusWC = doc.Styles["ChorusWC"];
+										StorpheWC = doc.Styles["StropheWC"];
 
 										Page = doc.PageSetup;
 								}
@@ -153,32 +153,30 @@ namespace ChordEditor.Core
 								List<Paragraph> mContent = new List<Paragraph>();
 
 								public ProcessedSheet(SheetHeader sh)
-								{mSheet = new Sheet(sh.FileName);}
+								{ mSheet = new Sheet(sh.FileName); }
 
 								internal void Analyze(Document doc, Template tpl)
 								{
 										mSheet.ReloadFile();
 
-										AddParagraph(doc, tpl.TitleStyle, mSheet.Header.Title);
+										AddParagraph(doc, tpl.SongTitle, mSheet.Header.Title);
 										if (mSheet.Header.Artist != null)
-												AddParagraph(doc, tpl.ArtistStyle, mSheet.Header.Artist);
+												AddParagraph(doc, tpl.SongArtist, mSheet.Header.Artist);
 
-										using (var reader = new System.IO.StringReader(mSheet.Content))
-										{
-												for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-												{
-														AddParagraph(doc, tpl.StropheStyle, line);
-												}
-										}
+										string[] pars = mSheet.Content.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+										foreach (string par in pars)
+												AddParagraph(doc, tpl.StorpheWC, par);
 								}
 
 								private void AddParagraph(Document doc, Style style, string content)
 								{
+										content = content.Replace("\r\n", "\v");
+
 										Paragraph par = doc.Content.Paragraphs.Add();
 										par.Range.Text = content;
 										par.set_Style(style);
-										//mContent.Add(par);
-										par.Range.InsertParagraphBefore();
+										mContent.Add(par);
+										par.Range.InsertParagraphAfter();
 								}
 
 
@@ -195,7 +193,7 @@ namespace ChordEditor.Core
 
 						foreach (SheetHeader sh in SheetDB.List)
 						{
-								if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
+								if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Verified && sh.SheetCategory != null)
 										job.Add(sh, opt);
 						}
 

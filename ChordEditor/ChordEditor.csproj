@@ -317,9 +317,7 @@
     <None Include="Template\chordbook.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Template\songbook.docx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Template\demo.docx" />
     <None Include="Transpose.py" />
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />
     <None Include="UserControls\DockingManager\license.txt" />
