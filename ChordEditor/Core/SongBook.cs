@@ -54,10 +54,11 @@ namespace ChordEditor.Core
 				object oMissing = System.Reflection.Missing.Value;
 
 				Application app = new Application();
+				app.Visible = true;
 				Document doc = app.Documents.Open(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), oMissing,oTrue, oFalse);
 				Template tpl = new Template(doc);
 
-				PreProcess(progress, doc, tpl);
+				PreProcess(progress, app, doc, tpl);
 
 				app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
 				
@@ -69,20 +70,20 @@ namespace ChordEditor.Core
 
 			
 
-			private void PreProcess(JobProgress progress, Document doc, Template tpl)
+			private void PreProcess(JobProgress progress, Application app, Document doc, Template tpl)
 			{
 				foreach (KeyValuePair<string, JobDictionary.CategoryGroup> kvp in mList)
 				{
 					int count = 0;
 					foreach (ProcessedSheet ps in kvp.Value.Indexed)
 					{
-						ps.Analyze(doc, tpl);
+						ps.Analyze(app, doc, tpl);
 						if (progress != null)
 							progress(count++, ps.mSheet.Header);
 					}
 					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
 					{
-						ps.Analyze(doc, tpl);
+						ps.Analyze(app, doc, tpl);
 						if (progress != null)
 							progress(count++, ps.mSheet.Header);
 					}
@@ -124,7 +125,7 @@ namespace ChordEditor.Core
 				public ProcessedSheet(SheetHeader sh)
 				{ mSheet = new Sheet(sh.FileName); }
 
-				internal void Analyze(Document doc, Template tpl)
+				internal void Analyze(Application app, Document doc, Template tpl)
 				{
 					mSheet.ReloadFile();
 
@@ -143,16 +144,16 @@ namespace ChordEditor.Core
 						while ((line = sr.ReadLine()) != null)
 						{
 							if (line == "{soc}")
-							{ OnNewParagraph(doc, tpl, Helper, InChorus); InChorus = true; }
+							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = true; }
 							else if (line == "{eoc}")
-							{ OnNewParagraph(doc, tpl, Helper, InChorus); InChorus = false; }
+							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = false; }
 							else if (string.IsNullOrWhiteSpace(line))
-							{ OnNewParagraph(doc, tpl, Helper, InChorus); }
+							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); }
 							else
 							{ AppendToParagraph(Helper, line); }
 						}
 
-						OnNewParagraph(doc, tpl, Helper, InChorus); //close last paragraph
+						OnNewParagraph(app, doc, tpl, Helper, InChorus); //close last paragraph
 					}
 				}
 
@@ -164,11 +165,11 @@ namespace ChordEditor.Core
 					Helper.Append(line);
 				}
 
-				private void OnNewParagraph(Document doc, Template tpl, StringBuilder Helper, bool InChorus)
+				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus)
 				{
 					//close prev paragraph
 					if (Helper.Length > 0)
-						AddParagraph(doc, tpl, Helper.ToString(), InChorus);
+						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus);
 
 					//begin new paragraph
 					Helper.Clear();
@@ -183,43 +184,46 @@ namespace ChordEditor.Core
 					par.Range.InsertParagraphAfter();
 				}
 
-				private void AddParagraph(Document doc, Template tpl, string content, bool InChorus)
+				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus)
 				{
 					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(content);
 					//remove all chords
 					content = Core.RegexList.Chords.ChordProNote.Replace(content, "");
-					
+
 					bool WithChords = matches.Count > 0;
 					Style style = InChorus ? (WithChords ? tpl.ChorusWC : tpl.ChorusWoC) : (WithChords ? tpl.StorpheWC : tpl.StorpheWoC);
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = content;
 					par.set_Style(style);
-
+					
 					int offset = 0;
 					foreach (System.Text.RegularExpressions.Match match in matches)
 					{
-						int position = par.Range.Start + match.Index - offset;
+						Range place = doc.Range(par.Range.Start + match.Index - offset, par.Range.Start + match.Index - offset + 1);
+						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 40, 20, place);
+						//TB.RelativeVerticalPosition = WdRelativeVerticalPosition.wdRelativeVerticalPositionLine;
+						//TB.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionCharacter;
+						//TB.LeftRelative = 0.0f;
+						//TB.TopRelative = -0.25f;
+						//TB.LockAnchor = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
 
-						Range target = doc.Range(position);
-
-						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 40, 20, target);
-						TB.RelativeVerticalPosition = WdRelativeVerticalPosition.wdRelativeVerticalPositionLine;
-						TB.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionCharacter;
 						TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
 						TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-						TB.LeftRelative = 0.0f;
-						TB.TopRelative = -0.25f;
 						TB.TextFrame.MarginBottom = 0;
 						TB.TextFrame.MarginLeft = 0;
 						TB.TextFrame.MarginRight = 0;
 						TB.TextFrame.MarginTop = 0;
 						TB.TextFrame.TextRange.Text = match.Value;
 
+						InlineShape S = TB.ConvertToInlineShape();
+
 						offset += match.Length;
 					}
 
 					par.Range.InsertParagraphAfter();
 				}
+
+
 
 				
 
