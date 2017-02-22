@@ -195,17 +195,27 @@ namespace ChordEditor.Core
 					par.Range.Text = content;
 					par.set_Style(style);
 
+					int offset = 0;
 					foreach (System.Text.RegularExpressions.Match match in matches)
 					{
-						Microsoft.Office.Interop.Word.Shape textbox = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 100, 20, par.Range);
-						textbox.TextFrame.TextRange.Text = match.Value;
-						textbox.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-						textbox.TextFrame.MarginBottom = 0;
-						textbox.TextFrame.MarginLeft = 0;
-						textbox.TextFrame.MarginRight = 0;
-						textbox.TextFrame.MarginTop = 0;
+						int position = par.Range.Start + match.Index - offset;
 
-						//textbox.Width = 20;
+						Range target = doc.Range(position);
+
+						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 40, 20, target);
+						TB.RelativeVerticalPosition = WdRelativeVerticalPosition.wdRelativeVerticalPositionLine;
+						TB.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionCharacter;
+						TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+						TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+						TB.LeftRelative = 0.0f;
+						TB.TopRelative = -0.25f;
+						TB.TextFrame.MarginBottom = 0;
+						TB.TextFrame.MarginLeft = 0;
+						TB.TextFrame.MarginRight = 0;
+						TB.TextFrame.MarginTop = 0;
+						TB.TextFrame.TextRange.Text = match.Value;
+
+						offset += match.Length;
 					}
 
 					par.Range.InsertParagraphAfter();

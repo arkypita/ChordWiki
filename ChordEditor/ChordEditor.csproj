@@ -320,7 +320,6 @@
     <None Include="Template\chordbook.dotx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Template\demo.docx" />
     <None Include="Transpose.py" />
     <None Include="UserControls\DockingManager\Docking\DockPanel.bmp" />
     <None Include="UserControls\DockingManager\license.txt" />
