@@ -55,7 +55,7 @@ namespace ChordEditor.Core
 
 				Application app = new Application();
 				app.Visible = true;
-				Document doc = app.Documents.Open(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), oMissing,oTrue, oFalse);
+				Document doc = app.Documents.Add(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), oTrue, WdNewDocumentType.wdNewBlankDocument, true);
 				Template tpl = new Template(doc);
 
 				PreProcess(progress, app, doc, tpl);
@@ -199,8 +199,12 @@ namespace ChordEditor.Core
 					int offset = 0;
 					foreach (System.Text.RegularExpressions.Match match in matches)
 					{
-						Range place = doc.Range(par.Range.Start + match.Index - offset, par.Range.Start + match.Index - offset + 1);
-						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 40, 20, place);
+						doc.Range(par.Range.Start + match.Index - offset, par.Range.Start + match.Index - offset).Select();
+						var left = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdHorizontalPositionRelativeToPage);
+						var top = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdVerticalPositionRelativeToPage);
+
+
+						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, left, top-10, 40, 20, par.Range);
 						//TB.RelativeVerticalPosition = WdRelativeVerticalPosition.wdRelativeVerticalPositionLine;
 						//TB.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionCharacter;
 						//TB.LeftRelative = 0.0f;
@@ -213,9 +217,8 @@ namespace ChordEditor.Core
 						TB.TextFrame.MarginLeft = 0;
 						TB.TextFrame.MarginRight = 0;
 						TB.TextFrame.MarginTop = 0;
-						TB.TextFrame.TextRange.Text = match.Value;
+						TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] {'[', ']'});
 
-						InlineShape S = TB.ConvertToInlineShape();
 
 						offset += match.Length;
 					}
