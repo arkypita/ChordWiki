@@ -49,21 +49,25 @@ namespace ChordEditor.Core
 			{
 				if (begin != null) begin(unsorted + indexed);
 
-				object oFalse = false;
-				object oTrue = true;
 				object oMissing = System.Reflection.Missing.Value;
 
 				Application app = new Application();
+				app.CheckLanguage = false;
 				app.Visible = true;
-				Document doc = app.Documents.Add(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), oTrue, WdNewDocumentType.wdNewBlankDocument, true);
-				Template tpl = new Template(doc);
 
+				Document doc = app.Documents.Add(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), true, WdNewDocumentType.wdNewBlankDocument, true);
+				doc.SpellingChecked = true;
+				doc.GrammarChecked = true;
+				doc.ShowGrammaticalErrors = false;
+				doc.ShowSpellingErrors = false;
+
+				Template tpl = new Template(doc);
 				PreProcess(progress, app, doc, tpl);
 
-				app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
+				//app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
 				
-				doc.Close(Microsoft.Office.Interop.Word.WdSaveOptions.wdDoNotSaveChanges);
-				app.Quit();
+				//doc.Close(Microsoft.Office.Interop.Word.WdSaveOptions.wdDoNotSaveChanges);
+				//app.Quit();
 
 				if (end != null) end();
 			}
@@ -99,6 +103,7 @@ namespace ChordEditor.Core
 				public Style StorpheWC;
 				public Style ChorusWoC;
 				public Style StorpheWoC;
+				public Style ChordTB;
 
 				public PageSetup Page;
 
@@ -113,8 +118,11 @@ namespace ChordEditor.Core
 					ChorusWoC = doc.Styles["ChorusWoC"];
 					StorpheWoC = doc.Styles["StropheWoC"];
 
+					ChordTB = doc.Styles["ChordTB"];
+
 					Page = doc.PageSetup;
 				}
+
 			}
 
 			private class ProcessedSheet
@@ -186,6 +194,8 @@ namespace ChordEditor.Core
 
 				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus)
 				{
+					bool first = true;
+
 					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(content);
 					//remove all chords
 					content = Core.RegexList.Chords.ChordProNote.Replace(content, "");
@@ -195,35 +205,51 @@ namespace ChordEditor.Core
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = content;
 					par.set_Style(style);
-					
+					par.Range.SpellingChecked = true;
+					par.Range.GrammarChecked = true;
+
+					int parstart = par.Range.Start;
 					int offset = 0;
 					foreach (System.Text.RegularExpressions.Match match in matches)
 					{
-						doc.Range(par.Range.Start + match.Index - offset, par.Range.Start + match.Index - offset).Select();
+						doc.Range(parstart + match.Index - offset, parstart + match.Index - offset).Select();
 						var left = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdHorizontalPositionRelativeToPage);
 						var top = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdVerticalPositionRelativeToPage);
 
+						if (first == true)
+						{
+							Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, left, top - 8, 40, 20, par.Range);
+							TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+							TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+							TB.TextFrame.MarginBottom = 0;
+							TB.TextFrame.MarginLeft = 0;
+							TB.TextFrame.MarginRight = 0;
+							TB.TextFrame.MarginTop = 0;
+							TB.TextFrame.AutoSize = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
+							TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
+							TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
 
-						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, left, top-10, 40, 20, par.Range);
-						//TB.RelativeVerticalPosition = WdRelativeVerticalPosition.wdRelativeVerticalPositionLine;
-						//TB.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionCharacter;
-						//TB.LeftRelative = 0.0f;
-						//TB.TopRelative = -0.25f;
-						//TB.LockAnchor = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
+							TB.Select();
+							app.Selection.Copy();
+							first = false;
+						}
+						else
+						{
+							app.Selection.Paste();
+							Microsoft.Office.Interop.Word.Shape TB = doc.Shapes[doc.Shapes.Count -1];
 
-						TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-						TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-						TB.TextFrame.MarginBottom = 0;
-						TB.TextFrame.MarginLeft = 0;
-						TB.TextFrame.MarginRight = 0;
-						TB.TextFrame.MarginTop = 0;
-						TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] {'[', ']'});
+							TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
+							TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
+							TB.Left = left;
+							TB.Top = top -8;
+						}
 
 
-						offset += match.Length;
+						offset += match.Length - 1;
 					}
 
 					par.Range.InsertParagraphAfter();
+
 				}
 
 
@@ -244,7 +270,7 @@ namespace ChordEditor.Core
 
 			foreach (SheetHeader sh in SheetDB.List)
 			{
-				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Reviewed && sh.SheetCategory != null)
+				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
 					job.Add(sh, opt);
 			}
 
