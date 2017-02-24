@@ -4,278 +4,306 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.Office.Interop.Word;
+//using Microsoft.Office.Interop.Word;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace ChordEditor.Core
 {
 	public static class SongBook
 	{
 
-		private class JobDictionary
-		{
-			private Dictionary<string, JobDictionary.CategoryGroup> mList = new Dictionary<string, JobDictionary.CategoryGroup>();
-			internal delegate void JobBegin(int total);
-			internal delegate void JobEnd();
-			internal delegate void JobProgress(int count, SheetHeader sh);
+		//private class JobDictionary
+		//{
+		//	private Dictionary<string, JobDictionary.CategoryGroup> mList = new Dictionary<string, JobDictionary.CategoryGroup>();
+		//	internal delegate void JobBegin(int total);
+		//	internal delegate void JobEnd();
+		//	internal delegate void JobProgress(int count, SheetHeader sh);
 
 
-			int indexed = 0;
-			int unsorted = 0;
+		//	int indexed = 0;
+		//	int unsorted = 0;
 
-			private class CategoryGroup
-			{
-				public List<ProcessedSheet> Indexed = new List<ProcessedSheet>();
-				public List<ProcessedSheet> Unsorted = new List<ProcessedSheet>();
-			}
+		//	private class CategoryGroup
+		//	{
+		//		public List<ProcessedSheet> Indexed = new List<ProcessedSheet>();
+		//		public List<ProcessedSheet> Unsorted = new List<ProcessedSheet>();
+		//	}
 
-			internal void Add(SheetHeader sh, GeneartorOptions opt)
-			{
-				if (!mList.ContainsKey(sh.SheetCategory))
-					mList.Add(sh.SheetCategory, new CategoryGroup());
+		//	internal void Add(SheetHeader sh, GeneartorOptions opt)
+		//	{
+		//		if (!mList.ContainsKey(sh.SheetCategory))
+		//			mList.Add(sh.SheetCategory, new CategoryGroup());
 
-				if (sh.Index < 0 || opt.RebuildIdx)
-				{
-					mList[sh.SheetCategory].Unsorted.Add(new ProcessedSheet(sh));
-					unsorted++;
-				}
-				else
-				{
-					mList[sh.SheetCategory].Indexed.Add(new ProcessedSheet(sh));
-					indexed++;
-				}
-			}
+		//		if (sh.Index < 0 || opt.RebuildIdx)
+		//		{
+		//			mList[sh.SheetCategory].Unsorted.Add(new ProcessedSheet(sh));
+		//			unsorted++;
+		//		}
+		//		else
+		//		{
+		//			mList[sh.SheetCategory].Indexed.Add(new ProcessedSheet(sh));
+		//			indexed++;
+		//		}
+		//	}
 
-			internal void Execute(JobBegin begin, JobProgress progress, JobEnd end)
-			{
-				if (begin != null) begin(unsorted + indexed);
+		//	internal void Execute(JobBegin begin, JobProgress progress, JobEnd end)
+		//	{
+		//		if (begin != null) begin(unsorted + indexed);
 
-				object oMissing = System.Reflection.Missing.Value;
+		//		object oMissing = System.Reflection.Missing.Value;
 
-				Application app = new Application();
-				app.CheckLanguage = false;
-				app.Visible = true;
+		//		Application app = new Application();
+		//		app.CheckLanguage = false;
+		//		app.Visible = true;
 
-				Document doc = app.Documents.Add(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), true, WdNewDocumentType.wdNewBlankDocument, true);
-				doc.SpellingChecked = true;
-				doc.GrammarChecked = true;
-				doc.ShowGrammaticalErrors = false;
-				doc.ShowSpellingErrors = false;
+		//		Document doc = app.Documents.Add(System.IO.Path.GetFullPath("./Template/chordbook.dotx"), true, WdNewDocumentType.wdNewBlankDocument, true);
+		//		doc.SpellingChecked = true;
+		//		doc.GrammarChecked = true;
+		//		doc.ShowGrammaticalErrors = false;
+		//		doc.ShowSpellingErrors = false;
 
-				Template tpl = new Template(doc);
-				PreProcess(progress, app, doc, tpl);
+		//		Template tpl = new Template(doc);
+		//		PreProcess(progress, app, doc, tpl);
 
-				//app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
+		//		//app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
 				
-				//doc.Close(Microsoft.Office.Interop.Word.WdSaveOptions.wdDoNotSaveChanges);
-				//app.Quit();
+		//		//doc.Close(Microsoft.Office.Interop.Word.WdSaveOptions.wdDoNotSaveChanges);
+		//		//app.Quit();
 
-				if (end != null) end();
-			}
+		//		if (end != null) end();
+		//	}
 
 			
 
-			private void PreProcess(JobProgress progress, Application app, Document doc, Template tpl)
-			{
-				foreach (KeyValuePair<string, JobDictionary.CategoryGroup> kvp in mList)
-				{
-					int count = 0;
-					foreach (ProcessedSheet ps in kvp.Value.Indexed)
-					{
-						ps.Analyze(app, doc, tpl);
-						if (progress != null)
-							progress(count++, ps.mSheet.Header);
-					}
-					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
-					{
-						ps.Analyze(app, doc, tpl);
-						if (progress != null)
-							progress(count++, ps.mSheet.Header);
-					}
-				}
-			}
+		//	private void PreProcess(JobProgress progress, Application app, Document doc, Template tpl)
+		//	{
+		//		foreach (KeyValuePair<string, JobDictionary.CategoryGroup> kvp in mList)
+		//		{
+		//			int count = 0;
+		//			foreach (ProcessedSheet ps in kvp.Value.Indexed)
+		//			{
+		//				ps.Analyze(app, doc, tpl);
+		//				if (progress != null)
+		//					progress(count++, ps.mSheet.Header);
+		//			}
+		//			foreach (ProcessedSheet ps in kvp.Value.Unsorted)
+		//			{
+		//				ps.Analyze(app, doc, tpl);
+		//				if (progress != null)
+		//					progress(count++, ps.mSheet.Header);
+		//			}
+		//		}
+		//	}
 
 
-			private class Template
-			{
-				public Style SongTitle;
-				public Style SongArtist;
-				public Style ChorusWC;
-				public Style StorpheWC;
-				public Style ChorusWoC;
-				public Style StorpheWoC;
-				public Style ChordTB;
+		//	private class Template
+		//	{
+		//		public Style SongTitle;
+		//		public Style SongArtist;
+		//		public Style ChorusWC;
+		//		public Style StorpheWC;
+		//		public Style ChorusWoC;
+		//		public Style StorpheWoC;
+		//		public Style ChordTB;
 
-				public PageSetup Page;
+		//		public PageSetup Page;
 
-				public Template(Document doc)
-				{
-					SongTitle = doc.Styles["SongTitle"];
-					SongArtist = doc.Styles["SongArtist"];
+		//		public Template(Document doc)
+		//		{
+		//			SongTitle = doc.Styles["SongTitle"];
+		//			SongArtist = doc.Styles["SongArtist"];
 
-					ChorusWC = doc.Styles["ChorusWC"];
-					StorpheWC = doc.Styles["StropheWC"];
+		//			ChorusWC = doc.Styles["ChorusWC"];
+		//			StorpheWC = doc.Styles["StropheWC"];
 
-					ChorusWoC = doc.Styles["ChorusWoC"];
-					StorpheWoC = doc.Styles["StropheWoC"];
+		//			ChorusWoC = doc.Styles["ChorusWoC"];
+		//			StorpheWoC = doc.Styles["StropheWoC"];
 
-					ChordTB = doc.Styles["ChordTB"];
+		//			ChordTB = doc.Styles["ChordTB"];
 
-					Page = doc.PageSetup;
-				}
+		//			Page = doc.PageSetup;
+		//		}
 
-			}
+		//	}
 
-			private class ProcessedSheet
-			{
-				internal Sheet mSheet;
-				List<Paragraph> mContent = new List<Paragraph>();
+		//	private class ProcessedSheet
+		//	{
+		//		internal Sheet mSheet;
+		//		List<Paragraph> mContent = new List<Paragraph>();
 
-				public ProcessedSheet(SheetHeader sh)
-				{ mSheet = new Sheet(sh.FileName); }
+		//		public ProcessedSheet(SheetHeader sh)
+		//		{ mSheet = new Sheet(sh.FileName); }
 
-				internal void Analyze(Application app, Document doc, Template tpl)
-				{
-					mSheet.ReloadFile();
+		//		internal void Analyze(Application app, Document doc, Template tpl)
+		//		{
+		//			mSheet.ReloadFile();
 
-					AddHeader(doc, tpl.SongTitle, mSheet.Header.Title);
-					if (mSheet.Header.Artist != null)
-						AddHeader(doc, tpl.SongArtist, mSheet.Header.Artist);
-
-
-					StringBuilder Helper = new StringBuilder();
-					bool InChorus = false;
-					using (System.IO.StringReader sr = new System.IO.StringReader(mSheet.Content))
-					{
-						string line = null;
-						bool chorus = false;
-
-						while ((line = sr.ReadLine()) != null)
-						{
-							if (line == "{soc}")
-							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = true; }
-							else if (line == "{eoc}")
-							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = false; }
-							else if (string.IsNullOrWhiteSpace(line))
-							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); }
-							else
-							{ AppendToParagraph(Helper, line); }
-						}
-
-						OnNewParagraph(app, doc, tpl, Helper, InChorus); //close last paragraph
-					}
-				}
-
-				private void AppendToParagraph(StringBuilder Helper, string line)
-				{
-					if (Helper.Length > 0)
-						Helper.Append('\v');		//append vertical newline (new line, same paragraph)
-
-					Helper.Append(line);
-				}
-
-				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus)
-				{
-					//close prev paragraph
-					if (Helper.Length > 0)
-						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus);
-
-					//begin new paragraph
-					Helper.Clear();
-				}
-
-				private void AddHeader(Document doc, Style style, string title)
-				{
-					Paragraph par = doc.Content.Paragraphs.Add();
-					par.Range.Text = title;
-					par.set_Style(style);
-					mContent.Add(par);
-					par.Range.InsertParagraphAfter();
-				}
-
-				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus)
-				{
-					bool first = true;
-
-					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(content);
-					//remove all chords
-					content = Core.RegexList.Chords.ChordProNote.Replace(content, "");
-
-					bool WithChords = matches.Count > 0;
-					Style style = InChorus ? (WithChords ? tpl.ChorusWC : tpl.ChorusWoC) : (WithChords ? tpl.StorpheWC : tpl.StorpheWoC);
-					Paragraph par = doc.Content.Paragraphs.Add();
-					par.Range.Text = content;
-					par.set_Style(style);
-					par.Range.SpellingChecked = true;
-					par.Range.GrammarChecked = true;
-
-					int parstart = par.Range.Start;
-					int offset = 0;
-					foreach (System.Text.RegularExpressions.Match match in matches)
-					{
-						doc.Range(parstart + match.Index - offset, parstart + match.Index - offset).Select();
-						var left = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdHorizontalPositionRelativeToPage);
-						var top = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdVerticalPositionRelativeToPage);
-
-						if (first == true)
-						{
-							Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, left, top - 8, 40, 20, par.Range);
-							TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-							TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-							TB.TextFrame.MarginBottom = 0;
-							TB.TextFrame.MarginLeft = 0;
-							TB.TextFrame.MarginRight = 0;
-							TB.TextFrame.MarginTop = 0;
-							TB.TextFrame.AutoSize = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
-							TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
-							TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
-
-							TB.Select();
-							app.Selection.Copy();
-							first = false;
-						}
-						else
-						{
-							app.Selection.Paste();
-							Microsoft.Office.Interop.Word.Shape TB = doc.Shapes[doc.Shapes.Count -1];
-
-							TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
-							TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
-							TB.Left = left;
-							TB.Top = top -8;
-						}
+		//			AddHeader(doc, tpl.SongTitle, mSheet.Header.Title);
+		//			if (mSheet.Header.Artist != null)
+		//				AddHeader(doc, tpl.SongArtist, mSheet.Header.Artist);
 
 
-						offset += match.Length - 1;
-					}
+		//			StringBuilder Helper = new StringBuilder();
+		//			bool InChorus = false;
+		//			using (System.IO.StringReader sr = new System.IO.StringReader(mSheet.Content))
+		//			{
+		//				string line = null;
+		//				bool chorus = false;
 
-					par.Range.InsertParagraphAfter();
+		//				while ((line = sr.ReadLine()) != null)
+		//				{
+		//					if (line == "{soc}")
+		//					{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = true; }
+		//					else if (line == "{eoc}")
+		//					{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = false; }
+		//					else if (string.IsNullOrWhiteSpace(line))
+		//					{ OnNewParagraph(app, doc, tpl, Helper, InChorus); }
+		//					else
+		//					{ AppendToParagraph(Helper, line); }
+		//				}
 
-				}
+		//				OnNewParagraph(app, doc, tpl, Helper, InChorus); //close last paragraph
+		//			}
+		//		}
+
+		//		private void AppendToParagraph(StringBuilder Helper, string line)
+		//		{
+		//			if (Helper.Length > 0)
+		//				Helper.Append('\v');		//append vertical newline (new line, same paragraph)
+
+		//			Helper.Append(line);
+		//		}
+
+		//		private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus)
+		//		{
+		//			//close prev paragraph
+		//			if (Helper.Length > 0)
+		//				AddParagraph(app, doc, tpl, Helper.ToString(), InChorus);
+
+		//			//begin new paragraph
+		//			Helper.Clear();
+		//		}
+
+		//		private void AddHeader(Document doc, Style style, string title)
+		//		{
+		//			Paragraph par = doc.Content.Paragraphs.Add();
+		//			par.Range.Text = title;
+		//			par.set_Style(style);
+		//			mContent.Add(par);
+		//			par.Range.InsertParagraphAfter();
+		//		}
+
+		//		private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus)
+		//		{
+		//			bool first = true;
+
+		//			System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(content);
+		//			//remove all chords
+		//			content = Core.RegexList.Chords.ChordProNote.Replace(content, "");
+
+		//			bool WithChords = matches.Count > 0;
+		//			Style style = InChorus ? (WithChords ? tpl.ChorusWC : tpl.ChorusWoC) : (WithChords ? tpl.StorpheWC : tpl.StorpheWoC);
+		//			Paragraph par = doc.Content.Paragraphs.Add();
+		//			par.Range.Text = content;
+		//			par.set_Style(style);
+		//			par.Range.SpellingChecked = true;
+		//			par.Range.GrammarChecked = true;
+
+		//			int parstart = par.Range.Start;
+		//			int offset = 0;
+		//			foreach (System.Text.RegularExpressions.Match match in matches)
+		//			{
+		//				doc.Range(parstart + match.Index - offset, parstart + match.Index - offset).Select();
+		//				var left = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdHorizontalPositionRelativeToPage);
+		//				var top = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdVerticalPositionRelativeToPage);
+
+		//				if (first == true)
+		//				{
+		//					Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, left, top - 8, 40, 20, par.Range);
+		//					TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+		//					TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+		//					TB.TextFrame.MarginBottom = 0;
+		//					TB.TextFrame.MarginLeft = 0;
+		//					TB.TextFrame.MarginRight = 0;
+		//					TB.TextFrame.MarginTop = 0;
+		//					TB.TextFrame.AutoSize = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
+		//					TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
+		//					TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
+
+		//					TB.Select();
+		//					app.Selection.Copy();
+		//					first = false;
+		//				}
+		//				else
+		//				{
+		//					app.Selection.Paste();
+		//					Microsoft.Office.Interop.Word.Shape TB = doc.Shapes[doc.Shapes.Count -1];
+
+		//					TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
+		//					TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
+		//					TB.Left = left;
+		//					TB.Top = top -8;
+		//				}
+
+
+		//				offset += match.Length - 1;
+		//			}
+
+		//			par.Range.InsertParagraphAfter();
+
+		//		}
 
 
 
 				
 
 
-			}
+		//	}
 
-		}
+		//}
 
 		public static void Generate()
 		{
-			GeneartorOptions opt = Forms.BookGenerator.CreateAndShowDialog();
+			HelloWorld();
 
-			JobDictionary job = new JobDictionary();
+			//GeneartorOptions opt = Forms.BookGenerator.CreateAndShowDialog();
+
+			//JobDictionary job = new JobDictionary();
 
 
-			foreach (SheetHeader sh in SheetDB.List)
-			{
-				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
-					job.Add(sh, opt);
-			}
+			//foreach (SheetHeader sh in SheetDB.List)
+			//{
+			//	if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
+			//		job.Add(sh, opt);
+			//}
 
-			job.Execute(null, (int count, SheetHeader sh) => { System.Diagnostics.Debug.WriteLine(sh.Title); }, null);
+			//job.Execute(null, (int count, SheetHeader sh) => { System.Diagnostics.Debug.WriteLine(sh.Title); }, null);
 		}
+
+
+		public static void HelloWorld()
+		{
+			// Create a Wordprocessing document. 
+			using (WordprocessingDocument doc = WordprocessingDocument.Create("D:\\helloworld.docx", WordprocessingDocumentType.Document))
+			{
+				// Add a new main document part. 
+				doc.AddMainDocumentPart();
+
+				// Create the Document DOM. 
+				doc.MainDocumentPart.Document =
+				  new Document(
+					new Body(
+					  new Paragraph(
+						new Run(
+						  new Text("Hello World!")))));
+
+				// Save changes to the main document part. 
+				doc.MainDocumentPart.Document.Save();
+			}
+		}
+
 
 
 		public class GeneartorOptions
