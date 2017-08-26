@@ -151,59 +151,31 @@ namespace ChordEditor.Core
 		}
 
 		// Generates content of mainDocumentPart1.
-		private void GenerateMainDocumentPart1Content(MainDocumentPart mainDocumentPart1)
+		private void GenerateMainDocumentPart1Content(MainDocumentPart MainDocument)
 		{
-			Document document1 = new Document() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 wp14" } };
-			document1.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
-			document1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-			document1.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
-			document1.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-			document1.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
-			document1.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
-			document1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
-			document1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
-			document1.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
-			document1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-			document1.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-			document1.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
-			document1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
-			document1.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
-			document1.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
-			document1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+			Document document = new Document() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 wp14" } };
+			document.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
+			document.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+			document.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
+			document.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+			document.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
+			document.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
+			document.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+			document.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+			document.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
+			document.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+			document.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
+			document.AddNamespaceDeclaration("w15", "http://schemas.microsoft.com/office/word/2012/wordml");
+			document.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+			document.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
+			document.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
+			document.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
 
-			Body body1 = new Body();
+			Body body = new Body();
 
-			Paragraph paragraph1 = new Paragraph() { RsidParagraphAddition = "00D30EB8", RsidParagraphProperties = "00496A6D", RsidRunAdditionDefault = "00496A6D" };
+			AppendSongTitle(body, "La canzone del Sole");
+			AppendSongArtist(body, "Lucio Battisti");
 
-			ParagraphProperties paragraphProperties1 = new ParagraphProperties();
-			ParagraphStyleId paragraphStyleId1 = new ParagraphStyleId() { Val = "SongTitle" };
-
-			paragraphProperties1.Append(paragraphStyleId1);
-
-			Run run1 = new Run();
-			Text text1 = new Text();
-			text1.Text = "La canzone del Sole";
-
-			run1.Append(text1);
-
-			paragraph1.Append(paragraphProperties1);
-			paragraph1.Append(run1);
-
-			Paragraph paragraph2 = new Paragraph() { RsidParagraphAddition = "00496A6D", RsidParagraphProperties = "00496A6D", RsidRunAdditionDefault = "00496A6D" };
-
-			ParagraphProperties paragraphProperties2 = new ParagraphProperties();
-			ParagraphStyleId paragraphStyleId2 = new ParagraphStyleId() { Val = "SongArtist" };
-
-			paragraphProperties2.Append(paragraphStyleId2);
-
-			Run run2 = new Run();
-			Text text2 = new Text();
-			text2.Text = "Lucio Battisti";
-
-			run2.Append(text2);
-
-			paragraph2.Append(paragraphProperties2);
-			paragraph2.Append(run2);
 
 			Paragraph paragraph3 = new Paragraph() { RsidParagraphMarkRevision = "00496A6D", RsidParagraphAddition = "00496A6D", RsidParagraphProperties = "00496A6D", RsidRunAdditionDefault = "00496A6D" };
 
@@ -1362,18 +1334,10 @@ namespace ChordEditor.Core
 			Run run24 = new Run();
 			Break break2 = new Break();
 			Text text18 = new Text();
-			text18.Text = "e la cantina buia do";
+			text18.Text = "e la cantina buia dove noi, respiravamo piano";
 
 			run24.Append(break2);
 			run24.Append(text18);
-			BookmarkStart bookmarkStart1 = new BookmarkStart() { Name = "_GoBack", Id = "0" };
-			BookmarkEnd bookmarkEnd1 = new BookmarkEnd() { Id = "0" };
-
-			Run run25 = new Run();
-			Text text19 = new Text();
-			text19.Text = "ve noi, respiravamo piano";
-
-			run25.Append(text19);
 
 			paragraph3.Append(paragraphProperties3);
 			paragraph3.Append(run3);
@@ -1388,9 +1352,6 @@ namespace ChordEditor.Core
 			paragraph3.Append(run20);
 			paragraph3.Append(run23);
 			paragraph3.Append(run24);
-			paragraph3.Append(bookmarkStart1);
-			paragraph3.Append(bookmarkEnd1);
-			paragraph3.Append(run25);
 
 			SectionProperties sectionProperties1 = new SectionProperties() { RsidRPr = "00496A6D", RsidR = "00496A6D", RsidSect = "00937B3B" };
 			PageSize pageSize1 = new PageSize() { Width = (UInt32Value)8391U, Height = (UInt32Value)11907U, Code = (UInt16Value)11U };
@@ -1403,15 +1364,39 @@ namespace ChordEditor.Core
 			sectionProperties1.Append(columns1);
 			sectionProperties1.Append(docGrid1);
 
-			body1.Append(paragraph1);
-			body1.Append(paragraph2);
-			body1.Append(paragraph3);
-			body1.Append(sectionProperties1);
+			body.Append(paragraph3);
 
-			document1.Append(body1);
+			AppendSongTitle(body, "La canzone del camposanto");
+			AppendSongArtist(body, "Vinicio Capossela");
 
-			mainDocumentPart1.Document = document1;
+			body.Append(sectionProperties1);
+
+			document.Append(body);
+			MainDocument.Document = document;
 		}
+
+		private void AppendSongArtist(Body body, string Artist)
+		{AppendParagraphWhithStyle(body, Artist, "SongArtist");}
+
+		private static void AppendSongTitle(Body body, string Title)
+		{AppendParagraphWhithStyle(body, Title, "SongTitle");}
+
+		private static void AppendParagraphWhithStyle(Body body, string paragraph, string style)
+		{
+			Paragraph P = new Paragraph();
+
+			ParagraphProperties PP = new ParagraphProperties();
+			PP.Append(new ParagraphStyleId() { Val = style });
+
+			Run R = new Run();
+			R.Append(new Text() {Text = paragraph});
+
+			P.Append(PP);
+			P.Append(R);
+
+			body.Append(P);
+		}
+
 
 		// Generates content of webSettingsPart1.
 		private void GenerateWebSettingsPart1Content(WebSettingsPart webSettingsPart1)
