@@ -13,7 +13,7 @@ namespace ChordEditor.Core
 
 		private class JobDictionary
 		{
-			private Dictionary<string, JobDictionary.CategoryGroup> mList = new Dictionary<string, JobDictionary.CategoryGroup>();
+			private Dictionary<string, CategoryGroup> mList = new Dictionary<string, JobDictionary.CategoryGroup>();
 			internal delegate void JobBegin(int total);
 			internal delegate void JobEnd();
 			internal delegate void JobProgress(int count, SheetHeader sh);
@@ -45,11 +45,9 @@ namespace ChordEditor.Core
 				}
 			}
 
-			internal void Execute(JobBegin begin, JobProgress progress, JobEnd end)
+			internal void Execute(JobBegin begin, JobProgress progress, JobEnd end, GeneartorOptions opt)
 			{
-				if (begin != null) begin(unsorted + indexed);
-
-				object oMissing = System.Reflection.Missing.Value;
+				begin?.Invoke(unsorted + indexed);
 
 				Application app = new Application();
 				app.CheckLanguage = false;
@@ -62,38 +60,44 @@ namespace ChordEditor.Core
 				doc.ShowSpellingErrors = false;
 
 				Template tpl = new Template(doc);
-				PreProcess(progress, app, doc, tpl);
+				PreProcess(progress, app, doc, tpl, opt);
 
 				//app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
 
 				//doc.Close(Microsoft.Office.Interop.Word.WdSaveOptions.wdDoNotSaveChanges);
 				//app.Quit();
 
-				if (end != null) end();
+				end?.Invoke();
 			}
 
 
 
-			private void PreProcess(JobProgress progress, Application app, Document doc, Template tpl)
+			private void PreProcess(JobProgress progress, Application app, Document doc, Template tpl, GeneartorOptions opt)
 			{
-				foreach (KeyValuePair<string, JobDictionary.CategoryGroup> kvp in mList)
+				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
 				{
 					int count = 0;
 					foreach (ProcessedSheet ps in kvp.Value.Indexed)
 					{
-						ps.Analyze(app, doc, tpl);
-						if (progress != null)
-							progress(count++, ps.mSheet.Header);
+						ps.Analyze(app, doc, tpl, opt);
+						progress?.Invoke(count++, ps.mSheet.Header);
 					}
 					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
 					{
-						ps.Analyze(app, doc, tpl);
-						if (progress != null)
-							progress(count++, ps.mSheet.Header);
+						ps.Analyze(app, doc, tpl, opt);
+						progress?.Invoke(count++, ps.mSheet.Header);
 					}
 				}
+
+				AddIndex(doc);
 			}
 
+			private void AddIndex(Document doc)
+			{
+				Paragraph par = doc.Content.Paragraphs.Add();
+				par.Range.InsertBreak(WdBreakType.wdPageBreak);
+				doc.Indexes.Add(par.Range, WdHeadingSeparator.wdHeadingSeparatorBlankLine, true, WdIndexType.wdIndexIndent, 2, false, WdIndexSortBy.wdIndexSortBySyllable, WdLanguageID.wdItalian);
+			}
 
 			private class Template
 			{
@@ -133,35 +137,34 @@ namespace ChordEditor.Core
 				public ProcessedSheet(SheetHeader sh)
 				{ mSheet = new Sheet(sh.FileName); }
 
-				internal void Analyze(Application app, Document doc, Template tpl)
+				internal void Analyze(Application app, Document doc, Template tpl, GeneartorOptions opt)
 				{
 					mSheet.ReloadFile();
 
-					AddHeader(doc, tpl.SongTitle, mSheet.Header.Title);
+					AddSongTitle(doc, tpl.SongTitle, mSheet.Header.SheetCategory, mSheet.Header.Title);
 					if (mSheet.Header.Artist != null)
-						AddHeader(doc, tpl.SongArtist, mSheet.Header.Artist);
+						AddSongArtist(doc, tpl.SongArtist, mSheet.Header.Artist);
 
 
 					StringBuilder Helper = new StringBuilder();
-					bool InChorus = false;
 					using (System.IO.StringReader sr = new System.IO.StringReader(mSheet.Content))
 					{
 						string line = null;
-						bool chorus = false;
+						bool InChorus = false;
 
 						while ((line = sr.ReadLine()) != null)
 						{
 							if (line == "{soc}")
-							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = true; }
+							{ OnNewParagraph(app, doc, tpl, Helper, InChorus, opt); InChorus = true; }
 							else if (line == "{eoc}")
-							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); InChorus = false; }
+							{ OnNewParagraph(app, doc, tpl, Helper, InChorus, opt); InChorus = false; }
 							else if (string.IsNullOrWhiteSpace(line))
-							{ OnNewParagraph(app, doc, tpl, Helper, InChorus); }
+							{ OnNewParagraph(app, doc, tpl, Helper, InChorus, opt); }
 							else
 							{ AppendToParagraph(Helper, line); }
 						}
 
-						OnNewParagraph(app, doc, tpl, Helper, InChorus); //close last paragraph
+						OnNewParagraph(app, doc, tpl, Helper, InChorus, opt); //close last paragraph
 					}
 				}
 
@@ -173,17 +176,27 @@ namespace ChordEditor.Core
 					Helper.Append(line);
 				}
 
-				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus)
+				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus, GeneartorOptions opt)
 				{
 					//close prev paragraph
 					if (Helper.Length > 0)
-						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus);
+						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus, opt);
 
 					//begin new paragraph
 					Helper.Clear();
 				}
 
-				private void AddHeader(Document doc, Style style, string title)
+				private void AddSongTitle(Document doc, Style style, string category, string title)
+				{
+					Paragraph par = doc.Content.Paragraphs.Add();
+					par.Range.Text = title;
+					par.set_Style(style);
+					mContent.Add(par);
+					doc.Indexes.MarkEntry(par.Range, $"{category}:{title}");
+					par.Range.InsertParagraphAfter();
+				}
+
+				private void AddSongArtist(Document doc, Style style, string title)
 				{
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = title;
@@ -192,14 +205,14 @@ namespace ChordEditor.Core
 					par.Range.InsertParagraphAfter();
 				}
 
-				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus)
+
+				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus, GeneartorOptions opt)
 				{
-
-					System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(content);
+					System.Text.RegularExpressions.MatchCollection chords = RegexList.Chords.ChordProNote.Matches(content);
 					//remove all chords
-					content = Core.RegexList.Chords.ChordProNote.Replace(content, "");
+					content = RegexList.Chords.ChordProNote.Replace(content, "");
 
-					bool WithChords = matches.Count > 0;
+					bool WithChords = chords.Count > 0;
 					Style style = InChorus ? (WithChords ? tpl.ChorusWC : tpl.ChorusWoC) : (WithChords ? tpl.StorpheWC : tpl.StorpheWoC);
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = content;
@@ -209,63 +222,68 @@ namespace ChordEditor.Core
 
 					int parstart = par.Range.Start;
 					int offset = 0;
-					foreach (System.Text.RegularExpressions.Match match in matches)
+
+					if (!opt.StripChord)
 					{
-						doc.Range(parstart + match.Index - offset, parstart + match.Index - offset).Select();
-						var left = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdHorizontalPositionRelativeToPage);
-						var top = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdVerticalPositionRelativeToPage);
+						foreach (System.Text.RegularExpressions.Match chord in chords)
+						{
 
-						Microsoft.Office.Interop.Word.Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, left, top - 8, 40, 20, par.Range);
-						TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-						TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
-						TB.TextFrame.MarginBottom = 0;
-						TB.TextFrame.MarginLeft = 0;
-						TB.TextFrame.MarginRight = 0;
-						TB.TextFrame.MarginTop = 0;
-						TB.TextFrame.AutoSize = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
-						TB.TextFrame.TextRange.Text = match.Value.Trim(new char[] { '[', ']' });
-						TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
+							//var left = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdHorizontalPositionRelativeToPage);
+							//var top = app.Selection.get_Information(Microsoft.Office.Interop.Word.WdInformation.wdVerticalPositionRelativeToPage);
 
+							Shape TB = doc.Shapes.AddTextbox(Microsoft.Office.Core.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 40, 20);
+							TB.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionCharacter;
 
+							TB.Line.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+							TB.Fill.Visible = Microsoft.Office.Core.MsoTriState.msoFalse;
+							TB.TextFrame.MarginBottom = 0;
+							TB.TextFrame.MarginLeft = 0;
+							TB.TextFrame.MarginRight = 0;
+							TB.TextFrame.MarginTop = 0;
+							TB.TextFrame.AutoSize = (int)Microsoft.Office.Core.MsoTriState.msoTrue;
+							TB.TextFrame.TextRange.Text = chord.Value.Trim(new char[] { '[', ']' });
+							TB.TextFrame.TextRange.set_Style(tpl.ChordTB);
 
-						offset += match.Length - 1;
+							TB.Select();
+							app.Selection.Cut();
+							doc.Range(parstart + chord.Index - offset, parstart + chord.Index - offset + 1).Select();
+							app.Selection.Paste();
+
+							offset += chord.Length - 1;
+						}
 					}
 
 					par.Range.InsertParagraphAfter();
 
 				}
-
-
-
-
-
-
 			}
-
 		}
 
 		public static void Generate()
 		{
-			Core.WordFile wf = new Core.WordFile();
-			wf.CreatePackage("D:\\songbook.docx");
+			//Core.WordFile wf = new Core.WordFile();
+			//wf.CreatePackage("D:\\songbook.docx");
 
-			//GeneartorOptions opt = Forms.BookGenerator.CreateAndShowDialog();
+			GeneartorOptions opt = Forms.BookGenerator.CreateAndShowDialog();
+			JobDictionary job = new JobDictionary();
 
-			//JobDictionary job = new JobDictionary();
+			foreach (SheetHeader sh in SheetDB.List)
+			{
+				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Verified && sh.SheetCategory != null)
+					job.Add(sh, opt);
+			}
 
-
-			//foreach (SheetHeader sh in SheetDB.List)
-			//{
-			//	if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
-			//		job.Add(sh, opt);
-			//}
-
-			//job.Execute(null, (int count, SheetHeader sh) => { System.Diagnostics.Debug.WriteLine(sh.Title); }, null);
+			job.Execute(
+				(int total) => { System.Diagnostics.Debug.WriteLine($"Job Begin: {total} song to process"); },
+				(int count, SheetHeader sh) => { System.Diagnostics.Debug.WriteLine(sh.Title); },
+				() => { System.Diagnostics.Debug.WriteLine($"Job Completed!"); },
+				opt);
 		}
 
 		public class GeneartorOptions
 		{
 			public bool RebuildIdx;
+			public bool StripChord;
 		}
 
 	}

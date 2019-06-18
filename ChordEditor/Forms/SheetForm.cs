@@ -57,20 +57,20 @@ namespace ChordEditor.Forms
 			CbZoom.Items.Add(String.Format("{0} %", 200));
 			CbZoom.Items.Add(String.Format("{0} %", 300));
 
-			CMnUndo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Undo);
-			CMnRedo.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Redo);
-			CMnCut.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Cut);
-			CMnCopy.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Copy);
-			CMnPaste.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.Paste);
-			CMnSelectAll.ShortcutKeys = GetShortCut(FastColoredTextBoxNS.FCTBAction.SelectAll);
+			CMnUndo.ShortcutKeys = GetShortCut(FCTBAction.Undo);
+			CMnRedo.ShortcutKeys = GetShortCut(FCTBAction.Redo);
+			CMnCut.ShortcutKeys = GetShortCut(FCTBAction.Cut);
+			CMnCopy.ShortcutKeys = GetShortCut(FCTBAction.Copy);
+			CMnPaste.ShortcutKeys = GetShortCut(FCTBAction.Paste);
+			CMnSelectAll.ShortcutKeys = GetShortCut(FCTBAction.SelectAll);
 
 
 			Core.Sheet.SheetChange += Sheet_SheetChange;
 		}
 
-		private Keys GetShortCut(FastColoredTextBoxNS.FCTBAction action)
+		private Keys GetShortCut(FCTBAction action)
 		{
-			foreach (KeyValuePair<Keys, FastColoredTextBoxNS.FCTBAction> kvp in CHP.HotkeysMapping)
+			foreach (KeyValuePair<Keys, FCTBAction> kvp in CHP.HotkeysMapping)
 				if (action == kvp.Value)
 					return kvp.Key;
 			return Keys.None;
@@ -95,14 +95,14 @@ namespace ChordEditor.Forms
 
 		private void SheetForm_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			Core.Sheet.SheetChange -= Sheet_SheetChange;
+			Sheet.SheetChange -= Sheet_SheetChange;
 		}
 
-		void Sheet_SheetChange(Core.Sheet s)
+		void Sheet_SheetChange(Sheet s)
 		{
 			if (InvokeRequired)
 			{
-				Invoke(new Core.Sheet.SheetDelegate(Sheet_SheetChange), s);
+				Invoke(new Sheet.SheetDelegate(Sheet_SheetChange), s);
 			}
 			else
 			{
@@ -158,7 +158,7 @@ namespace ChordEditor.Forms
 			{
 				if (mSheet.Header.Title == null || mSheet.Header.Title.Trim().Length == 0) //no song title!
 				{
-					System.Windows.Forms.MessageBox.Show("Invalid song title!\r\nPlease complete sheet information.", "Save error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+					MessageBox.Show("Invalid song title!\r\nPlease complete sheet information.", "Save error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					return false;
 				}
 
@@ -188,29 +188,28 @@ namespace ChordEditor.Forms
 		{
 			if (mSheet.HasMemoryChanges && !mForceClose)
 			{
-				DialogResult rv = System.Windows.Forms.MessageBox.Show("This file contains changes.\r\nSave changes?", "Close confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+				DialogResult rv = MessageBox.Show("This file contains changes.\r\nSave changes?", "Close confirm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-				if (rv == System.Windows.Forms.DialogResult.Yes)
+				if (rv == DialogResult.Yes)
 					e.Cancel = !Save(true);
-				else if (rv == System.Windows.Forms.DialogResult.Cancel)
+				else if (rv == DialogResult.Cancel)
 					e.Cancel = true;
 			}
 		}
 
 
-		public Core.Sheet Sheet
+		public Sheet Sheet
 		{ get { return mSheet; } }
 
-		public FastColoredTextBoxNS.FastColoredTextBox Editor
+		public FastColoredTextBox Editor
 		{ get { return CHP; } }
 
-		private void CHPTextChangedDelayed(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+		private void CHPTextChangedDelayed(object sender, TextChangedEventArgs e)
 		{
 			mSheet.Content = CHP.Text;
 			Analyze();
 
-			if (DelayedTextChanged != null)
-				DelayedTextChanged(this);
+			DelayedTextChanged?.Invoke(this);
 
 			RefreshPreview();
 		}
@@ -270,7 +269,7 @@ namespace ChordEditor.Forms
 				chords = chords + new string(' ', Math.Max(Math.Min(1, chords.Length), position - chords.Length)); //aggiungi spazi bianchi, almeno 1 (tranne all'inizio quando va bene anche zero)
 				chords = chords + cval;
 			}
-			song = Core.RegexList.Chords.ChordProNote.Replace(line, "");
+			song = RegexList.Chords.ChordProNote.Replace(line, "");
 		}
 
 		private void AppendChordLine(string chords)
@@ -281,7 +280,7 @@ namespace ChordEditor.Forms
 		private void AppendSongLine(string song, bool chorus)
 		{
 			System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.CHPTagAndVal.Matches(song);
-			song = Core.RegexList.Chords.CHPTagAndVal.Replace(song, delegate(System.Text.RegularExpressions.Match match)
+			song = RegexList.Chords.CHPTagAndVal.Replace(song, delegate(System.Text.RegularExpressions.Match match)
 			{
 				string tag = match.Groups[1].Value;
 				string value = match.Groups[2].Value;
@@ -325,7 +324,7 @@ namespace ChordEditor.Forms
 			catch { CHPZoomChanged(null, null); }
 		}
 
-		private void CHPTextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+		private void CHPTextChanged(object sender, TextChangedEventArgs e)
 		{
 			//clear previous highlighting
 			e.ChangedRange.ClearStyle();
@@ -348,13 +347,13 @@ namespace ChordEditor.Forms
 
 		internal void ChangeNotation()
 		{
-			Core.ChordNotation targetNotation = Core.ChordNotation.Unknown;
-			if (SheetNotation == Core.ChordNotation.Italian)
-				targetNotation = Core.ChordNotation.American;
-			else if (SheetNotation == Core.ChordNotation.American)
-				targetNotation = Core.ChordNotation.Italian;
+			ChordNotation targetNotation = ChordNotation.Unknown;
+			if (SheetNotation == ChordNotation.Italian)
+				targetNotation = ChordNotation.American;
+			else if (SheetNotation == ChordNotation.American)
+				targetNotation = ChordNotation.Italian;
 
-			if (targetNotation != Core.ChordNotation.Unknown)
+			if (targetNotation != ChordNotation.Unknown)
 				CHP.Text = Pagliaro.ChangeNotation(CHP.Text, targetNotation);
 		}
 
@@ -402,7 +401,7 @@ namespace ChordEditor.Forms
 
 		private void CHPPasting(object sender, TextChangingEventArgs e)
 		{
-			Core.Importer.ImportedContent content = Core.Importer.ImportClipbord(e.InsertingText, true);
+			Importer.ImportedContent content = Importer.ImportClipbord(e.InsertingText, true);
 
 			if (content != null)
 			{
@@ -413,8 +412,7 @@ namespace ChordEditor.Forms
 					mSheet.Header.Title = content.Title;
 
 				if (content.Title != null || content.Artist != null)
-					if (HeaderChanged != null)
-						HeaderChanged(this);
+					HeaderChanged?.Invoke(this);
 
 				e.InsertingText = content.Text;
 			}

@@ -135,6 +135,7 @@
     <Compile Include="Core\SheetDB.cs" />
     <Compile Include="Core\SheetHeader.cs" />
     <Compile Include="Core\SheetList.cs" />
+    <Compile Include="Core\SongBook.old.cs" />
     <Compile Include="Core\SongBook.cs" />
     <Compile Include="Core\SVN.cs" />
     <Compile Include="Core\TokenFile.cs" />
@@ -228,9 +229,7 @@
     <Compile Include="UserControls\DockingManager\Docking\DockPanel.AutoHideWindow.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserControls\DockingManager\Docking\DockPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="UserControls\DockingManager\Docking\DockPanel.cs" />
     <Compile Include="UserControls\DockingManager\Docking\DockPanel.DockDragHandler.cs">
       <SubType>Component</SubType>
     </Compile>
