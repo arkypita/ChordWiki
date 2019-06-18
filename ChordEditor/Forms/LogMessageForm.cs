@@ -37,6 +37,7 @@ namespace ChordEditor.Forms
 
 		private void SongBook_JobBegin(int total)
 		{
+			Log("------ CREATE BOOK------", opStyle); 
 			Log($"Job Begin: {total} song to process", opStyle);
 		}
 
