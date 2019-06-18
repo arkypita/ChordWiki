@@ -196,6 +196,8 @@ namespace ChordEditor.Core
 					par.Range.Text = title;
 					par.set_Style(style);
 					mContent.Add(par);
+					par.Range.SpellingChecked = true;
+					par.Range.GrammarChecked = true;
 					doc.Indexes.MarkEntry(par.Range, $"{category}:{title}");
 					par.Range.InsertParagraphAfter();
 				}
@@ -205,10 +207,11 @@ namespace ChordEditor.Core
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = title;
 					par.set_Style(style);
+					par.Range.SpellingChecked = true;
+					par.Range.GrammarChecked = true;
 					mContent.Add(par);
 					par.Range.InsertParagraphAfter();
 				}
-
 
 				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus, GeneartorOptions opt)
 				{
@@ -256,7 +259,7 @@ namespace ChordEditor.Core
 							offset += chord.Length - 1;
 						}
 					}
-
+					mContent.Add(par);
 					par.Range.InsertParagraphAfter();
 
 				}
