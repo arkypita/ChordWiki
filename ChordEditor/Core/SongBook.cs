@@ -11,13 +11,17 @@ namespace ChordEditor.Core
 	public static class SongBook
 	{
 
+		public delegate void JobBeginDlg(int total);
+		public delegate void JobEndDlg();
+		public delegate void JobProgressDlg(int count, SheetHeader sh);
+
+		public static event JobBeginDlg JobBegin;
+		public static event JobEndDlg JobEnd;
+		public static event JobProgressDlg JobProgress;
+
 		private class JobDictionary
 		{
 			private Dictionary<string, CategoryGroup> mList = new Dictionary<string, JobDictionary.CategoryGroup>();
-			internal delegate void JobBegin(int total);
-			internal delegate void JobEnd();
-			internal delegate void JobProgress(int count, SheetHeader sh);
-
 
 			int indexed = 0;
 			int unsorted = 0;
@@ -45,7 +49,7 @@ namespace ChordEditor.Core
 				}
 			}
 
-			internal void Execute(JobBegin begin, JobProgress progress, JobEnd end, GeneartorOptions opt)
+			internal void Execute(JobBeginDlg begin, JobProgressDlg progress, JobEndDlg end, GeneartorOptions opt)
 			{
 				begin?.Invoke(unsorted + indexed);
 
@@ -72,7 +76,7 @@ namespace ChordEditor.Core
 
 
 
-			private void PreProcess(JobProgress progress, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			private void PreProcess(JobProgressDlg progress, Application app, Document doc, Template tpl, GeneartorOptions opt)
 			{
 				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
 				{
@@ -274,9 +278,9 @@ namespace ChordEditor.Core
 			}
 
 			job.Execute(
-				(int total) => { System.Diagnostics.Debug.WriteLine($"Job Begin: {total} song to process"); },
-				(int count, SheetHeader sh) => { System.Diagnostics.Debug.WriteLine(sh.Title); },
-				() => { System.Diagnostics.Debug.WriteLine($"Job Completed!"); },
+				(int total) => { JobBegin?.Invoke(total); },
+				(int count, SheetHeader sh) => { JobProgress?.Invoke(count, sh); },
+				() => {JobEnd?.Invoke(); },
 				opt);
 		}
 
