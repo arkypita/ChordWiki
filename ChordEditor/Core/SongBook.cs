@@ -81,14 +81,26 @@ namespace ChordEditor.Core
 				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
 				{
 					int count = 0;
+					//foreach (ProcessedSheet ps in kvp.Value.Indexed)
+					//{
+					//	ps.Analyze(app, doc, tpl, opt, true);
+					//	progress?.Invoke(count++, ps.mSheet.Header);
+					//}
+					//foreach (ProcessedSheet ps in kvp.Value.Unsorted)
+					//{
+					//	ps.Analyze(app, doc, tpl, opt, true);
+					//	progress?.Invoke(count++, ps.mSheet.Header);
+					//}
+
+
 					foreach (ProcessedSheet ps in kvp.Value.Indexed)
 					{
-						ps.Analyze(app, doc, tpl, opt);
+						ps.Analyze(app, doc, tpl, opt, false);
 						progress?.Invoke(count++, ps.mSheet.Header);
 					}
 					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
 					{
-						ps.Analyze(app, doc, tpl, opt);
+						ps.Analyze(app, doc, tpl, opt, false);
 						progress?.Invoke(count++, ps.mSheet.Header);
 					}
 				}
@@ -129,26 +141,28 @@ namespace ChordEditor.Core
 					ChordTB = doc.Styles["ChordTB"];
 
 					Page = doc.PageSetup;
+
+					System.Diagnostics.Debug.WriteLine($"Page Height {Page.PageHeight}");
 				}
 
 			}
 
 			private class ProcessedSheet
 			{
+				private double mSize;
 				internal Sheet mSheet;
 				List<Paragraph> mContent = new List<Paragraph>();
 
 				public ProcessedSheet(SheetHeader sh)
 				{ mSheet = new Sheet(sh.FileName); }
 
-				internal void Analyze(Application app, Document doc, Template tpl, GeneartorOptions opt)
+				internal void Analyze(Application app, Document doc, Template tpl, GeneartorOptions opt, bool firstpass)
 				{
 					mSheet.ReloadFile();
 
 					AddSongTitle(doc, tpl.SongTitle, mSheet.Header.SheetCategory, mSheet.Header.Title);
 					if (mSheet.Header.Artist != null)
 						AddSongArtist(doc, tpl.SongArtist, mSheet.Header.Artist);
-
 
 					StringBuilder Helper = new StringBuilder();
 					using (System.IO.StringReader sr = new System.IO.StringReader(mSheet.Content))
@@ -170,7 +184,43 @@ namespace ChordEditor.Core
 
 						OnNewParagraph(app, doc, tpl, Helper, InChorus, opt); //close last paragraph
 					}
+
+					if (firstpass)
+					{
+						Range range = doc.Range(mContent[0].Range.Start, mContent[0].Range.End);
+
+						//System.Diagnostics.Debug.WriteLine($"------ {mSheet.Header.Title} -------");
+						//System.Diagnostics.Debug.WriteLine($" whole range selection");
+						//foreach (WdInformation info in UseInfo)
+						//	System.Diagnostics.Debug.WriteLine($"{info} {range.Information[info]}");
+						//System.Diagnostics.Debug.WriteLine("");
+
+						int pcount = (int)range.Information[WdInformation.wdNumberOfPagesInDocument];
+						float uph = doc.PageSetup.PageHeight - doc.PageSetup.BottomMargin - doc.PageSetup.TopMargin; //usefull page height
+						float lph = ((float)range.Information[WdInformation.wdVerticalPositionRelativeToPage] - doc.PageSetup.TopMargin); //last page used height
+						float waste = uph - lph;
+
+						if (lph / uph > 1)
+							System.Diagnostics.Debug.WriteLine("error?");
+
+						float size = uph * pcount - waste;
+						mSize = (pcount - 1) + lph / uph;
+
+
+						//System.Diagnostics.Debug.WriteLine($"pageheight: {uph} size: {size} waste: {waste} check: {uph * pcount - size} msize: {mSize}");
+						System.Diagnostics.Debug.WriteLine($"{mSheet.Header.SheetCategory}\t{mSheet.Header.Title}\t{mSize}");
+						doc.Content.Delete();
+					}
 				}
+
+				private List<WdInformation> UseInfo = new List<WdInformation>() {
+					WdInformation.wdFirstCharacterLineNumber,
+					WdInformation.wdVerticalPositionRelativeToTextBoundary,
+					WdInformation.wdVerticalPositionRelativeToPage,
+					WdInformation.wdNumberOfPagesInDocument,
+					WdInformation.wdActiveEndPageNumber,
+					WdInformation.wdActiveEndSectionNumber,
+					WdInformation.wdActiveEndAdjustedPageNumber};
 
 				private void AppendToParagraph(StringBuilder Helper, string line)
 				{
@@ -276,7 +326,7 @@ namespace ChordEditor.Core
 
 			foreach (SheetHeader sh in SheetDB.List)
 			{
-				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
+				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Verified && sh.SheetCategory != null)
 					job.Add(sh, opt);
 			}
 
