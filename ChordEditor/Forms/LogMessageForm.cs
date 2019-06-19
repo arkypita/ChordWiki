@@ -20,25 +20,12 @@ namespace ChordEditor.Forms
 			Importer.ImportAction += Importer_ImportAction;
 			Importer.ImportEnd += Importer_ImportEnd;
 
-			SongBook.JobBegin += SongBook_JobBegin;
-			SongBook.JobProgress += SongBook_JobProgress;
-			SongBook.JobEnd += SongBook_JobEnd;
+			SongBook.JobMessage += SongBook_JobMessage;
 		}
 
-		private void SongBook_JobEnd()
+		private void SongBook_JobMessage(string message)
 		{
-			Log("Job Completed!" + "\r\n", opStyle);
-		}
-
-		private void SongBook_JobProgress(int count, SheetHeader sh)
-		{
-			Log(sh.Title, opStyle);
-		}
-
-		private void SongBook_JobBegin(int total)
-		{
-			Log("------ CREATE BOOK------", opStyle); 
-			Log($"Job Begin: {total} song to process", opStyle);
+			Log(message, opStyle);
 		}
 
 		private void Importer_ImportEnd(string message, bool reload)
