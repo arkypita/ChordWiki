@@ -116,6 +116,24 @@ namespace ChordEditor.Core
 				public double UsedSpace => this.Sum(item => item.mSize);
 				public double WastedSpace => PageCount - UsedSpace;
 				public int PageCount => (int)Math.Ceiling(UsedSpace);
+
+				public double SpaceToFill
+				{
+					get
+					{
+						if (PageCount == 1)
+							return 1 + WastedSpace;
+						else if (IsEven(PageCount))
+							return 1 + WastedSpace;
+						else
+							return WastedSpace;
+					}
+				}
+
+				private static bool IsEven(int value)
+				{
+					return value % 2 != 0;
+				}
 			}
 
 			private Dictionary<string, List<SongGroup>> PreProcess(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
@@ -169,7 +187,7 @@ namespace ChordEditor.Core
 
 						for (int i = 0; i < tosort.Count;)
 						{
-							if (tosort[i].mSize < group.WastedSpace)
+							if (tosort[i].mSize < group.SpaceToFill)
 								MoveBetweenList(tosort, group, tosort[i]);
 							else
 								i++;
@@ -283,7 +301,6 @@ namespace ChordEditor.Core
 				public bool loaded;
 				public double mSize;
 				internal Sheet mSheet;
-				List<Paragraph> mContent = new List<Paragraph>();
 
 				public ProcessedSheet(SheetHeader sh)
 				{ mSheet = new Sheet(sh.FileName); }
@@ -320,7 +337,7 @@ namespace ChordEditor.Core
 
 					if (fase == Fase.Analyze)
 					{
-						Range range = doc.Range(mContent[0].Range.Start, mContent[0].Range.End);
+						Range range = doc.Paragraphs.Last.Range;
 
 						int pcount = (int)range.Information[WdInformation.wdNumberOfPagesInDocument];
 						float uph = doc.PageSetup.PageHeight - doc.PageSetup.BottomMargin - doc.PageSetup.TopMargin; //usefull page height
@@ -361,7 +378,6 @@ namespace ChordEditor.Core
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = title;
 					par.set_Style(style);
-					mContent.Add(par);
 					par.Range.SpellingChecked = true;
 					par.Range.GrammarChecked = true;
 					doc.Indexes.MarkEntry(par.Range, $"{category}:{title}");
@@ -375,7 +391,6 @@ namespace ChordEditor.Core
 					par.set_Style(style);
 					par.Range.SpellingChecked = true;
 					par.Range.GrammarChecked = true;
-					mContent.Add(par);
 					par.Range.InsertParagraphAfter();
 				}
 
@@ -427,8 +442,6 @@ namespace ChordEditor.Core
 					}
 
 					par.Range.InsertParagraphAfter();
-
-					mContent.Add(par);
 				}
 			}
 		}
