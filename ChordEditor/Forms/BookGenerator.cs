@@ -13,7 +13,6 @@ namespace ChordEditor.Forms
 
 		private void BtnOk_Click(object sender, EventArgs e)
 		{
-
 			DialogResult = DialogResult.OK;
 			Close();
 		}
@@ -39,6 +38,7 @@ namespace ChordEditor.Forms
 
 				SongBook.GeneartorOptions rv = new SongBook.GeneartorOptions();
 				rv.RebuildIdx = rb.CbRebuildIndexes.Checked;
+				rv.RebuildSize = rb.CbRebuildAllSize.Checked;
 				rv.StripChord = rb.CbStripChords.Checked;
 
 				return rv;

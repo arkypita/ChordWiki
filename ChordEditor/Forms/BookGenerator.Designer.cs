@@ -35,11 +35,12 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.CbStripChords = new System.Windows.Forms.CheckBox();
 			this.CbRebuildIndexes = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.BtnCancel = new System.Windows.Forms.Button();
 			this.BtnOk = new System.Windows.Forms.Button();
-			this.CbStripChords = new System.Windows.Forms.CheckBox();
+			this.CbRebuildAllSize = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -128,17 +129,31 @@
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel5.Controls.Add(this.CbStripChords, 0, 1);
+			this.tableLayoutPanel5.Controls.Add(this.CbStripChords, 0, 2);
 			this.tableLayoutPanel5.Controls.Add(this.CbRebuildIndexes, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.CbRebuildAllSize, 0, 1);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 127);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 3;
+			this.tableLayoutPanel5.RowCount = 4;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel5.Size = new System.Drawing.Size(517, 141);
 			this.tableLayoutPanel5.TabIndex = 11;
+			// 
+			// CbStripChords
+			// 
+			this.CbStripChords.AutoSize = true;
+			this.CbStripChords.Checked = true;
+			this.CbStripChords.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.CbStripChords.Location = new System.Drawing.Point(3, 49);
+			this.CbStripChords.Name = "CbStripChords";
+			this.CbStripChords.Size = new System.Drawing.Size(83, 17);
+			this.CbStripChords.TabIndex = 1;
+			this.CbStripChords.Text = "Strip Chords";
+			this.CbStripChords.UseVisualStyleBackColor = true;
 			// 
 			// CbRebuildIndexes
 			// 
@@ -190,17 +205,15 @@
 			this.BtnOk.UseVisualStyleBackColor = true;
 			this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
 			// 
-			// CbStripChords
+			// CbRebuildAllSize
 			// 
-			this.CbStripChords.AutoSize = true;
-			this.CbStripChords.Checked = true;
-			this.CbStripChords.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.CbStripChords.Location = new System.Drawing.Point(3, 26);
-			this.CbStripChords.Name = "CbStripChords";
-			this.CbStripChords.Size = new System.Drawing.Size(83, 17);
-			this.CbStripChords.TabIndex = 1;
-			this.CbStripChords.Text = "Strip Chords";
-			this.CbStripChords.UseVisualStyleBackColor = true;
+			this.CbRebuildAllSize.AutoSize = true;
+			this.CbRebuildAllSize.Location = new System.Drawing.Point(3, 26);
+			this.CbRebuildAllSize.Name = "CbRebuildAllSize";
+			this.CbRebuildAllSize.Size = new System.Drawing.Size(122, 17);
+			this.CbRebuildAllSize.TabIndex = 2;
+			this.CbRebuildAllSize.Text = "Rebuild all song size";
+			this.CbRebuildAllSize.UseVisualStyleBackColor = true;
 			// 
 			// BookGenerator
 			// 
@@ -242,5 +255,6 @@
 				private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 				private System.Windows.Forms.CheckBox CbRebuildIndexes;
 		private System.Windows.Forms.CheckBox CbStripChords;
+		private System.Windows.Forms.CheckBox CbRebuildAllSize;
 	}
 }

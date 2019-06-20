@@ -67,8 +67,8 @@ namespace ChordEditor.Core
 				doc.ShowSpellingErrors = false;
 
 				Template tpl = new Template(doc);
-				PreProcess(message, app, doc, tpl, opt);
-				BuildOutput(message, app, doc, tpl, opt);
+				Dictionary<string, List<SongGroup>> groups = PreProcess(message, app, doc, tpl, opt);
+				BuildOutput(message, app, doc, tpl, opt, groups);
 
 				//app.Dialogs[WdWordDialog.wdDialogFileSaveAs].Show();
 
@@ -78,64 +78,102 @@ namespace ChordEditor.Core
 				message?.Invoke("Job Completed!\r\n");
 			}
 
-			private void BuildOutput(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			private void BuildOutput(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt, Dictionary<string, List<SongGroup>> groups)
 			{
 				message?.Invoke("Building final output...");
-				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
+				foreach (KeyValuePair<string, List<SongGroup>> kvp in groups)
 				{
-					foreach (ProcessedSheet ps in kvp.Value.Indexed)
+					AddSectionHeader(doc, tpl, kvp.Key);
+
+					foreach (SongGroup lsg in kvp.Value)
 					{
-						message?.Invoke($"{Fase.Rendering} {ps.mSheet.Header.SheetCategory} {ps.mSheet.Header.Title}");
-						ps.ProcessFile(app, doc, tpl, opt, Fase.Rendering);
+						foreach (ProcessedSheet ps in lsg)
+						{
+							message?.Invoke($"{Fase.Rendering} {ps.mSheet.Header.SheetCategory} {ps.mSheet.Header.Title}");
+							ps.ProcessFile(app, doc, tpl, opt, Fase.Rendering, object.ReferenceEquals(ps, lsg[lsg.Count-1]));
+						}
 					}
 
-					kvp.Value.Unsorted.Sort((a, b) => a.mSheet.Header.Index.CompareTo(b.mSheet.Header.Index)); //sort unsorted
-
-					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
-					{
-						message?.Invoke($"{Fase.Rendering} {ps.mSheet.Header.SheetCategory} {ps.mSheet.Header.Title}");
-						ps.ProcessFile(app, doc, tpl, opt, Fase.Rendering);
-					}
+					doc.Words.Last.InsertBreak(WdBreakType.wdSectionBreakNextPage); //add section break
 				}
 
 				AddIndex(doc);
 			}
 
-			private void PreProcess(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			private void AddSectionHeader(Document doc, Template tpl, string section)
 			{
-				message?.Invoke("Compute song size...");
-				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
-				{
-					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
-					{
-						message?.Invoke($"{Fase.Analyze} {ps.mSheet.Header.SheetCategory} {ps.mSheet.Header.Title}");
-						ps.ProcessFile(app, doc, tpl, opt, Fase.Analyze);
-					}
-				}
+				Paragraph par = doc.Content.Paragraphs.Add();
+				par.Range.Text = section;
+				par.set_Style(tpl.SectionHeader);
+				par.Range.SpellingChecked = true;
+				par.Range.GrammarChecked = true;
+				par.Range.InsertParagraphAfter();
+				par.Range.InsertBreak(WdBreakType.wdPageBreak);
+			}
 
+			private class SongGroup : List<ProcessedSheet>
+			{
+				public double UsedSpace => this.Sum(item => item.mSize);
+				public double WastedSpace => PageCount - UsedSpace;
+				public int PageCount => (int)Math.Ceiling(UsedSpace);
+			}
+
+			private Dictionary<string, List<SongGroup>> PreProcess(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			{
+				ComputeAllSongSize(message, app, doc, tpl, opt);
+				return CreatePageGroups(message);
+				//AssignIndexes(message, catgroups);
+			}
+
+			//private void AssignIndexes(JobMessageDlg message, Dictionary<string, List<SongGroup>> catgroups)
+			//{
+			//	message?.Invoke("Assigning song indexes...");
+			//	foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
+			//	{
+			//		//compute prev max index
+			//		int index = 0;
+			//		foreach (ProcessedSheet ps in kvp.Value.Indexed)
+			//			index = Math.Max(index, ps.mSheet.Header.Index);
+
+			//		List<SongGroup> groups = catgroups[kvp.Key];
+
+			//		if (groups != null)
+			//		{
+			//			foreach (List<ProcessedSheet> group in groups)
+			//			{
+			//				foreach (ProcessedSheet sheet in group)
+			//				{
+			//					sheet.mSheet.Header.Index = index++;
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
+
+			private Dictionary<string, List<SongGroup>> CreatePageGroups(JobMessageDlg message)
+			{
+				Dictionary<string, List<SongGroup>> catgroups = new Dictionary<string, List<SongGroup>>();
 				message?.Invoke("Creating best fit groups for space optimization...");
-				Dictionary<string, List<List<ProcessedSheet>>> catgroups = new Dictionary<string, List<List<ProcessedSheet>>>();
 				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
 				{
-					List<List<ProcessedSheet>> groups = new List<List<ProcessedSheet>>();
+					List<SongGroup> groups = new List<SongGroup>();
 
 					//ordina per dimensione decrescente, dalla più grande alla più piccola
 					List<ProcessedSheet> tosort = new List<ProcessedSheet>(kvp.Value.Unsorted);
-					tosort.Sort((a, b) => b.mSize.CompareTo(a.mSize));  
+					tosort.Sort((a, b) => b.mSize.CompareTo(a.mSize));
 
 					while (tosort.Count > 0)
 					{
-						//create a new group
-						List<ProcessedSheet> group = new List<ProcessedSheet>();
+						SongGroup group = new SongGroup();          //create a new group
+						MoveBetweenList(tosort, group, tosort[0]);  //peek the biggest one
 
-						//peek the biggest one
-						MoveBetweenList(tosort, group, tosort[0]);
-
-						//find best fitting song/songs
-						List<ProcessedSheet> bestfitting = GetBestFitting(tosort, Math.Ceiling(group[0].mSize) - group[0].mSize);
-
-						//move best fitting into group
-						MoveBetweenList(tosort, group, bestfitting);
+						for (int i = 0; i < tosort.Count;)
+						{
+							if (tosort[i].mSize < group.WastedSpace)
+								MoveBetweenList(tosort, group, tosort[i]);
+							else
+								i++;
+						}
 
 						groups.Add(group);
 					}
@@ -143,26 +181,46 @@ namespace ChordEditor.Core
 					catgroups.Add(kvp.Key, groups);
 				}
 
-				message?.Invoke("Assigning song indexes...");
+				return catgroups;
+			}
+
+			private void ComputeAllSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			{
+				message?.Invoke("Computing song size...");
+
+				Dictionary<string, double> knownSize = (Dictionary<string, double>)Serializer.ObjFromFile("SongSizeData.bin");
+				if (knownSize == null || opt.RebuildSize) knownSize = new Dictionary<string, double>();
+
 				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
 				{
-					//compute prev max index
-					int index = 0;
 					foreach (ProcessedSheet ps in kvp.Value.Indexed)
-						index = Math.Max(index, ps.mSheet.Header.Index);
+						ComputeSongSize(message, app, doc, tpl, opt, knownSize, ps);
+					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
+						ComputeSongSize(message, app, doc, tpl, opt, knownSize, ps);
+				}
 
-					List<List<ProcessedSheet>> groups = catgroups[kvp.Key];
+				Serializer.ObjToFile(knownSize, "SongSizeData.bin");
+			}
 
-					if (groups != null)
-					{
-						foreach (List<ProcessedSheet> group in groups)
-						{
-							foreach (ProcessedSheet sheet in group)
-							{
-								sheet.mSheet.Header.Index = index++;
-							}
-						}
-					}
+			private static void ComputeSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt, Dictionary<string, double> knownSize, ProcessedSheet ps)
+			{
+				ps.mSheet.ReloadFile();
+				ps.mSheet.FixContentIssues();               //correct file content
+				if (ps.mSheet.HasMemoryChanges)
+				{
+					if (knownSize.ContainsKey(ps.mSheet.Header.FileName)) knownSize.Remove(ps.mSheet.Header.FileName); //must compute a new size
+					ps.mSheet.Save();
+				}
+
+				if (knownSize.ContainsKey(ps.mSheet.Header.FileName))
+				{
+					ps.mSize = knownSize[ps.mSheet.Header.FileName];
+				}
+				else
+				{
+					message?.Invoke($"{Fase.Analyze} {ps.mSheet.Header.SheetCategory} {ps.mSheet.Header.Title}");
+					ps.ProcessFile(app, doc, tpl, opt, Fase.Analyze, false);
+					knownSize.Add(ps.mSheet.Header.FileName, ps.mSize);
 				}
 			}
 
@@ -177,88 +235,6 @@ namespace ChordEditor.Core
 				from.Remove(item);
 				to.Add(item);
 			}
-
-			private List<ProcessedSheet> GetBestFitting(List<ProcessedSheet> sheets, double freespace)
-			{
-				List<List<ProcessedSheet>> combos = GetAllCombos(sheets, freespace);
-				List<ProcessedSheet> bestcombination = new List<ProcessedSheet>();
-
-				double bestspace = 0;
-				foreach (List<ProcessedSheet> combo in combos)
-				{
-					if (combo.Count > combos[0].Count && bestspace > 0) //prefer the shortest one
-						break;
-
-					double combospace = 0;
-					foreach (ProcessedSheet sheet in combo)
-						combospace += sheet.mSize;
-
-					if (combospace < freespace && combospace > bestspace)
-					{
-						bestspace = combospace;
-						bestcombination = combo;
-					}
-				}
-
-				return bestcombination;
-			}
-
-
-
-			private static List<List<ProcessedSheet>> GetAllCombos(List<ProcessedSheet>list, double limit)
-			{
-				List<List<ProcessedSheet>> rv = new List<List<ProcessedSheet>>();
-
-				for (int a = 0; a < list.Count ; a++ )
-				{
-					if (list[a].mSize <= limit)
-						rv.Add(new List<ProcessedSheet>() { list[a] });
-
-					for (int b = a; b < list.Count; b++)
-					{
-						if (list[a].mSize + list[b].mSize <= limit)
-							rv.Add(new List<ProcessedSheet>() { list[a], list[b] });
-
-						for (int c = b; c < list.Count; c++)
-						{
-							if (list[a].mSize + list[b].mSize + list[c].mSize <= limit)
-								rv.Add(new List<ProcessedSheet>() { list[a], list[b], list[c] });
-
-							for (int d = c; d < list.Count; d++)
-							{
-								if (list[a].mSize + list[b].mSize + list[c].mSize + list[d].mSize <= limit)
-									rv.Add(new List<ProcessedSheet>() { list[a], list[b], list[c], list[d] });
-							}
-						}
-					}
-				}
-
-
-				return rv;
-			}
-
-			//// Iterative, using 'i' as bitmask to choose each combo members
-			//public static List<List<T>> GetAllCombos<T>(List<T> list)
-			//{
-			//	int comboCount = (int)Math.Pow(2, list.Count) - 1;
-			//	List<List<T>> result = new List<List<T>>();
-			//	for (int i = 1; i < comboCount + 1; i++)
-			//	{
-			//		// make each combo here
-			//		result.Add(new List<T>());
-			//		for (int j = 0; j < list.Count; j++)
-			//		{
-			//			if ((i >> j) % 2 != 0)
-			//				result.Last().Add(list[j]);
-			//		}
-			//	}
-			//	return result;
-			//}
-
-			// Example usage
-			
-
-
 
 			private void AddIndex(Document doc)
 			{
@@ -276,6 +252,7 @@ namespace ChordEditor.Core
 				public Style ChorusWoC;
 				public Style StorpheWoC;
 				public Style ChordTB;
+				public Style SectionHeader;
 
 				public PageSetup Page;
 
@@ -291,6 +268,8 @@ namespace ChordEditor.Core
 					StorpheWoC = doc.Styles["StropheWoC"];
 
 					ChordTB = doc.Styles["ChordTB"];
+
+					SectionHeader = doc.Styles["SectionHeader"];
 
 					Page = doc.PageSetup;
 
@@ -309,7 +288,7 @@ namespace ChordEditor.Core
 				public ProcessedSheet(SheetHeader sh)
 				{ mSheet = new Sheet(sh.FileName); }
 
-				internal void ProcessFile(Application app, Document doc, Template tpl, GeneartorOptions opt, Fase fase)
+				internal void ProcessFile(Application app, Document doc, Template tpl, GeneartorOptions opt, Fase fase, bool closingGroup)
 				{
 					if (!loaded) mSheet.ReloadFile();
 					loaded = true;
@@ -336,7 +315,7 @@ namespace ChordEditor.Core
 							{ AppendToParagraph(Helper, line); }
 						}
 
-						OnNewParagraph(app, doc, tpl, Helper, InChorus, opt); //close last paragraph
+						OnNewParagraph(app, doc, tpl, Helper, InChorus, opt, closingGroup); //close last paragraph
 					}
 
 					if (fase == Fase.Analyze)
@@ -367,11 +346,11 @@ namespace ChordEditor.Core
 					Helper.Append(line);
 				}
 
-				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus, GeneartorOptions opt)
+				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus, GeneartorOptions opt, bool closingGroup = false)
 				{
 					//close prev paragraph
 					if (Helper.Length > 0)
-						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus, opt);
+						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus, opt, closingGroup);
 
 					//begin new paragraph
 					Helper.Clear();
@@ -400,7 +379,7 @@ namespace ChordEditor.Core
 					par.Range.InsertParagraphAfter();
 				}
 
-				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus, GeneartorOptions opt)
+				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus, GeneartorOptions opt, bool closingGroup = false)
 				{
 					System.Text.RegularExpressions.MatchCollection chords = RegexList.Chords.ChordProNote.Matches(content);
 					//remove all chords
@@ -409,7 +388,7 @@ namespace ChordEditor.Core
 					bool WithChords = chords.Count > 0;
 					Style style = InChorus ? (WithChords ? tpl.ChorusWC : tpl.ChorusWoC) : (WithChords ? tpl.StorpheWC : tpl.StorpheWoC);
 					Paragraph par = doc.Content.Paragraphs.Add();
-					par.Range.Text = content;
+					par.Range.Text = closingGroup ? content + "\f" : content ;
 					par.set_Style(style);
 					par.Range.SpellingChecked = true;
 					par.Range.GrammarChecked = true;
@@ -446,8 +425,10 @@ namespace ChordEditor.Core
 							offset += chord.Length - 1;
 						}
 					}
-					mContent.Add(par);
+
 					par.Range.InsertParagraphAfter();
+
+					mContent.Add(par);
 				}
 			}
 		}
@@ -472,6 +453,7 @@ namespace ChordEditor.Core
 		public class GeneartorOptions
 		{
 			public bool RebuildIdx;
+			public bool RebuildSize;
 			public bool StripChord;
 		}
 
