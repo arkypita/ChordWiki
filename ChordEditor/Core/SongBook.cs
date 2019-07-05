@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Word;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Office.Interop.Word;
 
 namespace ChordEditor.Core
 {
@@ -24,9 +22,8 @@ namespace ChordEditor.Core
 		private class JobDictionary
 		{
 			private Dictionary<string, CategoryGroup> mList = new Dictionary<string, CategoryGroup>();
-
-			int indexed = 0;
-			int unsorted = 0;
+			private int indexed = 0;
+			private int unsorted = 0;
 
 			private class CategoryGroup
 			{
@@ -34,10 +31,12 @@ namespace ChordEditor.Core
 				public List<ProcessedSheet> Unsorted = new List<ProcessedSheet>();
 			}
 
-			internal void Add(SheetHeader sh, GeneartorOptions opt)
+			internal void Add(SheetHeader sh, GeneratorOptions opt)
 			{
 				if (!mList.ContainsKey(sh.SheetCategory))
+				{
 					mList.Add(sh.SheetCategory, new CategoryGroup());
+				}
 
 				if (sh.Index < 0 || opt.RebuildIdx)
 				{
@@ -51,10 +50,10 @@ namespace ChordEditor.Core
 				}
 			}
 
-			internal void Execute(JobMessageDlg message, GeneartorOptions opt)
+			internal void Execute(JobMessageDlg message, GeneratorOptions opt)
 			{
 				message?.Invoke("------ CREATE BOOK------");
-				message?.Invoke($"Job Begin: {unsorted}/{unsorted+indexed} song to process.");
+				message?.Invoke($"Job Begin: {unsorted}/{unsorted + indexed} song to process.");
 
 				Application app = new Application();
 				app.CheckLanguage = false;
@@ -78,7 +77,7 @@ namespace ChordEditor.Core
 				message?.Invoke("Job Completed!\r\n");
 			}
 
-			private void BuildOutput(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt, Dictionary<string, List<SongGroup>> groups)
+			private void BuildOutput(JobMessageDlg message, Application app, Document doc, Template tpl, GeneratorOptions opt, Dictionary<string, List<SongGroup>> groups)
 			{
 				message?.Invoke("Building final output...");
 				foreach (KeyValuePair<string, List<SongGroup>> kvp in groups)
@@ -90,7 +89,7 @@ namespace ChordEditor.Core
 						foreach (ProcessedSheet ps in lsg)
 						{
 							message?.Invoke($"{Fase.Rendering} {ps.mSheet.Header.SheetCategory} {ps.mSheet.Header.Title}");
-							ps.ProcessFile(app, doc, tpl, opt, Fase.Rendering, object.ReferenceEquals(ps, lsg[lsg.Count-1]));
+							ps.ProcessFile(app, doc, tpl, opt, Fase.Rendering, object.ReferenceEquals(ps, lsg[lsg.Count - 1]));
 						}
 					}
 
@@ -122,11 +121,17 @@ namespace ChordEditor.Core
 					get
 					{
 						if (PageCount == 1)
+						{
 							return 1 + WastedSpace;
+						}
 						else if (IsEven(PageCount))
+						{
 							return 1 + WastedSpace;
+						}
 						else
+						{
 							return WastedSpace;
+						}
 					}
 				}
 
@@ -136,7 +141,7 @@ namespace ChordEditor.Core
 				}
 			}
 
-			private Dictionary<string, List<SongGroup>> PreProcess(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			private Dictionary<string, List<SongGroup>> PreProcess(JobMessageDlg message, Application app, Document doc, Template tpl, GeneratorOptions opt)
 			{
 				ComputeAllSongSize(message, app, doc, tpl, opt);
 				return CreatePageGroups(message);
@@ -188,9 +193,13 @@ namespace ChordEditor.Core
 						for (int i = 0; i < tosort.Count;)
 						{
 							if (tosort[i].mSize < group.SpaceToFill)
+							{
 								MoveBetweenList(tosort, group, tosort[i]);
+							}
 							else
+							{
 								i++;
+							}
 						}
 
 						groups.Add(group);
@@ -202,31 +211,43 @@ namespace ChordEditor.Core
 				return catgroups;
 			}
 
-			private void ComputeAllSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt)
+			private void ComputeAllSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneratorOptions opt)
 			{
 				message?.Invoke("Computing song size...");
 
 				Dictionary<string, double> knownSize = (Dictionary<string, double>)Serializer.ObjFromFile("SongSizeData.bin");
-				if (knownSize == null || opt.RebuildSize) knownSize = new Dictionary<string, double>();
+				if (knownSize == null || opt.RebuildSize)
+				{
+					knownSize = new Dictionary<string, double>();
+				}
 
 				foreach (KeyValuePair<string, CategoryGroup> kvp in mList)
 				{
 					foreach (ProcessedSheet ps in kvp.Value.Indexed)
+					{
 						ComputeSongSize(message, app, doc, tpl, opt, knownSize, ps);
+					}
+
 					foreach (ProcessedSheet ps in kvp.Value.Unsorted)
+					{
 						ComputeSongSize(message, app, doc, tpl, opt, knownSize, ps);
+					}
 				}
 
 				Serializer.ObjToFile(knownSize, "SongSizeData.bin");
 			}
 
-			private static void ComputeSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneartorOptions opt, Dictionary<string, double> knownSize, ProcessedSheet ps)
+			private static void ComputeSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneratorOptions opt, Dictionary<string, double> knownSize, ProcessedSheet ps)
 			{
 				ps.mSheet.ReloadFile();
 				ps.mSheet.FixContentIssues();               //correct file content
 				if (ps.mSheet.HasMemoryChanges)
 				{
-					if (knownSize.ContainsKey(ps.mSheet.Header.FileName)) knownSize.Remove(ps.mSheet.Header.FileName); //must compute a new size
+					if (knownSize.ContainsKey(ps.mSheet.Header.FileName))
+					{
+						knownSize.Remove(ps.mSheet.Header.FileName); //must compute a new size
+					}
+
 					ps.mSheet.Save();
 				}
 
@@ -245,7 +266,9 @@ namespace ChordEditor.Core
 			private static void MoveBetweenList(List<ProcessedSheet> from, List<ProcessedSheet> to, List<ProcessedSheet> items)
 			{
 				foreach (ProcessedSheet item in items)
+				{
 					MoveBetweenList(from, to, item);
+				}
 			}
 
 			private static void MoveBetweenList(List<ProcessedSheet> from, List<ProcessedSheet> to, ProcessedSheet item)
@@ -272,6 +295,9 @@ namespace ChordEditor.Core
 				public Style ChordTB;
 				public Style SectionHeader;
 
+				public Style ChorusM;   //monospace
+				public Style StorpheM;  //monospace
+
 				public PageSetup Page;
 
 				public Template(Document doc)
@@ -286,6 +312,9 @@ namespace ChordEditor.Core
 					StorpheWoC = doc.Styles["StropheWoC"];
 
 					ChordTB = doc.Styles["ChordTB"];
+
+					ChorusM = doc.Styles["ChorusM"];
+					StorpheM = doc.Styles["StropheM"];
 
 					SectionHeader = doc.Styles["SectionHeader"];
 
@@ -305,14 +334,20 @@ namespace ChordEditor.Core
 				public ProcessedSheet(SheetHeader sh)
 				{ mSheet = new Sheet(sh.FileName); }
 
-				internal void ProcessFile(Application app, Document doc, Template tpl, GeneartorOptions opt, Fase fase, bool closingGroup)
+				internal void ProcessFile(Application app, Document doc, Template tpl, GeneratorOptions opt, Fase fase, bool closingGroup)
 				{
-					if (!loaded) mSheet.ReloadFile();
+					if (!loaded)
+					{
+						mSheet.ReloadFile();
+					}
+
 					loaded = true;
 
 					AddSongTitle(doc, tpl.SongTitle, mSheet.Header.SheetCategory, mSheet.Header.Title);
 					if (mSheet.Header.Artist != null)
+					{
 						AddSongArtist(doc, tpl.SongArtist, mSheet.Header.Artist);
+					}
 
 					StringBuilder Helper = new StringBuilder();
 					using (System.IO.StringReader sr = new System.IO.StringReader(mSheet.Content))
@@ -345,7 +380,9 @@ namespace ChordEditor.Core
 						float waste = uph - lph;
 
 						if (lph / uph > 1)
+						{
 							System.Diagnostics.Debug.WriteLine("error?");
+						}
 
 						float size = uph * pcount - waste;
 						mSize = (pcount - 1) + lph / uph;
@@ -358,16 +395,20 @@ namespace ChordEditor.Core
 				private void AppendToParagraph(StringBuilder Helper, string line)
 				{
 					if (Helper.Length > 0)
-						Helper.Append('\v');		//append vertical newline (new line, same paragraph)
+					{
+						Helper.Append('\v');        //append vertical newline (new line, same paragraph)
+					}
 
 					Helper.Append(line);
 				}
 
-				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus, GeneartorOptions opt, bool closingGroup = false)
+				private void OnNewParagraph(Application app, Document doc, Template tpl, StringBuilder Helper, bool InChorus, GeneratorOptions opt, bool closingGroup = false)
 				{
 					//close prev paragraph
 					if (Helper.Length > 0)
+					{
 						AddParagraph(app, doc, tpl, Helper.ToString(), InChorus, opt, closingGroup);
+					}
 
 					//begin new paragraph
 					Helper.Clear();
@@ -394,25 +435,40 @@ namespace ChordEditor.Core
 					par.Range.InsertParagraphAfter();
 				}
 
-				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus, GeneartorOptions opt, bool closingGroup = false)
+				private void AddParagraph(Application app, Document doc, Template tpl, string content, bool InChorus, GeneratorOptions opt, bool closingGroup = false)
+				{
+					if (!opt.Monospace)
+					{
+						content = AddParagraphNice(app, doc, tpl, content, InChorus, opt, closingGroup);
+					}
+					else
+					{
+						content = AddParagraphMonospace(app, doc, tpl, content, InChorus, opt, closingGroup);
+					}
+				}
+
+				private static string AddParagraphNice(Application app, Document doc, Template tpl, string content, bool ChorusStyle, GeneratorOptions opt, bool closingGroup)
 				{
 					System.Text.RegularExpressions.MatchCollection chords = RegexList.Chords.ChordProNote.Matches(content);
-					//remove all chords
+					bool ChordStyle = chords.Count > 0 && !opt.StripChord;
+
+					//rimuovi gli accordi
 					content = RegexList.Chords.ChordProNote.Replace(content, "");
 
-					bool WithChords = chords.Count > 0;
-					Style style = InChorus ? (WithChords ? tpl.ChorusWC : tpl.ChorusWoC) : (WithChords ? tpl.StorpheWC : tpl.StorpheWoC);
+					//inserisci il paragrafo
+					Style style = ChorusStyle ? (ChordStyle ? tpl.ChorusWC : tpl.ChorusWoC) : (ChordStyle ? tpl.StorpheWC : tpl.StorpheWoC);
 					Paragraph par = doc.Content.Paragraphs.Add();
-					par.Range.Text = closingGroup ? content + "\f" : content ;
+					par.Range.Text = closingGroup ? content + "\f" : content;
 					par.set_Style(style);
 					par.Range.SpellingChecked = true;
 					par.Range.GrammarChecked = true;
 
-					int parstart = par.Range.Start;
-					int offset = 0;
-
 					if (!opt.StripChord)
 					{
+						int parstart = par.Range.Start;
+						int offset = 0;
+
+						//inserisci le textbox con gli accordi
 						foreach (System.Text.RegularExpressions.Match chord in chords)
 						{
 
@@ -442,6 +498,52 @@ namespace ChordEditor.Core
 					}
 
 					par.Range.InsertParagraphAfter();
+					return content;
+				}
+
+				private static string AddParagraphMonospace(Application app, Document doc, Template tpl, string content, bool InChorus, GeneratorOptions opt, bool closingGroup)
+				{
+					content = CpToMonospace(content);
+
+					Style style = InChorus ? tpl.ChorusM : tpl.StorpheM;
+
+					Paragraph par = doc.Content.Paragraphs.Add();
+					par.Range.Text = closingGroup ? content + "\f" : content;
+					par.set_Style(style);
+					par.Range.SpellingChecked = true;
+					par.Range.GrammarChecked = true;
+
+					int parstart = par.Range.Start;
+
+					par.Range.InsertParagraphAfter();
+					return content;
+				}
+
+				private static string CpToMonospace(string content)
+				{
+					System.Text.RegularExpressions.MatchCollection allmatch = Core.RegexList.Chords.ChordProNote.Matches(content);
+					bool ContainsChords = allmatch.Count > 0;
+
+					if (!ContainsChords)
+						return content;
+
+					StringBuilder rv = new StringBuilder();
+					string[] arr = content.Split(new char[] { '\v' });
+					foreach (string line in arr)
+					{
+						System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
+
+						string chords;
+						string song;
+
+						Forms.SheetForm.ExtractSongChord(line, matches, out chords, out song);
+
+						rv.Append(chords);
+						rv.Append('\v');
+						rv.Append(song);
+						rv.Append('\v');
+					}
+					return rv.ToString().Trim(new char[] { '\v' });
 				}
 			}
 		}
@@ -451,23 +553,26 @@ namespace ChordEditor.Core
 			//Core.WordFile wf = new Core.WordFile();
 			//wf.CreatePackage("D:\\songbook.docx");
 
-			GeneartorOptions opt = Forms.BookGenerator.CreateAndShowDialog();
+			GeneratorOptions opt = Forms.BookGenerator.CreateAndShowDialog();
 			JobDictionary job = new JobDictionary();
 
 			foreach (SheetHeader sh in SheetDB.List)
 			{
 				if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Verified && sh.SheetCategory != null)
+				{
 					job.Add(sh, opt);
+				}
 			}
 
 			job.Execute((string message) => { JobMessage?.Invoke(message); }, opt);
 		}
 
-		public class GeneartorOptions
+		public class GeneratorOptions
 		{
 			public bool RebuildIdx;
 			public bool RebuildSize;
 			public bool StripChord;
+			public bool Monospace;
 		}
 
 	}

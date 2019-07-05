@@ -37,10 +37,11 @@
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.CbStripChords = new System.Windows.Forms.CheckBox();
 			this.CbRebuildIndexes = new System.Windows.Forms.CheckBox();
+			this.CbRebuildAllSize = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.BtnCancel = new System.Windows.Forms.Button();
 			this.BtnOk = new System.Windows.Forms.Button();
-			this.CbRebuildAllSize = new System.Windows.Forms.CheckBox();
+			this.CbMonospace = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -129,6 +130,7 @@
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel5.Controls.Add(this.CbMonospace, 0, 3);
 			this.tableLayoutPanel5.Controls.Add(this.CbStripChords, 0, 2);
 			this.tableLayoutPanel5.Controls.Add(this.CbRebuildIndexes, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.CbRebuildAllSize, 0, 1);
@@ -164,6 +166,16 @@
 			this.CbRebuildIndexes.TabIndex = 0;
 			this.CbRebuildIndexes.Text = "Rebuild all indexes";
 			this.CbRebuildIndexes.UseVisualStyleBackColor = true;
+			// 
+			// CbRebuildAllSize
+			// 
+			this.CbRebuildAllSize.AutoSize = true;
+			this.CbRebuildAllSize.Location = new System.Drawing.Point(3, 26);
+			this.CbRebuildAllSize.Name = "CbRebuildAllSize";
+			this.CbRebuildAllSize.Size = new System.Drawing.Size(122, 17);
+			this.CbRebuildAllSize.TabIndex = 2;
+			this.CbRebuildAllSize.Text = "Rebuild all song size";
+			this.CbRebuildAllSize.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel2
 			// 
@@ -205,15 +217,17 @@
 			this.BtnOk.UseVisualStyleBackColor = true;
 			this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
 			// 
-			// CbRebuildAllSize
+			// CbMonospace
 			// 
-			this.CbRebuildAllSize.AutoSize = true;
-			this.CbRebuildAllSize.Location = new System.Drawing.Point(3, 26);
-			this.CbRebuildAllSize.Name = "CbRebuildAllSize";
-			this.CbRebuildAllSize.Size = new System.Drawing.Size(122, 17);
-			this.CbRebuildAllSize.TabIndex = 2;
-			this.CbRebuildAllSize.Text = "Rebuild all song size";
-			this.CbRebuildAllSize.UseVisualStyleBackColor = true;
+			this.CbMonospace.AutoSize = true;
+			this.CbMonospace.Checked = true;
+			this.CbMonospace.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.CbMonospace.Location = new System.Drawing.Point(3, 72);
+			this.CbMonospace.Name = "CbMonospace";
+			this.CbMonospace.Size = new System.Drawing.Size(124, 17);
+			this.CbMonospace.TabIndex = 3;
+			this.CbMonospace.Text = "Use monospace font";
+			this.CbMonospace.UseVisualStyleBackColor = true;
 			// 
 			// BookGenerator
 			// 
@@ -256,5 +270,6 @@
 				private System.Windows.Forms.CheckBox CbRebuildIndexes;
 		private System.Windows.Forms.CheckBox CbStripChords;
 		private System.Windows.Forms.CheckBox CbRebuildAllSize;
+		private System.Windows.Forms.CheckBox CbMonospace;
 	}
 }

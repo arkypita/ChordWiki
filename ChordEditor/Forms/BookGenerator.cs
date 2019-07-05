@@ -23,7 +23,7 @@ namespace ChordEditor.Forms
 			Close();
 		}
 
-		internal static SongBook.GeneartorOptions CreateAndShowDialog()
+		internal static SongBook.GeneratorOptions CreateAndShowDialog()
 		{
 			using (BookGenerator rb = new BookGenerator())
 			{
@@ -36,10 +36,11 @@ namespace ChordEditor.Forms
 					rb.ShowDialog(Application.OpenForms[Application.OpenForms.Count - 1]);
 				}
 
-				SongBook.GeneartorOptions rv = new SongBook.GeneartorOptions();
+				SongBook.GeneratorOptions rv = new SongBook.GeneratorOptions();
 				rv.RebuildIdx = rb.CbRebuildIndexes.Checked;
 				rv.RebuildSize = rb.CbRebuildAllSize.Checked;
 				rv.StripChord = rb.CbStripChords.Checked;
+				rv.Monospace = rb.CbMonospace.Checked;
 
 				return rv;
 			}

@@ -255,7 +255,7 @@ namespace ChordEditor.Forms
 			COT.EndUpdate();
 		}
 
-		private static void ExtractSongChord(string line, System.Text.RegularExpressions.MatchCollection matches, out string chords, out string song)
+		public static void ExtractSongChord(string line, System.Text.RegularExpressions.MatchCollection matches, out string chords, out string song)
 		{
 			int offset = 0;
 			chords = "";
