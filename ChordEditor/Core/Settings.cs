@@ -82,7 +82,7 @@ namespace ChordEditor.Core
 
 				public static bool SuperUser
 				{
-						get { return Username == "diego"; }
+						get { return Username == "diego" || Username == "davide" || Username == "matteo"; }
 				}
 
 				public static byte[] LVState
