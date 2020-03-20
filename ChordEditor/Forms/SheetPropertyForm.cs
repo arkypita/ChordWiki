@@ -139,7 +139,7 @@ namespace ChordEditor.Forms
 								PbAdd.Enabled = false;
 								PbVerify.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Added || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified);
 								PbReview.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed);
-								PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked) && (ActiveSheet.Header.LockedBy == null || SVN.Username == null || ActiveSheet.Header.LockedBy == SVN.Username);
+								PbLock.Enabled = (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed || ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked) && SVN.Username != null && (ActiveSheet.Header.LockedBy == null || ActiveSheet.Header.LockedBy == SVN.Username || Settings.SuperUser);
 
 								TlpMain.Enabled = true;
 
