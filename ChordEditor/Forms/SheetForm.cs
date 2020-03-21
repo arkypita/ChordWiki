@@ -17,6 +17,7 @@ namespace ChordEditor.Forms
 		public delegate void SheetFormDelegate(SheetForm sf);
 		public static event SheetFormDelegate DelayedTextChanged;
 		public static event SheetFormDelegate HeaderChanged;
+		public static event FormClosedEventHandler NotifyFormClosed;
 
 		private Core.Sheet mSheet;
 		private Core.ChordNotation mSheetNotation;
@@ -140,7 +141,13 @@ namespace ChordEditor.Forms
 		public static void CreateAndShow(Core.Sheet sheet, UserControls.DockingManager.DockPanel panel)
 		{
 			SheetForm sf = new SheetForm(sheet);
+			sf.FormClosed += OnFormClose;
 			sf.Show(panel);
+		}
+
+		private static void OnFormClose(object sender, FormClosedEventArgs e)
+		{
+			NotifyFormClosed?.Invoke(sender, e);
 		}
 
 		public MenuStrip GetMenu()
