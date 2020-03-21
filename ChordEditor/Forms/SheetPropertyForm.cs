@@ -343,7 +343,7 @@ namespace ChordEditor.Forms
 				{
 						if (ActiveSheet != null)
 						{
-								if (Settings.SuperUser || VerifyMd5Hash(InputBox.Show("Privileged option", "Lock Password?", "", true, true), "8af0c15085845360b61b67ea41a87cfb"))
+								if (Settings.SuperUser || VerifyMd5Hash(InputBox.Show("Privileged option", "Lock Password?", "", true, true), "c85e75f65d87fd82124511109bfd2f11"))
 								{
 										if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Locked)
 										{
