@@ -39,9 +39,7 @@ namespace ChordEditor.Core
 					mContent = value;
 
 					if (SheetChange != null)
-					{
 						SheetChange(this);
-					}
 				}
 			}
 		}

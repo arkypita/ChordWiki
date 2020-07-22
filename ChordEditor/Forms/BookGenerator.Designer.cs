@@ -35,19 +35,27 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.CbStripChords = new System.Windows.Forms.CheckBox();
 			this.CbRebuildIndexes = new System.Windows.Forms.CheckBox();
 			this.CbRebuildAllSize = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.BtnCancel = new System.Windows.Forms.Button();
 			this.BtnOk = new System.Windows.Forms.Button();
-			this.CbMonospace = new System.Windows.Forms.CheckBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.RbPerChitarra = new System.Windows.Forms.RadioButton();
+			this.RbPerCanto = new System.Windows.Forms.RadioButton();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.flowLayoutPanel1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -62,9 +70,9 @@
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(529, 326);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 256);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel3
@@ -81,7 +89,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(523, 271);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(402, 201);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// tableLayoutPanel4
@@ -98,7 +106,7 @@
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(517, 118);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(396, 118);
 			this.tableLayoutPanel4.TabIndex = 10;
 			// 
 			// label1
@@ -109,10 +117,10 @@
 			this.label1.Location = new System.Drawing.Point(131, 6);
 			this.label1.Margin = new System.Windows.Forms.Padding(6);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(380, 106);
+			this.label1.Size = new System.Drawing.Size(259, 106);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "The generation of the songbook is a fully automatic process. \r\nSelect pagination " +
-    "options, we do the rest.\r\n\r\nWarning: this is an experimental function!";
+			this.label1.Text = "Warning: this is an experimental function!";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// pictureBox1
 			// 
@@ -127,35 +135,20 @@
 			// 
 			// tableLayoutPanel5
 			// 
+			this.tableLayoutPanel5.AutoSize = true;
+			this.tableLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel5.Controls.Add(this.CbMonospace, 0, 3);
-			this.tableLayoutPanel5.Controls.Add(this.CbStripChords, 0, 2);
-			this.tableLayoutPanel5.Controls.Add(this.CbRebuildIndexes, 0, 0);
-			this.tableLayoutPanel5.Controls.Add(this.CbRebuildAllSize, 0, 1);
+			this.tableLayoutPanel5.Controls.Add(this.groupBox1, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.groupBox2, 1, 0);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 127);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 4;
+			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(517, 141);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(396, 71);
 			this.tableLayoutPanel5.TabIndex = 11;
-			// 
-			// CbStripChords
-			// 
-			this.CbStripChords.AutoSize = true;
-			this.CbStripChords.Checked = true;
-			this.CbStripChords.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.CbStripChords.Location = new System.Drawing.Point(3, 49);
-			this.CbStripChords.Name = "CbStripChords";
-			this.CbStripChords.Size = new System.Drawing.Size(83, 17);
-			this.CbStripChords.TabIndex = 1;
-			this.CbStripChords.Text = "Strip Chords";
-			this.CbStripChords.UseVisualStyleBackColor = true;
 			// 
 			// CbRebuildIndexes
 			// 
@@ -188,17 +181,17 @@
 			this.tableLayoutPanel2.Controls.Add(this.BtnCancel, 2, 0);
 			this.tableLayoutPanel2.Controls.Add(this.BtnOk, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 280);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 210);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(523, 43);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(402, 43);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// BtnCancel
 			// 
 			this.BtnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.BtnCancel.Location = new System.Drawing.Point(431, 3);
+			this.BtnCancel.Location = new System.Drawing.Point(310, 3);
 			this.BtnCancel.Name = "BtnCancel";
 			this.BtnCancel.Size = new System.Drawing.Size(89, 37);
 			this.BtnCancel.TabIndex = 2;
@@ -209,7 +202,7 @@
 			// BtnOk
 			// 
 			this.BtnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.BtnOk.Location = new System.Drawing.Point(336, 3);
+			this.BtnOk.Location = new System.Drawing.Point(215, 3);
 			this.BtnOk.Name = "BtnOk";
 			this.BtnOk.Size = new System.Drawing.Size(89, 37);
 			this.BtnOk.TabIndex = 1;
@@ -217,25 +210,91 @@
 			this.BtnOk.UseVisualStyleBackColor = true;
 			this.BtnOk.Click += new System.EventHandler(this.BtnOk_Click);
 			// 
-			// CbMonospace
+			// groupBox1
 			// 
-			this.CbMonospace.AutoSize = true;
-			this.CbMonospace.Checked = true;
-			this.CbMonospace.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.CbMonospace.Location = new System.Drawing.Point(3, 72);
-			this.CbMonospace.Name = "CbMonospace";
-			this.CbMonospace.Size = new System.Drawing.Size(124, 17);
-			this.CbMonospace.TabIndex = 3;
-			this.CbMonospace.Text = "Use monospace font";
-			this.CbMonospace.UseVisualStyleBackColor = true;
+			this.groupBox1.AutoSize = true;
+			this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.groupBox1.Controls.Add(this.flowLayoutPanel1);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.groupBox1.Location = new System.Drawing.Point(3, 3);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(192, 65);
+			this.groupBox1.TabIndex = 4;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Tipologia di canzoniere";
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.flowLayoutPanel1.Controls.Add(this.RbPerChitarra);
+			this.flowLayoutPanel1.Controls.Add(this.RbPerCanto);
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(186, 46);
+			this.flowLayoutPanel1.TabIndex = 0;
+			this.flowLayoutPanel1.WrapContents = false;
+			// 
+			// RbPerChitarra
+			// 
+			this.RbPerChitarra.AutoSize = true;
+			this.RbPerChitarra.Checked = true;
+			this.RbPerChitarra.Location = new System.Drawing.Point(3, 3);
+			this.RbPerChitarra.Name = "RbPerChitarra";
+			this.RbPerChitarra.Size = new System.Drawing.Size(86, 17);
+			this.RbPerChitarra.TabIndex = 0;
+			this.RbPerChitarra.TabStop = true;
+			this.RbPerChitarra.Text = "Per Chitarristi";
+			this.RbPerChitarra.UseVisualStyleBackColor = true;
+			// 
+			// RbPerCanto
+			// 
+			this.RbPerCanto.AutoSize = true;
+			this.RbPerCanto.Location = new System.Drawing.Point(3, 26);
+			this.RbPerCanto.Name = "RbPerCanto";
+			this.RbPerCanto.Size = new System.Drawing.Size(83, 17);
+			this.RbPerCanto.TabIndex = 1;
+			this.RbPerCanto.Text = "Per Cantanti";
+			this.RbPerCanto.UseVisualStyleBackColor = true;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.AutoSize = true;
+			this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.groupBox2.Controls.Add(this.flowLayoutPanel2);
+			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+			this.groupBox2.Location = new System.Drawing.Point(201, 3);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(192, 65);
+			this.groupBox2.TabIndex = 5;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Opzioni indici";
+			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.AutoSize = true;
+			this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.flowLayoutPanel2.Controls.Add(this.CbRebuildIndexes);
+			this.flowLayoutPanel2.Controls.Add(this.CbRebuildAllSize);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 16);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(186, 46);
+			this.flowLayoutPanel2.TabIndex = 1;
+			this.flowLayoutPanel2.WrapContents = false;
 			// 
 			// BookGenerator
 			// 
 			this.AcceptButton = this.BtnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.CancelButton = this.BtnCancel;
-			this.ClientSize = new System.Drawing.Size(529, 326);
+			this.ClientSize = new System.Drawing.Size(408, 256);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "BookGenerator";
@@ -251,6 +310,14 @@
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -268,8 +335,12 @@
         private System.Windows.Forms.PictureBox pictureBox1;
 				private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 				private System.Windows.Forms.CheckBox CbRebuildIndexes;
-		private System.Windows.Forms.CheckBox CbStripChords;
 		private System.Windows.Forms.CheckBox CbRebuildAllSize;
-		private System.Windows.Forms.CheckBox CbMonospace;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+		private System.Windows.Forms.RadioButton RbPerChitarra;
+		private System.Windows.Forms.RadioButton RbPerCanto;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 	}
 }

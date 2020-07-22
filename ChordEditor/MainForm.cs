@@ -341,7 +341,7 @@ namespace ChordEditor
 
 		private void MnGenerate_Click(object sender, EventArgs e)
 		{
-			SongBook.Generate();
+			SongBook.Generate(this);
 		}
 
 

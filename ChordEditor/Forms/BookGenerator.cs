@@ -23,26 +23,25 @@ namespace ChordEditor.Forms
 			Close();
 		}
 
-		internal static SongBook.GeneratorOptions CreateAndShowDialog()
+		internal static SongBook.GeneratorOptions CreateAndShowDialog(MainForm mainForm)
 		{
 			using (BookGenerator rb = new BookGenerator())
 			{
-				if (Application.OpenForms.Count > 0)
+				if (rb.ShowDialog(mainForm) == DialogResult.OK)
 				{
-					rb.ShowDialog(Application.OpenForms[Application.OpenForms.Count - 1]);
-				}
-				else
-				{
-					rb.ShowDialog(Application.OpenForms[Application.OpenForms.Count - 1]);
+					SongBook.GeneratorOptions rv = new SongBook.GeneratorOptions();
+					rv.RebuildIdx = rb.CbRebuildIndexes.Checked;
+					rv.RebuildSize = rb.CbRebuildAllSize.Checked;
+
+					if (rb.RbPerChitarra.Checked)
+						rv.Type = SongBook.GeneratorOptions.BookType.Guitar;
+					else if (rb.RbPerCanto.Checked)
+						rv.Type = SongBook.GeneratorOptions.BookType.Singer;
+
+					return rv;
 				}
 
-				SongBook.GeneratorOptions rv = new SongBook.GeneratorOptions();
-				rv.RebuildIdx = rb.CbRebuildIndexes.Checked;
-				rv.RebuildSize = rb.CbRebuildAllSize.Checked;
-				rv.StripChord = rb.CbStripChords.Checked;
-				rv.Monospace = rb.CbMonospace.Checked;
-
-				return rv;
+				return null;
 			}
 		}
 
