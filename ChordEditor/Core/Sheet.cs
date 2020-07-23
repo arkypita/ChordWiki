@@ -95,7 +95,16 @@ namespace ChordEditor.Core
 
 		private string RemoveTrailingLeadingWitespace(string text)
 		{
-			return text.Trim(new char[] { '\r', '\n', '\t', ' '});
+			//sostituisci le linee piene di soli spazi con \r\n\r\n
+			text = RegexList.Cleanup.AnyWhitespacesLine.Replace(text, "\r\n\r\n");
+
+			//togli ritorni a capo inutili all'inizio del file
+			text = text.TrimStart(new char[] { '\r', '\n' });
+
+			//rimuovi schifezze alla fine del file
+			text = text.TrimEnd(new char[] { '\r', '\n', ' ', '\t', '\\', '/' });
+
+			return text;
 		}
 
 
