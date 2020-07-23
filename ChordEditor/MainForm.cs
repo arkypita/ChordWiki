@@ -346,7 +346,8 @@ namespace ChordEditor
 
 		private void MnNormalizeDB_Click(object sender, EventArgs e)
 		{
-			SheetDB.NormalizeAllSong();
+			if (MessageBox.Show("Questo comando andrà a modificare tutti i file nel database effettuando una pulizia e normalizzazione dei contenuti. Usare solo se si è consapevoli di cosa si sta facendo!!!", "Attenzione!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.OK)
+				SheetDB.NormalizeAllSong();
 		}
 	}
 }

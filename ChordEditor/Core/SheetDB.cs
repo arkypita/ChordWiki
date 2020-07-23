@@ -199,11 +199,7 @@ namespace ChordEditor.Core
 			foreach (SheetHeader sh in mList)
 			{
 				Sheet sheet = new Sheet(sh.FileName);
-				System.Diagnostics.Debug.Write($"Normalizing {sh.Title}... ");
-				if (sheet.AutomaticNormalizationCleanup(true))
-					System.Diagnostics.Debug.WriteLine("changed!");
-				else
-					System.Diagnostics.Debug.WriteLine("ok!");
+				sheet.AutomaticNormalizationCleanup(true);
 			}
 		}
 	}

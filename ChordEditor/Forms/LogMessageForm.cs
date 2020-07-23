@@ -21,6 +21,13 @@ namespace ChordEditor.Forms
 			Importer.ImportEnd += Importer_ImportEnd;
 
 			SongBook.JobMessage += SongBook_JobMessage;
+			Sheet.SheetMessage += Sheet_SheetMessage;
+		}
+
+		private void Sheet_SheetMessage(string message)
+		{
+			Log(message, opStyle);
+			System.Windows.Forms.Application.DoEvents();
 		}
 
 		private void SongBook_JobMessage(string message)

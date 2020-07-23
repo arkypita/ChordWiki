@@ -6,6 +6,9 @@ namespace ChordEditor.Core
 {
 	public class Sheet
 	{
+		public delegate void SheetMessageDlg(string message);
+		public static event SheetMessageDlg SheetMessage;
+
 		public delegate void SheetDelegate(Sheet s);
 		public static event SheetDelegate SheetChange;
 
@@ -105,6 +108,14 @@ namespace ChordEditor.Core
 			text = RemoveTrailingLeadingWitespace(text);
 			Content = text; //fa l'evento se siamo nella pagina di edit, altrimenti no
 			bool changes = HasMemoryChanges;
+
+			if (SheetMessage != null)
+			{
+				if(changes)
+					SheetMessage($"Normalize {Header.Title}... Normalized");
+				else
+					SheetMessage($"Normalize {Header.Title}... Nothing to do!");
+			}
 
 			if (save)		//veniamo dal ciclo che lo fa su tutte
 				Save();

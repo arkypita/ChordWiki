@@ -65,7 +65,6 @@
 			this.LV.AllColumns.Add(this.ChRevisor);
 			this.LV.AllColumns.Add(this.ChStatus);
 			this.LV.CellEditUseWholeCell = false;
-			this.LV.CheckBoxes = true;
 			this.LV.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ChTitle,
             this.ChProgress,
