@@ -113,6 +113,7 @@ namespace ChordEditor.Core
 			string text = mContent;
 			text = Importer.CleanUp(text);
 			text = Pagliaro.Normalize(text);
+			text = Pagliaro.ChangeNotation(text, ChordNotation.Italian);
 			text = NormalizeComment(text);
 			text = RemoveTrailingLeadingWitespace(text);
 			Content = text; //fa l'evento se siamo nella pagina di edit, altrimenti no

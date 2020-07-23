@@ -291,7 +291,7 @@ namespace ChordEditor.Core
 
 		internal static string ChangeNotation(string source, ChordNotation targetNotation)
 		{
-			System.Text.StringBuilder text = new System.Text.StringBuilder(source);
+			StringBuilder text = new StringBuilder(source);
 			int offset = 0;
 
 			foreach (System.Text.RegularExpressions.Match m in RegexList.Chords.ChordProNote.Matches(source))
