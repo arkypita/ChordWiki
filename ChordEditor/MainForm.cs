@@ -344,11 +344,9 @@ namespace ChordEditor
 			SongBook.Generate(this);
 		}
 
-
-
-
-
-
-
+		private void MnNormalizeDB_Click(object sender, EventArgs e)
+		{
+			SheetDB.NormalizeAllSong();
+		}
 	}
 }

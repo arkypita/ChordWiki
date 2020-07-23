@@ -141,14 +141,15 @@ namespace ChordEditor.Core
 			}
 		}
 
-		private static string CleanUp(string text)
+		public static string CleanUp(string text)
 		{
 			text = RegexList.Cleanup.AnyTrash.Replace(text, "");
+			text = RegexList.Cleanup.AnyShitTriplepoint.Replace(text, "...");
 			text = RegexList.Cleanup.AnyStrangeSpace.Replace(text, " ");
-			text = RegexList.Cleanup.AnyTabulation.Replace(text, "            "); //tabulation = 12 spaces
-			text = RegexList.Cleanup.AnyNewLine.Replace(text, "\r\n"); //normalize newline
-			text = RegexList.Cleanup.AnyWhitespacesLine.Replace(text, "\r\n\r\n"); //remove empty line filled of spaces
-			text = RegexList.Cleanup.MultipleSpacedLine.Replace(text, "\r\n\r\n"); //remove multiple white lines, keep paragraph (2 line)
+			text = RegexList.Cleanup.AnyTabulation.Replace(text, "            ");	//tabulation = 12 spaces
+			text = RegexList.Cleanup.AnyNewLine.Replace(text, "\r\n");				//normalize newline
+			text = RegexList.Cleanup.AnyWhitespacesLine.Replace(text, "\r\n\r\n");	//remove empty line filled of spaces
+			text = RegexList.Cleanup.MultipleSpacedLine.Replace(text, "\r\n\r\n");	//remove multiple white lines, keep paragraph (2 line)
 			text = RegexList.Cleanup.WhiteSpacesAtEndOfLine.Replace(text, "");
 			return text;
 		}

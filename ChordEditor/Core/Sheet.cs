@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ChordEditor.Core
 {
@@ -57,7 +59,7 @@ namespace ChordEditor.Core
 			if (!HasMemoryChanges)
 				return;
 
-			FixContentIssues();
+			mContent = RemoveTrailingLeadingWitespace(mContent);
 
 			bool createNew = !System.IO.File.Exists(mHeader.FilePath);
 			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mHeader.FilePath))
@@ -88,9 +90,57 @@ namespace ChordEditor.Core
 			SheetChange?.Invoke(this);
 		}
 
-		public void FixContentIssues()
+		private string RemoveTrailingLeadingWitespace(string text)
 		{
-			mContent = mContent.Trim(new char[] { '\r', '\n', '\t', ' '});
+			return text.Trim(new char[] { '\r', '\n', '\t', ' '});
+		}
+
+
+		public bool AutomaticNormalizationCleanup(bool save)
+		{
+			string text = mContent;
+			text = Importer.CleanUp(text);
+			text = Pagliaro.Normalize(text);
+			text = NormalizeComment(text);
+			text = RemoveTrailingLeadingWitespace(text);
+			Content = text; //fa l'evento se siamo nella pagina di edit, altrimenti no
+			bool changes = HasMemoryChanges;
+
+			if (save)		//veniamo dal ciclo che lo fa su tutte
+				Save();
+
+			return changes;
+		}
+
+		private static string NormalizeComment(string text)
+		{
+			//auto transform missing comment tag (Rit.) to comment tag {c:Rit.}
+			text = RegexList.Comments.AutoComment.Replace(text, "{c:${commento}}");
+
+			//normalize other tag
+			int offset = 0;
+			Match match = RegexList.Comments.CommentoTag.Match(text, offset);
+			while (match != null && match.Success)
+			{
+				string oldval = match.Value;
+				string comment = match.Groups["commento"].Value;
+
+				comment = RegexList.Comments.Ritornello.Replace(comment, "rit");
+				comment = RegexList.Comments.VolteCount1.Replace(comment, "${numvolte}v");
+				comment = RegexList.Comments.VolteCount2.Replace(comment, "${numvolte}v");
+				comment = RegexList.Comments.Strumentale.Replace(comment, "strum");
+				comment = RegexList.Comments.Introduzione.Replace(comment, "intro");
+				comment = comment.Trim();
+
+				string newval = "{c:" + comment +"}";
+				text = text.Remove(match.Index, match.Length);
+				text = text.Insert(match.Index, newval);
+
+				offset = match.Index + oldval.Length + (newval.Length - oldval.Length);
+				match = RegexList.Comments.CommentoTag.Match(text, offset);
+			}
+
+			return text;
 		}
 
 		private void BackupStatus()

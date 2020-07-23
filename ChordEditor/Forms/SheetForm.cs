@@ -406,6 +406,12 @@ namespace ChordEditor.Forms
 			CHP.Text = Pagliaro.Normalize(CHP.Text);
 		}
 
+		internal void AutomaticNormalizationCleanup()
+		{
+			if(Sheet.AutomaticNormalizationCleanup(false))
+				CHP.Text = Sheet.Content;
+		}
+
 		private void CHPPasting(object sender, TextChangingEventArgs e)
 		{
 			Importer.ImportedContent content = Importer.ImportClipbord(e.InsertingText, true);
