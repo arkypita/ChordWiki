@@ -39,7 +39,7 @@ namespace ChordEditor.Core
 		};
 
 		private static chordMatch[] matchDictionary = new chordMatch[]
-{
+		{
             //notazione italiana
 
             new chordMatch(ChordNotation.Italian, "DO#", 1),
@@ -107,9 +107,7 @@ namespace ChordEditor.Core
 			new chordMatch(ChordNotation.American, "G", 7),
 			new chordMatch(ChordNotation.American, "A", 9),
 			new chordMatch(ChordNotation.American, "B", 11),
-};
-
-
+		};
 
 		#endregion
 
@@ -118,7 +116,103 @@ namespace ChordEditor.Core
 		private string mVariant = ""; //all the text next to note, in normalized format
 		private string mBaseText;
 
-		public Chord(string text)
+		public static Chord FromString(string text)
+		{
+			if (text.Contains("/") || text.Contains("\\"))
+				return new MultiChord(text);
+			else
+				return new Chord(text);
+		}
+
+		private class MultiChord : Chord
+		{
+			private List<Chord> mChords = new List<Chord>();
+
+			public MultiChord(string text) : base(null)
+			{
+				string[] chords = text.Split('\\', '/');
+				foreach (string chord in chords)
+					mChords.Add(new Chord(chord));
+			}
+
+			public override bool IsValid
+			{
+				get
+				{
+					if (mChords.Count == 0)
+						return false;
+
+					foreach (Chord chord in mChords)
+						if (!chord.IsValid)
+							return false;
+
+					return true;
+				}
+			}
+
+			public override string Normalized
+			{
+				get
+				{
+					string rv = "";
+
+					foreach (Chord chord in mChords)
+						rv = rv + chord.Normalized + "/";
+
+					return rv.Trim('/');
+				}
+			}
+
+			public override ChordNotation Notation
+			{
+				get
+				{
+					bool allitalian = true;
+					bool allamerican = true;
+
+					if (mChords.Count == 0)
+						return ChordNotation.Unknown;
+
+					foreach (Chord chord in mChords)
+					{
+						if (chord.Notation != ChordNotation.Italian)
+							allitalian = false;
+						if (chord.Notation != ChordNotation.American)
+							allamerican = false;
+					}
+
+					if (allitalian)
+						return ChordNotation.Italian;
+					if (allamerican)
+						return ChordNotation.American;
+
+					return ChordNotation.Unknown;
+				}
+			}
+
+			public override string ToNotation(ChordNotation notation)
+			{
+				string rv = "";
+
+				foreach (Chord chord in mChords)
+					rv = rv + chord.ToNotation(notation) + "/";
+
+				return rv.Trim('/');
+			}
+
+			internal override string Traspose(int semitones)
+			{
+				string rv = "";
+
+				foreach (Chord chord in mChords)
+					rv = rv + chord.Traspose(semitones) + "/";
+
+				return rv.Trim('/');
+			}
+
+		}
+
+		private Chord(string text)
 		{
 			if (text == null)
 				return;
@@ -159,13 +253,13 @@ namespace ChordEditor.Core
 			}
 		}
 
-		public bool IsValid
+		public virtual bool IsValid
 		{ get { return mNote >= 0; } }
 
-		public ChordNotation Notation
+		public virtual ChordNotation Notation
 		{ get { return mNotation; } }
 
-		public string ToNotation(ChordNotation notation)
+		public virtual string ToNotation(ChordNotation notation)
 		{
 			if (!IsValid)
 				return mBaseText;
@@ -173,7 +267,7 @@ namespace ChordEditor.Core
 				return noteDictionary[notation][mNote] + mVariant;
 		}
 
-		public string Normalized
+		public virtual string Normalized
 		{
 			get
 			{
@@ -184,7 +278,7 @@ namespace ChordEditor.Core
 			}
 		}
 
-		internal string Traspose(int semitones)
+		internal virtual string Traspose(int semitones)
 		{
 			if (!IsValid)
 				return mBaseText;
@@ -345,16 +439,16 @@ namespace ChordEditor.Core
 
 
 		private static Chord cGetChord(string text)
-		{ return new Chord(text); }
+		{ return Chord.FromString(text); }
 
 		private static string cChangeNotation(string text, ChordNotation notation)
-		{ return new Chord(text).ToNotation(notation); }
+		{ return Chord.FromString(text).ToNotation(notation); }
 
 		private static string cTraspose(string text, int semitones)
-		{ return new Chord(text).Traspose(semitones); }
+		{ return Chord.FromString(text).Traspose(semitones); }
 
 		private static string cNormalize(string text)
-		{ return new Chord(text).Normalized; }
+		{ return Chord.FromString(text).Normalized; }
 
 
 	}
