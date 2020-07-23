@@ -71,10 +71,11 @@
 			this.PbArtist = new System.Windows.Forms.PictureBox();
 			this.PbCategory = new System.Windows.Forms.PictureBox();
 			this.PbTags = new System.Windows.Forms.PictureBox();
+			this.BtnAutoClean = new System.Windows.Forms.Button();
 			this.TT = new System.Windows.Forms.ToolTip(this.components);
 			this.NF = new System.Windows.Forms.ImageList(this.components);
 			this.SF = new System.Windows.Forms.ImageList(this.components);
-			this.BtnAutoClean = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
 			this.TlpMain.SuspendLayout();
 			this.GbTools.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -100,13 +101,11 @@
 			this.TlpMain.Controls.Add(this.GbTools, 0, 1);
 			this.TlpMain.Controls.Add(this.GbSheetInfo, 0, 2);
 			this.TlpMain.Controls.Add(this.GbSongInfo, 0, 0);
-			this.TlpMain.Controls.Add(this.BtnAutoClean, 0, 3);
 			this.TlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.TlpMain.Enabled = false;
 			this.TlpMain.Location = new System.Drawing.Point(0, 0);
 			this.TlpMain.Name = "TlpMain";
-			this.TlpMain.RowCount = 5;
-			this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.TlpMain.RowCount = 4;
 			this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.TlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -123,7 +122,7 @@
 			this.GbTools.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.GbTools.Location = new System.Drawing.Point(3, 133);
 			this.GbTools.Name = "GbTools";
-			this.GbTools.Size = new System.Drawing.Size(219, 76);
+			this.GbTools.Size = new System.Drawing.Size(219, 105);
 			this.GbTools.TabIndex = 4;
 			this.GbTools.TabStop = false;
 			this.GbTools.Text = "Tools";
@@ -137,19 +136,22 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.Controls.Add(this.label8, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
 			this.tableLayoutPanel3.Controls.Add(this.PbNormalized, 3, 0);
 			this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.label2, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.PbNotation, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.label3, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.BtnAutoClean, 1, 2);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowCount = 3;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(213, 57);
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(213, 86);
 			this.tableLayoutPanel3.TabIndex = 2;
 			// 
 			// tableLayoutPanel4
@@ -309,7 +311,7 @@
 			this.GbSheetInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.GbSheetInfo.Controls.Add(this.TlpProgress);
 			this.GbSheetInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.GbSheetInfo.Location = new System.Drawing.Point(3, 215);
+			this.GbSheetInfo.Location = new System.Drawing.Point(3, 244);
 			this.GbSheetInfo.Name = "GbSheetInfo";
 			this.GbSheetInfo.Size = new System.Drawing.Size(219, 139);
 			this.GbSheetInfo.TabIndex = 2;
@@ -668,6 +670,18 @@
 			this.PbTags.TabStop = false;
 			this.TT.SetToolTip(this.PbTags, "Tags");
 			// 
+			// BtnAutoClean
+			// 
+			this.BtnAutoClean.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.tableLayoutPanel3.SetColumnSpan(this.BtnAutoClean, 3);
+			this.BtnAutoClean.Location = new System.Drawing.Point(60, 60);
+			this.BtnAutoClean.Name = "BtnAutoClean";
+			this.BtnAutoClean.Size = new System.Drawing.Size(99, 23);
+			this.BtnAutoClean.TabIndex = 5;
+			this.BtnAutoClean.Text = "Auto Cleanup";
+			this.BtnAutoClean.UseVisualStyleBackColor = true;
+			this.BtnAutoClean.Click += new System.EventHandler(this.BtnAutoClean_Click);
+			// 
 			// NF
 			// 
 			this.NF.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("NF.ImageStream")));
@@ -684,16 +698,15 @@
 			this.SF.Images.SetKeyName(1, "ImgKO");
 			this.SF.Images.SetKeyName(2, "ImgUNK");
 			// 
-			// BtnAutoClean
+			// label8
 			// 
-			this.BtnAutoClean.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.BtnAutoClean.Location = new System.Drawing.Point(63, 360);
-			this.BtnAutoClean.Name = "BtnAutoClean";
-			this.BtnAutoClean.Size = new System.Drawing.Size(99, 23);
-			this.BtnAutoClean.TabIndex = 5;
-			this.BtnAutoClean.Text = "Auto Cleanup";
-			this.BtnAutoClean.UseVisualStyleBackColor = true;
-			this.BtnAutoClean.Click += new System.EventHandler(this.BtnAutoClean_Click);
+			this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(3, 65);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(46, 13);
+			this.label8.TabIndex = 20;
+			this.label8.Text = "Cleanup";
 			// 
 			// SheetPropertyForm
 			// 
@@ -787,5 +800,6 @@
 		private UserControls.ImageButton PbReview;
 		private UserControls.ImageButton PbLock;
 		private System.Windows.Forms.Button BtnAutoClean;
+		private System.Windows.Forms.Label label8;
 	}
 }
