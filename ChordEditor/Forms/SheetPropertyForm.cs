@@ -352,7 +352,10 @@ namespace ChordEditor.Forms
 					}
 					else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
 					{
-						ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Locked;
+						if (ActiveSheet.CanAutoNormalize() && MessageBox.Show("Il file può essere normalizzato prima di bloccarlo. Normalizzare?", "Normalizza file", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+							ActiveSheetForm.AutomaticNormalizationCleanup();
+
+						ActiveSheet.Header.Progress = SheetHeader.SheetProgress.Locked;
 						ActiveSheet.Header.LockedBy = SVN.Username;
 					}
 					RefreshFileHeader();

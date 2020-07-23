@@ -108,29 +108,45 @@ namespace ChordEditor.Core
 		}
 
 
+		internal bool CanAutoNormalize()
+		{
+			string normalized = DoAutoNormalize(Content);
+			return normalized != Content;
+		}
+
 		public bool AutomaticNormalizationCleanup(bool save)
 		{
-			string text = mContent;
+			if (Header.Progress == SheetHeader.SheetProgress.Locked)
+			{
+				SheetMessage($"Normalize {Header.Title}... Skip!");
+				return false;
+			}
+
+			Content = DoAutoNormalize(Content); //l'assegnazione a Content fa l'evento se siamo nella pagina di edit, altrimenti no
+			bool changes = HasMemoryChanges;
+
+			if (SheetMessage != null)
+			{
+				if (changes)
+					SheetMessage($"Normalize {Header.Title}... Normalized!");
+				else
+					SheetMessage($"Normalize {Header.Title}... Nothing to do!");
+			}
+
+			if (save)       //veniamo dal ciclo che lo fa su tutte
+				Save();
+
+			return changes;
+		}
+
+		private string DoAutoNormalize(string text)
+		{
 			text = Importer.CleanUp(text);
 			text = Pagliaro.Normalize(text);
 			text = Pagliaro.ChangeNotation(text, ChordNotation.Italian);
 			text = NormalizeComment(text);
 			text = RemoveTrailingLeadingWitespace(text);
-			Content = text; //fa l'evento se siamo nella pagina di edit, altrimenti no
-			bool changes = HasMemoryChanges;
-
-			if (SheetMessage != null)
-			{
-				if(changes)
-					SheetMessage($"Normalize {Header.Title}... Normalized");
-				else
-					SheetMessage($"Normalize {Header.Title}... Nothing to do!");
-			}
-
-			if (save)		//veniamo dal ciclo che lo fa su tutte
-				Save();
-
-			return changes;
+			return text;
 		}
 
 		private static string NormalizeComment(string text)
@@ -184,5 +200,6 @@ namespace ChordEditor.Core
 
 			BackupStatus();
 		}
+
 	}
 }
