@@ -528,7 +528,7 @@ namespace ChordEditor.Core
 				JobDictionary job = new JobDictionary();
 
 				foreach (SheetHeader sh in SheetDB.List)
-					if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Verified && sh.SheetCategory != null)
+					if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
 						job.Add(sh, opt);
 
 				job.Execute((string message) => { JobMessage?.Invoke(message); }, opt);
