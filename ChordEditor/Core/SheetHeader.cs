@@ -45,7 +45,7 @@ namespace ChordEditor.Core
 		}
 
 		public string FilePath
-		{ get { return SVN.CurrentFolder + FileName; } }
+		{ get { return SVN.CurrentFolder + FileNameLC; } }
 
 
 		internal void LoadFromStream(System.IO.StreamReader sr)
@@ -67,7 +67,7 @@ namespace ChordEditor.Core
 				mOMetaData.Add(kvp.Key, kvp.Value);
 		}
 
-		public string FileName
+		public string FileNameLC
 		{ get { return mFileName; } }
 
 		public string Title

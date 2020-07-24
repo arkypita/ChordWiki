@@ -177,7 +177,7 @@ namespace ChordEditor.Forms
 			}
 			else
 			{
-				Forms.SheetForm.CreateAndShow(new Core.Sheet(sh.FileName), DockPanel);
+				Forms.SheetForm.CreateAndShow(new Core.Sheet(sh.FileNameLC), DockPanel);
 			}
 		}
 

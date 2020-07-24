@@ -58,19 +58,17 @@ namespace ChordEditor.Core
 
 				//update changed files           
 				mList.ForEach(item => item.ReloadChangedHeader());
+				
 				//add new files
-
 				string[] filenames = System.IO.Directory.GetFiles(CurrentFolder);
 				foreach (string filename in filenames)
 				{
-					if (System.IO.Path.GetFileName(filename).ToLower().EndsWith(".cpw"))
+					string lowname = System.IO.Path.GetFileName(filename).ToLower();
+					if (lowname.EndsWith(".cpw") && !mList.Any(sh => sh.FileNameLC == lowname))
 					{
 						SheetHeader sh = new SheetHeader(filename);
-						if (!mList.Contains(sh))
-						{
-							sh.ReloadHeader();
-							mList.Add(sh);
-						}
+						sh.ReloadHeader();
+						mList.Add(sh);
 					}
 				}
 
@@ -92,11 +90,11 @@ namespace ChordEditor.Core
 
 				foreach (SheetHeader sh in mList)
 				{
-					if (statuses.ContainsKey(sh.FileName.ToLower()))
-						sh.SVNStatus = statuses[sh.FileName.ToLower()];
+					if (statuses.ContainsKey(sh.FileNameLC.ToLower()))
+						sh.SVNStatus = statuses[sh.FileNameLC.ToLower()];
 
-					if (props.ContainsKey(sh.FileName.ToLower()))
-						sh.Deletable = props[sh.FileName.ToLower()]["deletable"].StringValue == "true";
+					if (props.ContainsKey(sh.FileNameLC.ToLower()))
+						sh.Deletable = props[sh.FileNameLC.ToLower()]["deletable"].StringValue == "true";
 					else
 						sh.Deletable = false;
 				}
@@ -184,10 +182,10 @@ namespace ChordEditor.Core
 				p = System.IO.Path.GetFileName(p).ToLower();
 
 				foreach (SheetHeader sh in mList)
-					if (System.IO.Path.GetFileName(sh.FileName).ToLower() == p)
+					if (System.IO.Path.GetFileName(sh.FileNameLC).ToLower() == p)
 						return sh;
 				foreach (SheetHeader sh in mDeleted)
-					if (System.IO.Path.GetFileName(sh.FileName).ToLower() == p)
+					if (System.IO.Path.GetFileName(sh.FileNameLC).ToLower() == p)
 						return sh;
 			}
 
@@ -198,7 +196,7 @@ namespace ChordEditor.Core
 		{
 			foreach (SheetHeader sh in mList)
 			{
-				Sheet sheet = new Sheet(sh.FileName);
+				Sheet sheet = new Sheet(sh.FileNameLC);
 				sheet.AutomaticNormalizationCleanup(true);
 			}
 		}

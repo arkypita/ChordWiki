@@ -243,7 +243,7 @@ namespace ChordEditor.Core
 
 			private static void ComputeSongSize(JobMessageDlg message, Application app, Document doc, Template tpl, GeneratorOptions opt, Dictionary<string, double> knownSize, ProcessedSheet ps)
 			{
-				string key = ps.mSheet.Header.FileName + "." + opt.Type; //concatena opzione perché cambia la dimensione
+				string key = ps.mSheet.Header.FileNameLC + "." + opt.Type; //concatena opzione perché cambia la dimensione
 				ps.mSheet.ReloadFile();
 
 				// decommentare se si vuole fare un giro di correzione automatica dei file
@@ -340,7 +340,7 @@ namespace ChordEditor.Core
 				internal Sheet mSheet;
 
 				public ProcessedSheet(SheetHeader sh)
-				{ mSheet = new Sheet(sh.FileName); }
+				{ mSheet = new Sheet(sh.FileNameLC); }
 
 				internal void ProcessFile(Application app, Document doc, Template tpl, GeneratorOptions opt, Fase fase, bool closingGroup)
 				{
