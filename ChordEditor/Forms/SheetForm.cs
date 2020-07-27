@@ -134,7 +134,7 @@ namespace ChordEditor.Forms
 			if (Settings.SuperUser)
 				ToolTipText = mSheet.Header.FileNameLC;
 
-			CHP.ReadOnly = !(mSheet.Header.Progress < Core.SheetHeader.SheetProgress.Reviewed);
+			CHP.ReadOnly = false;//!(mSheet.Header.Progress < Core.SheetHeader.SheetProgress.Reviewed);
 			BtnSave.Enabled = MMnSave.Enabled = mSheet.HasMemoryChanges;
 		}
 

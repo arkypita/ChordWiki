@@ -277,12 +277,14 @@ namespace ChordEditor.Forms
 					if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Reviewed)
 					{
 						ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Verified;
-						ActiveSheet.Header.SheetRevisor = "";
+						//ActiveSheet.Header.SheetRevisor = ""; //do not clear info
 					}
 					else if (ActiveSheet.Header.Progress == Core.SheetHeader.SheetProgress.Verified)
 					{
 						ActiveSheet.Header.Progress = Core.SheetHeader.SheetProgress.Reviewed;
-						ActiveSheet.Header.SheetRevisor = SVN.Username;
+
+						if (string.IsNullOrWhiteSpace(ActiveSheet.Header.SheetRevisor))
+							ActiveSheet.Header.SheetRevisor = SVN.Username;
 					}
 					RefreshFileHeader();
 				}
