@@ -177,6 +177,9 @@ namespace ChordEditor.Core
 				match = RegexList.Comments.CHPCommentTag.Match(text, offset);
 			}
 
+			//non usar questa regex in automatico perché non copre bene tutti i casi e perché alcuni casi sono da rispettare
+			//text = RegexList.Comments.SmallCommentOnSingleLine.Replace(text, " ${commento}");
+
 			return text;
 		}
 

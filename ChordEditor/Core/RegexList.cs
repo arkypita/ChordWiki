@@ -44,6 +44,7 @@ namespace ChordEditor.Core
 			public static Regex VolteCount2 = new Regex(@"\bx *(?<numvolte>\d+)\b\.?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 			public static Regex Ritornello = new Regex(@"\b(?:ritornello|Rit)\b\.?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+			//public static Regex SmallCommentOnSingleLine = new Regex(@"[\r\n]+(?<commento>{c:[^{}]{1,4}})", RegexOptions.Compiled);
 		}
 	}
 }
