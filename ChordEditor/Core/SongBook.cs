@@ -352,7 +352,7 @@ namespace ChordEditor.Core
 
 					loaded = true;
 
-					AddSongTitle(doc, tpl.SongTitle, mSheet.Header.SheetCategory, mSheet.Header.Title);
+					AddSongTitle(doc, tpl.SongTitle, mSheet.Header.SheetCategory, mSheet.Header.Title /*+ " " + mSize.ToString("0.00")*/);
 					if (mSheet.Header.Artist != null)
 						AddSongArtist(doc, tpl.SongArtist, mSheet.Header.Artist);
 
