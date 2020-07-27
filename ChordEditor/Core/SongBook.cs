@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ChordEditor.Core
 {
@@ -353,9 +354,7 @@ namespace ChordEditor.Core
 
 					AddSongTitle(doc, tpl.SongTitle, mSheet.Header.SheetCategory, mSheet.Header.Title);
 					if (mSheet.Header.Artist != null)
-					{
 						AddSongArtist(doc, tpl.SongArtist, mSheet.Header.Artist);
-					}
 
 					StringBuilder Helper = new StringBuilder();
 
@@ -467,7 +466,7 @@ namespace ChordEditor.Core
 					par.set_Style(style);
 					par.Range.SpellingChecked = true;
 					par.Range.GrammarChecked = true;
-
+					ProcessComments(doc, content, par);
 					par.Range.InsertParagraphAfter();
 				}
 
@@ -476,21 +475,37 @@ namespace ChordEditor.Core
 					content = CpToMonospace(content);
 
 					Style style = InChorus ? tpl.ChorusM : tpl.StorpheM;
-
 					Paragraph par = doc.Content.Paragraphs.Add();
 					par.Range.Text = closingGroup ? content + "\f" : content;
 					par.set_Style(style);
 					par.Range.SpellingChecked = true;
 					par.Range.GrammarChecked = true;
-
-					int parstart = par.Range.Start;
-
+					ProcessComments(doc, content, par);
 					par.Range.InsertParagraphAfter();
+				}
+
+				private static void ProcessComments(Document doc, string content, Paragraph par)
+				{
+					int delta = 0; //cumulativo dei caratteri aggiunti e/o tolti
+
+					foreach (Match m in RegexList.Comments.CHPCommentTag.Matches(content))
+					{
+						string src = m.Value;
+						string rpl = $"({m.Groups["commento"].Value.Trim()})";
+
+						int index = par.Range.Start + m.Index + delta;
+						Range rng = doc.Range(index, index + src.Length);
+						rng.Text = rpl;
+
+						delta = delta + rpl.Length - src.Length;
+
+						rng.Bold = -1; //attiva il bold
+					}
 				}
 
 				private static string CpToMonospace(string content)
 				{
-					System.Text.RegularExpressions.MatchCollection allmatch = Core.RegexList.Chords.ChordProNote.Matches(content);
+					MatchCollection allmatch = Core.RegexList.Chords.ChordProNote.Matches(content);
 					bool ContainsChords = allmatch.Count > 0;
 
 					if (!ContainsChords)
@@ -500,7 +515,7 @@ namespace ChordEditor.Core
 					string[] arr = content.Split(new char[] { '\v' });
 					foreach (string line in arr)
 					{
-						System.Text.RegularExpressions.MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
+						MatchCollection matches = Core.RegexList.Chords.ChordProNote.Matches(line);
 
 						string chords;
 						string song;
@@ -528,7 +543,7 @@ namespace ChordEditor.Core
 				JobDictionary job = new JobDictionary();
 
 				foreach (SheetHeader sh in SheetDB.List)
-					if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null)
+					if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null) //if (sh.Title.Contains("TEST"))
 						job.Add(sh, opt);
 
 				job.Execute((string message) => { JobMessage?.Invoke(message); }, opt);

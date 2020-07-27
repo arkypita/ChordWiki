@@ -152,11 +152,11 @@ namespace ChordEditor.Core
 		private static string NormalizeComment(string text)
 		{
 			//auto transform missing comment tag (Rit.) to comment tag {c:Rit.}
-			text = RegexList.Comments.AutoComment.Replace(text, "{c:${commento}}");
+			text = RegexList.Comments.TxtAutoComment.Replace(text, "{c:${commento}}");
 
 			//normalize other tag
 			int offset = 0;
-			Match match = RegexList.Comments.CommentoTag.Match(text, offset);
+			Match match = RegexList.Comments.CHPCommentTag.Match(text, offset);
 			while (match != null && match.Success)
 			{
 				string oldval = match.Value;
@@ -174,7 +174,7 @@ namespace ChordEditor.Core
 				text = text.Insert(match.Index, newval);
 
 				offset = match.Index + oldval.Length + (newval.Length - oldval.Length);
-				match = RegexList.Comments.CommentoTag.Match(text, offset);
+				match = RegexList.Comments.CHPCommentTag.Match(text, offset);
 			}
 
 			return text;
