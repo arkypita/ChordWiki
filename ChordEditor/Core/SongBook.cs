@@ -542,9 +542,21 @@ namespace ChordEditor.Core
 			{
 				JobDictionary job = new JobDictionary();
 
-				foreach (SheetHeader sh in SheetDB.List)
-					if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null) //if (sh.Title.Contains("TEST"))
-						job.Add(sh, opt);
+				if (SheetDB.SelectedSheets.Count > 1)
+				{
+					//lavora sulla selezione
+					foreach (SheetHeader sh in SheetDB.SelectedSheets)
+						if (sh.SheetCategory != null)
+							job.Add(sh, opt);
+				}
+				else
+				{
+					//lavora sul vero e proprio DB
+					foreach (SheetHeader sh in SheetDB.List)
+						if (!sh.Deletable && sh.Progress >= SheetHeader.SheetProgress.Locked && sh.SheetCategory != null) //if (sh.Title.Contains("TEST"))
+							job.Add(sh, opt);
+				}
+					
 
 				job.Execute((string message) => { JobMessage?.Invoke(message); }, opt);
 			}

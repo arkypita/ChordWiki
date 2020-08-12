@@ -149,6 +149,12 @@ namespace ChordEditor.Forms
 			BtnUndelete.Enabled = LV.SelectedObjects.Count > 0;
 
 			BtnErase.Enabled = LV.SelectedObjects.Count > 0;
+
+			SheetDB.SelectedSheets.Clear();
+			foreach (SheetHeader SH in LV.SelectedObjects)
+			{
+				SheetDB.SelectedSheets.Add(SH);
+			}
 		}
 
 		private void BtnOpen_Click(object sender, EventArgs e)

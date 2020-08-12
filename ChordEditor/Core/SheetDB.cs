@@ -14,6 +14,8 @@ namespace ChordEditor.Core
 		static List<SheetHeader> mList = new List<SheetHeader>();
 		static List<SheetHeader> mDeleted = new List<SheetHeader>();
 
+		static List<SheetHeader> mSelectedSheets = new List<SheetHeader>();
+
 		static List<string> mCategories = new List<string>();
 		static List<string> mTags = new List<string>();
 
@@ -145,6 +147,9 @@ namespace ChordEditor.Core
 
 		public static List<SheetHeader> List
 		{ get { return mList; } }
+
+		public static List<SheetHeader> SelectedSheets
+		{ get { return mSelectedSheets; } }
 
 
 		public static SheetHeader GetByFileNameWithDeleted(string p)
